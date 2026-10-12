@@ -1,8 +1,11 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, computed, inject } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { MatListModule } from '@angular/material/list';
 import { RouterModule } from '@angular/router';
+
 import { AuthService } from '../../services/auth';
-import { MenuItem } from '../../models/menu-item';
+import { normalizarRol } from '../../models/rol';
+import { MENU_POR_ROL } from './menu.config';
 
 @Component({
   selector: 'app-menu',
@@ -10,28 +13,13 @@ import { MenuItem } from '../../models/menu-item';
   templateUrl: './menu.html',
   styleUrl: './menu.css',
 })
-export class Menu implements OnInit {
+export class Menu {
   private auth = inject(AuthService);
-  items: MenuItem[] = [];
+  private usuario = toSignal(this.auth.usuario$, { initialValue: this.auth.getUsuario() });
 
-  ngOnInit(): void {
-    const u = this.auth.getUsuario();
-    const rol = (u?.rol || '').toUpperCase();
-    if (!this.auth.isLoggedIn()) {
-      this.items = [];
-      return;
-    }
-    if (rol === 'ADMIN') {
-      this.items = [
-        { titulo: 'Usuarios', ruta: '/admin/usuarios' },
-      ];
-    } else if (rol === 'MEDICO') {
-      this.items = [{ titulo: 'Agenda', ruta: '/medico/agenda' }];
-    } else if (rol === 'OPERADOR') {
-      this.items = [{ titulo: 'Turnos', ruta: '/operador/turnos' }];
-    } else if (rol === 'PACIENTE') {
-      this.items = [{ titulo: 'Mis turnos', ruta: '/paciente/turnos' }];
-    }
-  }
+  /** Opciones del menú según el rol de la sesión (vacío si no hay sesión). */
+  readonly items = computed(() => {
+    const rol = normalizarRol(this.usuario()?.rol);
+    return rol ? MENU_POR_ROL[rol] : [];
+  });
 }
-

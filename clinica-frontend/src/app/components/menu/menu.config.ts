@@ -1,0 +1,32 @@
+import { MenuItem } from '../../models/menu-item';
+import { Rol } from '../../models/rol';
+
+/**
+ * Menú declarativo por rol: una única fuente de verdad.
+ * Para sumar una opción basta con agregarla a la lista del rol.
+ * Las rutas apuntan a secciones que hoy renderizan `EnConstruccion`.
+ */
+export const MENU_POR_ROL: Record<Rol, MenuItem[]> = {
+  admin: [
+    { titulo: 'Usuarios', ruta: '/admin/usuarios' },
+    { titulo: 'Sedes', ruta: '/admin/sedes' },
+    { titulo: 'Especialidades', ruta: '/admin/especialidades' },
+    { titulo: 'Coberturas', ruta: '/admin/coberturas' },
+    { titulo: 'Auditoría', ruta: '/admin/auditoria' },
+    { titulo: 'Reportes', ruta: '/admin/reportes' },
+  ],
+  medico: [
+    { titulo: 'Mi agenda', ruta: '/medico/agenda' },
+    { titulo: 'Turnos del día', ruta: '/medico/turnos' },
+    { titulo: 'Historial clínico', ruta: '/medico/historial' },
+  ],
+  operador: [
+    { titulo: 'Turnos de la sede', ruta: '/operador/turnos' },
+    { titulo: 'Agenda', ruta: '/operador/agenda' },
+  ],
+  paciente: [
+    { titulo: 'Sacar turno', ruta: '/paciente/sacar-turno' },
+    { titulo: 'Mis turnos', ruta: '/paciente/turnos' },
+    { titulo: 'Mi historial', ruta: '/paciente/historial' },
+  ],
+};

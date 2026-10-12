@@ -1,6 +1,5 @@
 <mat-nav-list>
-  @for (item of items; track item.ruta) {
+  @for (item of items(); track item.ruta) {
     <a mat-list-item [routerLink]="item.ruta">{{ item.titulo }}</a>
   }
 </mat-nav-list>
-
