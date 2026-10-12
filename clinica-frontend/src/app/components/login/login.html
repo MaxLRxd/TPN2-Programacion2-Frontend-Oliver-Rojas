@@ -1,1 +1,31 @@
-<p>login works!</p>
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>Iniciar sesión</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+      <mat-form-field appearance="fill">
+        <mat-label>DNI</mat-label>
+        <input matInput formControlName="dni" />
+        @if (form.get('dni')?.hasError('required')) {
+          <mat-error>El DNI es obligatorio</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="fill">
+        <mat-label>Contraseña</mat-label>
+        <input matInput type="password" formControlName="password" />
+        @if (form.get('password')?.hasError('required')) {
+          <mat-error>La contraseña es obligatoria</mat-error>
+        }
+      </mat-form-field>
+
+      @if (error) {
+        <p>{{ error }}</p>
+      }
+
+      <button mat-raised-button color="primary" type="submit" [disabled]="form.invalid">Ingresar</button>
+    </form>
+  </mat-card-content>
+</mat-card>
+

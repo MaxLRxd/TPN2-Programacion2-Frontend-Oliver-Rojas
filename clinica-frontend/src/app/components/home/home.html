@@ -1,1 +1,15 @@
-<p>home works!</p>
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>Clínica Virtual</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    @if (!auth.isLoggedIn()) {
+      <p>Bienvenido. Podés iniciar sesión o registrarte como paciente.</p>
+      <button mat-button routerLink="/login">Iniciar sesión</button>
+      <button mat-button routerLink="/registro">Registrarse</button>
+    } @else {
+      <p>Elegí una función del menú para continuar.</p>
+    }
+  </mat-card-content>
+</mat-card>
+

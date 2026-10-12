@@ -1,13 +1,16 @@
 import { TestBed } from '@angular/core/testing';
+import { provideHttpClient } from '@angular/common/http';
 
-import { Cobertura } from './cobertura';
+import { CoberturaService } from './cobertura';
 
-describe('Cobertura', () => {
-  let service: Cobertura;
+describe('CoberturaService', () => {
+  let service: CoberturaService;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({});
-    service = TestBed.inject(Cobertura);
+    TestBed.configureTestingModule({
+      providers: [provideHttpClient()],
+    });
+    service = TestBed.inject(CoberturaService);
   });
 
   it('should be created', () => {

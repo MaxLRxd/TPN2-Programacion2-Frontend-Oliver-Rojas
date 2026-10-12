@@ -1,1 +1,4 @@
-export interface Cobertura {}
+export interface Cobertura {
+  id?: number;
+  nombre?: string;
+}

@@ -1,1 +1,81 @@
-<p>registro works!</p>
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>Registro de paciente</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+      <mat-form-field appearance="fill">
+        <mat-label>Nombre</mat-label>
+        <input matInput formControlName="nombre" />
+        @if (form.get('nombre')?.hasError('required')) {
+          <mat-error>Campo obligatorio</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="fill">
+        <mat-label>Apellido</mat-label>
+        <input matInput formControlName="apellido" />
+        @if (form.get('apellido')?.hasError('required')) {
+          <mat-error>Campo obligatorio</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="fill">
+        <mat-label>DNI</mat-label>
+        <input matInput formControlName="dni" />
+        @if (form.get('dni')?.hasError('required')) {
+          <mat-error>Campo obligatorio</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="fill">
+        <mat-label>Email</mat-label>
+        <input matInput formControlName="email" />
+        @if (form.get('email')?.hasError('required')) {
+          <mat-error>Campo obligatorio</mat-error>
+        }
+        @if (form.get('email')?.hasError('email')) {
+          <mat-error>Email inválido</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="fill">
+        <mat-label>Contraseña</mat-label>
+        <input matInput type="password" formControlName="password" />
+        @if (form.get('password')?.hasError('required')) {
+          <mat-error>Campo obligatorio</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="fill">
+        <mat-label>Fecha de nacimiento</mat-label>
+        <input matInput type="date" formControlName="fechaNacimiento" />
+        @if (form.get('fechaNacimiento')?.hasError('required')) {
+          <mat-error>Campo obligatorio</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="fill">
+        <mat-label>Cobertura</mat-label>
+        <mat-select formControlName="coberturaId">
+          @for (c of coberturas; track c.id) {
+            <mat-option [value]="c.id">{{ c.nombre }}</mat-option>
+          }
+        </mat-select>
+        @if (form.get('coberturaId')?.hasError('required')) {
+          <mat-error>Campo obligatorio</mat-error>
+        }
+      </mat-form-field>
+
+      @if (error) {
+        <p>{{ error }}</p>
+      }
+      @if (success) {
+        <p>{{ success }}</p>
+      }
+
+      <button mat-raised-button color="primary" type="submit" [disabled]="form.invalid">Registrarse</button>
+    </form>
+  </mat-card-content>
+</mat-card>
+
