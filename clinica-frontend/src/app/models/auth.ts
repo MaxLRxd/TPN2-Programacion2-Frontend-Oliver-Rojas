@@ -5,7 +5,7 @@ export interface LoginRequest {
   password: string;
 }
 
-/** El backend espera snake_case: fecha_nacimiento e id_cobertura. */
+/** DTO de entrada de la API: nombres en snake_case tal como los espera el backend. */
 export interface RegistroRequest {
   nombre: string;
   apellido: string;
@@ -16,6 +16,17 @@ export interface RegistroRequest {
   id_cobertura: number;
   telefono?: string;
   id_sede?: number;
+}
+
+/** Datos de registro tal como los maneja la UI (camelCase). */
+export interface RegistroForm {
+  nombre: string;
+  apellido: string;
+  dni: string;
+  email: string;
+  password: string;
+  fechaNacimiento: string;
+  coberturaId: number;
 }
 
 export interface AuthResponse {

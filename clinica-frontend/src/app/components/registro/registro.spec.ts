@@ -57,7 +57,7 @@ describe('Registro', () => {
     expect(auth.registro).not.toHaveBeenCalled();
   });
 
-  it('mapea el formulario a snake_case y envía', () => {
+  it('envía los datos del formulario (el mapeo a snake_case vive en el service)', () => {
     auth.registro.mockReturnValue(of({ id: 5 }));
     component.form.setValue(formValido);
     component.onSubmit();
@@ -67,8 +67,8 @@ describe('Registro', () => {
       dni: '36000960',
       email: 'franco@mail.com',
       password: 'clave123',
-      fecha_nacimiento: '1998-03-14',
-      id_cobertura: 1,
+      fechaNacimiento: '1998-03-14',
+      coberturaId: 1,
     });
   });
 

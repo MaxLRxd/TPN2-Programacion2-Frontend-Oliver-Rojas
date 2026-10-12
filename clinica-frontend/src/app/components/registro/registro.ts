@@ -17,7 +17,7 @@ import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth';
 import { CoberturaService } from '../../services/cobertura';
 import { Cobertura } from '../../models/cobertura';
-import { RegistroRequest } from '../../models/auth';
+import { RegistroForm } from '../../models/auth';
 import { ApiError } from '../../services/api';
 
 /** Valida que la fecha no sea posterior a hoy (fecha de nacimiento). */
@@ -132,17 +132,17 @@ export class Registro implements OnInit {
     this.cargando.set(true);
 
     const v = this.form.getRawValue();
-    const data: RegistroRequest = {
+    const datos: RegistroForm = {
       nombre: (v.nombre ?? '').trim(),
       apellido: (v.apellido ?? '').trim(),
       dni: (v.dni ?? '').trim(),
       email: (v.email ?? '').trim(),
       password: v.password ?? '',
-      fecha_nacimiento: v.fechaNacimiento ?? '',
-      id_cobertura: v.coberturaId as number,
+      fechaNacimiento: v.fechaNacimiento ?? '',
+      coberturaId: v.coberturaId as number,
     };
 
-    this.auth.registro(data).subscribe({
+    this.auth.registro(datos).subscribe({
       next: () => {
         this.cargando.set(false);
         this.success.set('Registro exitoso. Te llevamos al login...');

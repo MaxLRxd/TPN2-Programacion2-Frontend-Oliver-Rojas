@@ -59,7 +59,7 @@ describe('AuthService', () => {
     expect(service.getUsuario()?.rol).toBe('paciente');
   });
 
-  it('registro envía snake_case y devuelve el usuario creado', async () => {
+  it('registro traduce a snake_case y crea el usuario', async () => {
     const p = firstValueFrom(
       service.registro({
         nombre: 'Franco',
@@ -67,12 +67,13 @@ describe('AuthService', () => {
         dni: '36000960',
         email: 'franco@mail.com',
         password: 'clave123',
-        fecha_nacimiento: '1998-03-14',
-        id_cobertura: 1,
+        fechaNacimiento: '1998-03-14',
+        coberturaId: 1,
       }),
     );
     const req = httpMock.expectOne(`${base}/auth/registro`);
     expect(req.request.method).toBe('POST');
+    // el componente envía camelCase; el service lo traduce a snake_case
     expect(req.request.body).toEqual({
       nombre: 'Franco',
       apellido: 'Friggeri',
@@ -85,14 +86,7 @@ describe('AuthService', () => {
     req.flush({
       codigo: 201,
       estado: 'ok',
-      datos: {
-        id: 5,
-        nombre: 'Franco',
-        apellido: 'Friggeri',
-        dni: '36000960',
-        email: 'franco@mail.com',
-        rol: 'paciente',
-      },
+      datos: { id: 5, nombre: 'Franco', apellido: 'Friggeri', rol: 'paciente' },
     });
     await expect(p).resolves.toMatchObject({ id: 5, rol: 'paciente' });
   });
@@ -122,5 +116,13 @@ describe('AuthService', () => {
       codigo: 401,
       mensaje: 'Credenciales invalidas',
     });
+  });
+
+  it('logout limpia la sesión', () => {
+    localStorage.setItem('token', 'jwt-123');
+    service.logout();
+    expect(service.getToken()).toBeNull();
+    expect(service.getUsuario()).toBeNull();
+    expect(service.isLoggedIn()).toBe(false);
   });
 });
