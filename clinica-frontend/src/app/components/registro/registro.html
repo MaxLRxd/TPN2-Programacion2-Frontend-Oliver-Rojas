@@ -1,81 +1,115 @@
-<mat-card>
-  <mat-card-header>
-    <mat-card-title>Registro de paciente</mat-card-title>
-  </mat-card-header>
-  <mat-card-content>
-    <form [formGroup]="form" (ngSubmit)="onSubmit()">
-      <mat-form-field appearance="fill">
-        <mat-label>Nombre</mat-label>
-        <input matInput formControlName="nombre" />
-        @if (form.get('nombre')?.hasError('required')) {
-          <mat-error>Campo obligatorio</mat-error>
-        }
-      </mat-form-field>
+<div class="registro-page">
+  <mat-card class="registro-card" appearance="outlined">
+    <mat-card-header>
+      <mat-card-title>Registro de paciente</mat-card-title>
+      <mat-card-subtitle>Clínica Virtual</mat-card-subtitle>
+    </mat-card-header>
 
-      <mat-form-field appearance="fill">
-        <mat-label>Apellido</mat-label>
-        <input matInput formControlName="apellido" />
-        @if (form.get('apellido')?.hasError('required')) {
-          <mat-error>Campo obligatorio</mat-error>
-        }
-      </mat-form-field>
-
-      <mat-form-field appearance="fill">
-        <mat-label>DNI</mat-label>
-        <input matInput formControlName="dni" />
-        @if (form.get('dni')?.hasError('required')) {
-          <mat-error>Campo obligatorio</mat-error>
-        }
-      </mat-form-field>
-
-      <mat-form-field appearance="fill">
-        <mat-label>Email</mat-label>
-        <input matInput formControlName="email" />
-        @if (form.get('email')?.hasError('required')) {
-          <mat-error>Campo obligatorio</mat-error>
-        }
-        @if (form.get('email')?.hasError('email')) {
-          <mat-error>Email inválido</mat-error>
-        }
-      </mat-form-field>
-
-      <mat-form-field appearance="fill">
-        <mat-label>Contraseña</mat-label>
-        <input matInput type="password" formControlName="password" />
-        @if (form.get('password')?.hasError('required')) {
-          <mat-error>Campo obligatorio</mat-error>
-        }
-      </mat-form-field>
-
-      <mat-form-field appearance="fill">
-        <mat-label>Fecha de nacimiento</mat-label>
-        <input matInput type="date" formControlName="fechaNacimiento" />
-        @if (form.get('fechaNacimiento')?.hasError('required')) {
-          <mat-error>Campo obligatorio</mat-error>
-        }
-      </mat-form-field>
-
-      <mat-form-field appearance="fill">
-        <mat-label>Cobertura</mat-label>
-        <mat-select formControlName="coberturaId">
-          @for (c of coberturas; track c.id) {
-            <mat-option [value]="c.id">{{ c.nombre }}</mat-option>
+    <mat-card-content>
+      <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+        <mat-form-field appearance="outline">
+          <mat-label>Nombre</mat-label>
+          <input matInput formControlName="nombre" autocomplete="given-name" maxlength="30" />
+          @if (nombre.hasError('required')) {
+            <mat-error>Campo obligatorio</mat-error>
+          } @else if (nombre.hasError('maxlength')) {
+            <mat-error>Máximo 30 caracteres</mat-error>
           }
-        </mat-select>
-        @if (form.get('coberturaId')?.hasError('required')) {
-          <mat-error>Campo obligatorio</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Apellido</mat-label>
+          <input matInput formControlName="apellido" autocomplete="family-name" maxlength="30" />
+          @if (apellido.hasError('required')) {
+            <mat-error>Campo obligatorio</mat-error>
+          } @else if (apellido.hasError('maxlength')) {
+            <mat-error>Máximo 30 caracteres</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>DNI</mat-label>
+          <input matInput formControlName="dni" inputmode="numeric" maxlength="8" />
+          @if (dni.hasError('required')) {
+            <mat-error>Campo obligatorio</mat-error>
+          } @else if (dni.hasError('pattern')) {
+            <mat-error>El DNI debe tener hasta 8 números</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Email</mat-label>
+          <input matInput formControlName="email" type="email" autocomplete="email" maxlength="30" />
+          @if (email.hasError('required')) {
+            <mat-error>Campo obligatorio</mat-error>
+          } @else if (email.hasError('email')) {
+            <mat-error>Formato de email inválido</mat-error>
+          } @else if (email.hasError('maxlength')) {
+            <mat-error>Máximo 30 caracteres</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Contraseña</mat-label>
+          <input matInput formControlName="password" type="password" autocomplete="new-password" />
+          @if (password.hasError('required')) {
+            <mat-error>Campo obligatorio</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Fecha de nacimiento</mat-label>
+          <input matInput formControlName="fechaNacimiento" type="date" [max]="maxFecha" />
+          @if (fechaNacimiento.hasError('required')) {
+            <mat-error>Campo obligatorio</mat-error>
+          } @else if (fechaNacimiento.hasError('fechaFutura')) {
+            <mat-error>La fecha no puede ser futura</mat-error>
+          } @else if (fechaNacimiento.hasError('fechaInvalida')) {
+            <mat-error>Fecha inválida</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Cobertura</mat-label>
+          <mat-select formControlName="coberturaId">
+            @for (c of coberturas; track c.id) {
+              <mat-option [value]="c.id">{{ c.nombre }}</mat-option>
+            }
+          </mat-select>
+          @if (coberturaId.hasError('required')) {
+            <mat-error>Seleccioná una cobertura</mat-error>
+          }
+          @if (cargandoCoberturas()) {
+            <mat-hint>Cargando coberturas...</mat-hint>
+          }
+        </mat-form-field>
+
+        @if (error()) {
+          <div class="mensaje error" role="alert">
+            <mat-icon>error_outline</mat-icon>
+            <span>{{ error() }}</span>
+          </div>
         }
-      </mat-form-field>
+        @if (success()) {
+          <div class="mensaje exito" role="status">
+            <mat-icon>check_circle</mat-icon>
+            <span>{{ success() }}</span>
+          </div>
+        }
 
-      @if (error) {
-        <p>{{ error }}</p>
-      }
-      @if (success) {
-        <p>{{ success }}</p>
-      }
+        <button mat-flat-button color="primary" type="submit" class="btn-submit" [disabled]="cargando()">
+          @if (cargando()) {
+            <mat-spinner diameter="20"></mat-spinner>
+          } @else {
+            Registrarme
+          }
+        </button>
+      </form>
+    </mat-card-content>
 
-      <button mat-raised-button color="primary" type="submit" [disabled]="form.invalid">Registrarse</button>
-    </form>
-  </mat-card-content>
-</mat-card>
-
+    <mat-card-actions align="end">
+      <span class="registro-hint">¿Ya tenés cuenta?</span>
+      <a mat-button routerLink="/login">Iniciá sesión</a>
+    </mat-card-actions>
+  </mat-card>
+</div>

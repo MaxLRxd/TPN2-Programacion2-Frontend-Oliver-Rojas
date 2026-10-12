@@ -1,0 +1,55 @@
+.registro-page {
+  display: flex;
+  justify-content: center;
+  padding: 2rem 1rem;
+}
+
+.registro-card {
+  width: 100%;
+  max-width: 460px;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  margin-top: 0.5rem;
+}
+
+mat-form-field {
+  width: 100%;
+}
+
+.mensaje {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+}
+
+.mensaje mat-icon {
+  flex-shrink: 0;
+}
+
+.mensaje.error {
+  background: var(--mat-sys-error-container, #fde7e9);
+  color: var(--mat-sys-on-error-container, #b3261e);
+}
+
+.mensaje.exito {
+  background: var(--mat-sys-primary-container, #e3f2e5);
+  color: var(--mat-sys-on-primary-container, #1b5e20);
+}
+
+.btn-submit {
+  width: 100%;
+  height: 3rem;
+  margin-top: 0.5rem;
+}
+
+.registro-hint {
+  margin-right: 0.5rem;
+  color: #666;
+}
