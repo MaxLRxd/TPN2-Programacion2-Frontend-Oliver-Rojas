@@ -105,6 +105,50 @@ describe('AuthService', () => {
     expect(JSON.parse(localStorage.getItem('usuario') || 'null')?.rol).toBe('paciente');
   });
 
+  it('rehidrata el perfil si hay token pero no hay usuario', async () => {
+    localStorage.setItem('token', 'jwt-viejo');
+    const p = firstValueFrom(service.rehidratarSesion());
+    const req = httpMock.expectOne(`${base}/auth/perfil`);
+    req.flush({
+      codigo: 200,
+      estado: 'ok',
+      datos: { id: 2, nombre: 'Franco', rol: 'paciente' },
+    });
+    await p;
+    expect(service.getUsuario()?.nombre).toBe('Franco');
+  });
+
+  it('no hace nada al rehidratar si no hay token', async () => {
+    await firstValueFrom(service.rehidratarSesion());
+    httpMock.expectNone(`${base}/auth/perfil`);
+  });
+
+  it('no rehidrata si ya hay usuario guardado', async () => {
+    service.login({ dni: '1', password: 'x' }).subscribe();
+    httpMock
+      .expectOne(`${base}/auth/login`)
+      .flush({
+        codigo: 200,
+        estado: 'ok',
+        datos: { token: 'jwt', usuario: { id: 2, nombre: 'Franco', rol: 'paciente' } },
+      });
+    await firstValueFrom(service.rehidratarSesion());
+    httpMock.expectNone(`${base}/auth/perfil`);
+  });
+
+  it('limpia la sesión al rehidratar si el token venció (401)', async () => {
+    localStorage.setItem('token', 'jwt-vencido');
+    const p = firstValueFrom(service.rehidratarSesion());
+    const req = httpMock.expectOne(`${base}/auth/perfil`);
+    req.flush(
+      { codigo: 401, estado: 'Token vencido', datos: null },
+      { status: 401, statusText: 'Unauthorized' },
+    );
+    await p;
+    expect(service.getToken()).toBeNull();
+    expect(service.isLoggedIn()).toBe(false);
+  });
+
   it('login con credenciales inválidas devuelve el mensaje del backend', async () => {
     const p = firstValueFrom(service.login({ dni: '1', password: 'mala' }));
     const req = httpMock.expectOne(`${base}/auth/login`);

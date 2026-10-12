@@ -1,16 +1,65 @@
-<mat-card>
-  <mat-card-header>
-    <mat-card-title>Mi perfil</mat-card-title>
-  </mat-card-header>
-  <mat-card-content>
-    @if (usuario) {
-      <p>Nombre: {{ usuario.nombre }} {{ usuario.apellido }}</p>
-      <p>DNI: {{ usuario.dni }}</p>
-      <p>Email: {{ usuario.email }}</p>
-      <p>Rol: {{ usuario.rol }}</p>
-    } @else {
-      <p>Cargando...</p>
-    }
-  </mat-card-content>
-</mat-card>
+<section class="perfil-page">
+  <mat-card class="perfil-card" appearance="outlined">
+    <mat-card-header>
+      <mat-card-title>Mi perfil</mat-card-title>
+      <mat-card-subtitle>Datos de tu cuenta</mat-card-subtitle>
+    </mat-card-header>
 
+    <mat-card-content>
+      @if (cargando()) {
+        <div class="estado">
+          <mat-spinner diameter="40"></mat-spinner>
+          <p>Cargando perfil...</p>
+        </div>
+      } @else if (error()) {
+        <div class="mensaje error" role="alert">
+          <mat-icon>error_outline</mat-icon>
+          <span>{{ error() }}</span>
+        </div>
+        <button mat-stroked-button color="primary" type="button" (click)="cargar()">
+          <mat-icon>refresh</mat-icon>
+          Reintentar
+        </button>
+      } @else if (usuario(); as u) {
+        <div class="datos">
+          <div class="fila">
+            <span class="etiqueta">Nombre</span>
+            <span class="valor">{{ mostrar(u.nombre) }}</span>
+          </div>
+          <div class="fila">
+            <span class="etiqueta">Apellido</span>
+            <span class="valor">{{ mostrar(u.apellido) }}</span>
+          </div>
+          <div class="fila">
+            <span class="etiqueta">DNI</span>
+            <span class="valor">{{ mostrar(u.dni) }}</span>
+          </div>
+          <div class="fila">
+            <span class="etiqueta">Email</span>
+            <span class="valor">{{ mostrar(u.email) }}</span>
+          </div>
+          <div class="fila">
+            <span class="etiqueta">Teléfono</span>
+            <span class="valor">{{ mostrar(u.telefono) }}</span>
+          </div>
+          <div class="fila">
+            <span class="etiqueta">Rol</span>
+            <span class="valor">{{ mostrar(u.rol) }}</span>
+          </div>
+          <div class="fila">
+            <span class="etiqueta">Fecha de nacimiento</span>
+            <span class="valor">{{ mostrar(u.fecha_nacimiento) }}</span>
+          </div>
+          <div class="fila">
+            <span class="etiqueta">Sede</span>
+            <span class="valor">{{ mostrar(u.id_sede) }}</span>
+          </div>
+          <div class="fila">
+            <span class="etiqueta">Cobertura</span>
+            <span class="valor">{{ mostrar(u.id_cobertura) }}</span>
+          </div>
+        </div>
+      }
+    </mat-card-content>
+  </mat-card>
+</section>

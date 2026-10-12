@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
-import { Observable, tap } from 'rxjs';
-import { ApiService } from './api';
+import { catchError, map, Observable, of, tap } from 'rxjs';
+import { ApiError, ApiService } from './api';
 import { SessionService } from './session.service';
 import { AuthResponse, LoginRequest, RegistroForm, RegistroRequest } from '../models/auth';
 import { Usuario } from '../models/usuario';
@@ -29,6 +29,25 @@ export class AuthService {
     return this.api
       .get<Usuario>('/auth/perfil')
       .pipe(tap((usuario) => this.sesion.actualizarUsuario(usuario)));
+  }
+
+  /**
+   * Reconstruye la sesión al arrancar la app si hay token pero no usuario.
+   * Si el token está vencido (401), limpia la sesión.
+   */
+  rehidratarSesion(): Observable<void> {
+    if (!this.sesion.estaAutenticado() || this.sesion.getUsuario()) {
+      return of(void 0);
+    }
+    return this.cargarPerfil().pipe(
+      map(() => void 0),
+      catchError((e: ApiError) => {
+        if (e?.codigo === 401) {
+          this.logout();
+        }
+        return of(void 0);
+      }),
+    );
   }
 
   logout(): void {
