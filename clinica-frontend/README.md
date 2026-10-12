@@ -1,59 +1,43 @@
-# ClinicaFrontend
+# Clínica Virtual — Frontend
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.2.26.
+Frontend en **Angular 21 + Angular Material** para la gestión de una clínica virtual.
+Consume la API del backend (Express) que corre en `http://localhost:3000`.
 
-## Development server
+## Requisitos
 
-To start a local development server, run:
+- Node.js y npm
+- Backend levantado en el puerto `3000` (o ajustar `src/environments/environment.ts`)
 
-```bash
-ng serve
-```
-
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
-
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+## Instalación y ejecución
 
 ```bash
-ng generate component component-name
+npm install
+npm start        # levanta el dev server en http://localhost:4200
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+## Scripts
 
 ```bash
-ng generate --help
+npm start        # servidor de desarrollo
+npm run build    # compilación de producción en dist/
+npm test         # tests unitarios (Vitest)
 ```
 
-## Building
+## Estructura
 
-To build the project run:
-
-```bash
-ng build
+```
+src/app/
+  components/    # componentes de UI (login, registro, mi-perfil, home, header, menu, footer, ...)
+  guards/        # auth-guard, rol-guard
+  interceptors/  # token-interceptor
+  models/        # interfaces de dominio y de la API
+  services/      # ApiService (capa HTTP única), AuthService, SessionService, CoberturaService
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+## Arquitectura
 
-## Running unit tests
-
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+- **`ApiService`** es la única capa que usa `HttpClient`: desempaqueta el envelope
+  `{ codigo, estado, datos }` y expone `ApiError` con `codigo` y `mensaje`.
+- **`SessionService`** guarda el token y el usuario (composición, sin herencia).
+- **`AuthService`** compone `ApiService` + `SessionService` y encapsula el mapeo a los
+  DTO en `snake_case` que espera el backend.

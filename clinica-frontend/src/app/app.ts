@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { Header } from './components/header/header';
 import { Menu } from './components/menu/menu';
@@ -10,6 +10,4 @@ import { Footer } from './components/footer/footer';
   templateUrl: './app.html',
   styleUrl: './app.css',
 })
-export class App {
-  title = signal('clinica-frontend');
-}
+export class App {}
