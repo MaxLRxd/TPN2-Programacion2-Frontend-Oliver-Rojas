@@ -1,15 +1,14 @@
 import { inject, Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
-import { environment } from '../../environments/environment';
-import { AuthResponse, LoginRequest, RegistroRequest, Usuario } from '../models/auth';
+import { ApiService } from './api';
+import { AuthResponse, LoginRequest, RegistroRequest } from '../models/auth';
+import { Usuario } from '../models/usuario';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  private http = inject(HttpClient);
-  private apiUrl = `${environment.apiUrl}/auth`;
+  private api = inject(ApiService);
 
   private usuarioSubject = new BehaviorSubject<Usuario | null>(this.loadUsuario());
   usuario$ = this.usuarioSubject.asObservable();
@@ -18,32 +17,26 @@ export class AuthService {
   loggedIn$ = this.loggedInSubject.asObservable();
 
   login(data: LoginRequest): Observable<AuthResponse> {
-    return this.http.post<AuthResponse>(`${this.apiUrl}/login`, data).pipe(
+    return this.api.post<AuthResponse>('/auth/login', data).pipe(
       tap((resp) => {
-        if (resp.token) {
-          localStorage.setItem('token', resp.token);
-        }
-        if (resp.usuario) {
-          localStorage.setItem('usuario', JSON.stringify(resp.usuario));
-          this.usuarioSubject.next(resp.usuario);
-        } else {
-          this.cargarPerfil().subscribe();
-        }
+        localStorage.setItem('token', resp.token);
+        localStorage.setItem('usuario', JSON.stringify(resp.usuario));
+        this.usuarioSubject.next(resp.usuario);
         this.loggedInSubject.next(true);
-      })
+      }),
     );
   }
 
-  registro(data: RegistroRequest): Observable<any> {
-    return this.http.post(`${this.apiUrl}/registro`, data);
+  registro(data: RegistroRequest): Observable<Usuario> {
+    return this.api.post<Usuario>('/auth/registro', data);
   }
 
   cargarPerfil(): Observable<Usuario> {
-    return this.http.get<Usuario>(`${this.apiUrl}/perfil`).pipe(
+    return this.api.get<Usuario>('/auth/perfil').pipe(
       tap((u) => {
         localStorage.setItem('usuario', JSON.stringify(u));
         this.usuarioSubject.next(u);
-      })
+      }),
     );
   }
 
@@ -72,7 +65,9 @@ export class AuthService {
 
   private loadUsuario(): Usuario | null {
     const s = localStorage.getItem('usuario');
-    if (!s) return null;
+    if (!s) {
+      return null;
+    }
     try {
       return JSON.parse(s) as Usuario;
     } catch {
@@ -80,4 +75,3 @@ export class AuthService {
     }
   }
 }
-

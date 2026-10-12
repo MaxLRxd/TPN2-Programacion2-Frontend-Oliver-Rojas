@@ -16,7 +16,7 @@ export class Menu implements OnInit {
 
   ngOnInit(): void {
     const u = this.auth.getUsuario();
-    const rol = (u?.rol || u?.tipoUsuario || '').toUpperCase();
+    const rol = (u?.rol || '').toUpperCase();
     if (!this.auth.isLoggedIn()) {
       this.items = [];
       return;

@@ -1,7 +1,7 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { AuthService } from '../../services/auth';
-import { Usuario } from '../../models/auth';
+import { Usuario } from '../../models/usuario';
 
 @Component({
   selector: 'app-mi-perfil',

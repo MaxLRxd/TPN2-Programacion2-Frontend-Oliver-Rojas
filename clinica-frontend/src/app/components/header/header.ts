@@ -27,7 +27,7 @@ export class Header {
 
   get tipo() {
     const u = this.usuario;
-    return u?.rol || u?.tipoUsuario || '';
+    return u?.rol || '';
   }
 
   logout() {

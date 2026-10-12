@@ -9,6 +9,7 @@ import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth';
 import { CoberturaService } from '../../services/cobertura';
 import { Cobertura } from '../../models/cobertura';
+import { RegistroRequest } from '../../models/auth';
 
 @Component({
   selector: 'app-registro',
@@ -47,13 +48,19 @@ export class Registro implements OnInit {
     if (this.form.invalid) return;
     this.error = '';
     this.success = '';
-    this.auth.registro(this.form.value).subscribe({
+    const { fechaNacimiento, coberturaId, ...rest } = this.form.value;
+    const data: RegistroRequest = {
+      ...rest,
+      fecha_nacimiento: fechaNacimiento,
+      id_cobertura: coberturaId,
+    };
+    this.auth.registro(data).subscribe({
       next: () => {
         this.success = 'Registro exitoso. Redirigiendo al login...';
         setTimeout(() => this.router.navigate(['/login']), 1000);
       },
       error: (e) => {
-        this.error = e.error?.mensaje || 'Error en el registro';
+        this.error = e.mensaje || 'Error en el registro';
       },
     });
   }

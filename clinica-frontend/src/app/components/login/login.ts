@@ -32,7 +32,7 @@ export class Login {
         this.router.navigate(['/']);
       },
       error: (e) => {
-        this.error = e.error?.mensaje || 'Error al iniciar sesión';
+        this.error = e.mensaje || 'Error al iniciar sesión';
       },
     });
   }

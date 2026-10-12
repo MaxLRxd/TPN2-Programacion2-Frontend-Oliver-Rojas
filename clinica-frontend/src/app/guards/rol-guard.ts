@@ -14,8 +14,8 @@ export const rolGuard: CanActivateFn = (route, _state) => {
     router.navigate(['/Login']);
     return false;
   }
-  const rol = usuario.rol || usuario.tipoUsuario;
-  if (rol && roles.includes(rol)) {
+  const rol = usuario.rol || '';
+  if (roles.includes(rol)) {
     return true;
   }
   router.navigate(['/acceso-denegado']);
