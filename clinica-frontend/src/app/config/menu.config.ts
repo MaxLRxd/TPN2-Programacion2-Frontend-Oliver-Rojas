@@ -1,8 +1,8 @@
-import { MenuItem } from '../../models/menu-item';
-import { Rol } from '../../models/rol';
+import { MenuItem } from '../models/menu-item';
+import { normalizarRol, Rol } from '../models/rol';
 
 /**
- * Menú declarativo por rol: una única fuente de verdad.
+ * Menú declarativo por rol: única fuente de verdad de las secciones de la app.
  * Para sumar una opción basta con agregarla a la lista del rol.
  * Las rutas apuntan a secciones que hoy renderizan `EnConstruccion`.
  */
@@ -30,3 +30,9 @@ export const MENU_POR_ROL: Record<Rol, MenuItem[]> = {
     { titulo: 'Mi historial', ruta: '/paciente/historial' },
   ],
 };
+
+/** Primera sección del rol (destino post-login). `/` si el rol no es válido. */
+export function rutaInicioPorRol(rol?: string | null): string {
+  const normalizado = normalizarRol(rol);
+  return normalizado ? MENU_POR_ROL[normalizado][0].ruta : '/';
+}

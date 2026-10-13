@@ -1,15 +1,21 @@
 <mat-card>
   <mat-card-header>
     <mat-card-title>Clínica Virtual</mat-card-title>
+    <mat-card-subtitle>Turnos y atención médica, simple y online</mat-card-subtitle>
   </mat-card-header>
   <mat-card-content>
     @if (!auth.isLoggedIn()) {
-      <p>Bienvenido. Podés iniciar sesión o registrarte como paciente.</p>
-      <button mat-button routerLink="/login">Iniciar sesión</button>
-      <button mat-button routerLink="/registro">Registrarse</button>
+      <p>Bienvenido a la clínica virtual. Desde acá vas a poder:</p>
+      <ul>
+        <li>Sacar un turno con el especialista que necesites.</li>
+        <li>Consultar tus turnos y tu historial clínico.</li>
+        <li>Recibir notificaciones de la clínica.</li>
+      </ul>
+      <p>Para empezar, iniciá sesión o registrate como paciente.</p>
+      <button mat-flat-button color="primary" routerLink="/login">Iniciar sesión</button>
+      <button mat-stroked-button routerLink="/registro">Registrarme</button>
     } @else {
-      <p>Elegí una función del menú para continuar.</p>
+      <p>¡Hola de nuevo! Elegí una sección del menú para continuar.</p>
     }
   </mat-card-content>
 </mat-card>
-

@@ -5,7 +5,7 @@ import { RouterModule } from '@angular/router';
 
 import { AuthService } from '../../services/auth';
 import { normalizarRol } from '../../models/rol';
-import { MENU_POR_ROL } from './menu.config';
+import { MENU_POR_ROL } from '../../config/menu.config';
 
 @Component({
   selector: 'app-menu',

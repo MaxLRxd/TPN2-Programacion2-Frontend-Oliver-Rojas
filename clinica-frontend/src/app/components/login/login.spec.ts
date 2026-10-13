@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { provideRouter } from '@angular/router';
-import { throwError } from 'rxjs';
+import { provideRouter, Router } from '@angular/router';
+import { of, throwError } from 'rxjs';
 
 import { Login } from './login';
 import { AuthService } from '../../services/auth';
@@ -37,5 +37,14 @@ describe('Login', () => {
     component.form.setValue({ dni: '36000960', password: 'mala' });
     component.onSubmit();
     expect(component.error()).toBe('Credenciales invalidas');
+  });
+
+  it('redirige a la sección del rol tras iniciar sesión', () => {
+    auth.login.mockReturnValue(of({ token: 't', usuario: { id: 1, rol: 'admin' } }));
+    const router = TestBed.inject(Router);
+    const spy = vi.spyOn(router, 'navigateByUrl');
+    component.form.setValue({ dni: '36000960', password: 'clave123' });
+    component.onSubmit();
+    expect(spy).toHaveBeenCalledWith('/admin/usuarios');
   });
 });

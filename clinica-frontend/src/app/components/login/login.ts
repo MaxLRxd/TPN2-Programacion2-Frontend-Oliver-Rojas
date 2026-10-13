@@ -9,6 +9,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth';
 import { ApiError } from '../../services/api';
+import { rutaInicioPorRol } from '../../config/menu.config';
 
 @Component({
   selector: 'app-login',
@@ -54,9 +55,9 @@ export class Login {
     this.error.set('');
     this.cargando.set(true);
     this.auth.login(this.form.getRawValue()).subscribe({
-      next: () => {
+      next: (resp) => {
         this.cargando.set(false);
-        this.router.navigate(['/']);
+        this.router.navigateByUrl(rutaInicioPorRol(resp.usuario?.rol));
       },
       error: (e: ApiError) => {
         this.error.set(e?.mensaje || 'Error al iniciar sesión');
