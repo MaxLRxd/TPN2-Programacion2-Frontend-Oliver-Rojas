@@ -59,6 +59,10 @@ export class Header {
     return this.usuarioActual?.rol || '';
   }
 
+  irAPerfil(): void {
+    this.router.navigate(['/perfil']);
+  }
+
   logout(): void {
     this.auth.logout();
     this.router.navigate(['/']);

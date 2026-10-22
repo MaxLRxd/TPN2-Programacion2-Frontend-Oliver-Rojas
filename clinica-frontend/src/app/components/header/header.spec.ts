@@ -101,6 +101,11 @@ describe('Header', () => {
     expect(notificaciones.marcarLeida).not.toHaveBeenCalled();
   });
 
+  it('navega a Mi perfil', () => {
+    component.irAPerfil();
+    expect(router.navigate).toHaveBeenCalledWith(['/perfil']);
+  });
+
   it('cierra sesión y navega al inicio', () => {
     component.logout();
     expect(auth.logout).toHaveBeenCalled();

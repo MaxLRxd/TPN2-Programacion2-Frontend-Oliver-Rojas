@@ -10,7 +10,14 @@
     </button>
     <mat-menu #infoMenu="matMenu">
       <span mat-menu-item disabled>Tipo: {{ tipo }}</span>
-      <button mat-menu-item (click)="logout()">Cerrar sesión</button>
+      <button mat-menu-item (click)="irAPerfil()">
+        <mat-icon>person</mat-icon>
+        Mi perfil
+      </button>
+      <button mat-menu-item (click)="logout()">
+        <mat-icon>logout</mat-icon>
+        Cerrar sesión
+      </button>
     </mat-menu>
     <button
       mat-icon-button
