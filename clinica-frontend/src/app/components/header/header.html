@@ -12,9 +12,75 @@
       <span mat-menu-item disabled>Tipo: {{ tipo }}</span>
       <button mat-menu-item (click)="logout()">Cerrar sesión</button>
     </mat-menu>
-    <button mat-icon-button aria-label="Notificaciones">
+    <button
+      mat-icon-button
+      [matMenuTriggerFor]="notificacionesMenu"
+      aria-label="Notificaciones"
+      [matBadge]="notificaciones.noLeidas()"
+      [matBadgeHidden]="notificaciones.noLeidas() === 0"
+      matBadgeColor="warn"
+      matBadgeSize="small"
+    >
       <mat-icon>notifications</mat-icon>
     </button>
+
+    <mat-menu #notificacionesMenu="matMenu">
+      <div class="notificaciones" (click)="$event.stopPropagation()">
+        <div class="notificaciones__cabecera">
+          <span>Notificaciones</span>
+          <button
+            mat-icon-button
+            type="button"
+            aria-label="Actualizar notificaciones"
+            [disabled]="notificaciones.cargando()"
+            (click)="actualizarNotificaciones()"
+          >
+            <mat-icon>refresh</mat-icon>
+          </button>
+        </div>
+
+        @if (notificaciones.cargando()) {
+          <div class="notificaciones__estado" role="status">
+            <mat-spinner diameter="28"></mat-spinner>
+            <span>Cargando notificaciones...</span>
+          </div>
+        } @else if (notificaciones.error()) {
+          <div class="notificaciones__estado notificaciones__estado--error" role="alert">
+            <mat-icon>error_outline</mat-icon>
+            <span>{{ notificaciones.error() }}</span>
+            <button mat-button type="button" (click)="actualizarNotificaciones()">
+              Reintentar
+            </button>
+          </div>
+        } @else if (notificaciones.notificaciones().length === 0) {
+          <div class="notificaciones__estado">
+            <mat-icon>notifications_off</mat-icon>
+            <span>No tenés notificaciones.</span>
+          </div>
+        } @else {
+          @if (errorMarcar()) {
+            <p class="notificaciones__error" role="alert">{{ errorMarcar() }}</p>
+          }
+          <div class="notificaciones__lista">
+            @for (n of notificaciones.notificaciones(); track n.id) {
+              <button
+                type="button"
+                class="notificacion"
+                [class.notificacion--no-leida]="!n.leida"
+                (click)="marcarLeida(n)"
+              >
+                <mat-icon aria-hidden="true">
+                  {{ n.leida ? 'notifications_none' : 'notifications_active' }}
+                </mat-icon>
+                <span class="notificacion__texto">
+                  <span>{{ n.mensaje }}</span>
+                  <small>{{ formatearFecha(n.fecha) }}</small>
+                </span>
+              </button>
+            }
+          </div>
+        }
+      </div>
+    </mat-menu>
   }
 </mat-toolbar>
-
