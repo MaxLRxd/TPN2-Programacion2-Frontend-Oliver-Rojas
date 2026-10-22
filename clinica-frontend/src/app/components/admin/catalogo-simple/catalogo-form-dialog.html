@@ -1,0 +1,40 @@
+<h2 mat-dialog-title>
+  {{ esEdicion ? 'Editar' : 'Nueva' }} {{ datos.config.singular }}
+</h2>
+
+<form [formGroup]="form" (ngSubmit)="guardar()">
+  <mat-dialog-content class="formulario">
+    @if (error()) {
+      <div class="aviso-error" role="alert">
+        <mat-icon>error_outline</mat-icon>
+        <span>{{ error() }}</span>
+      </div>
+    }
+
+    <mat-form-field appearance="outline">
+      <mat-label>{{ datos.config.etiqueta }}</mat-label>
+      <input
+        matInput
+        formControlName="texto"
+        [maxlength]="datos.config.maxLongitud"
+      />
+      @if (form.controls.texto.touched && form.controls.texto.invalid) {
+        <mat-error>{{ mensajeError() }}</mat-error>
+      }
+    </mat-form-field>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+    <button mat-button type="button" [disabled]="guardando()" (click)="cancelar()">
+      Cancelar
+    </button>
+    <button mat-flat-button color="primary" type="submit" [disabled]="guardando()">
+      @if (guardando()) {
+        <mat-spinner diameter="18"></mat-spinner>
+      } @else {
+        <mat-icon>save</mat-icon>
+      }
+      Guardar
+    </button>
+  </mat-dialog-actions>
+</form>

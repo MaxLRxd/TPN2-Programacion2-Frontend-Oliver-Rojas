@@ -17,8 +17,20 @@ export const adminRoutes: Routes = [
         loadComponent: () =>
           import('../components/admin/sedes/sedes').then((modulo) => modulo.Sedes),
       },
-      { path: 'especialidades', component: EnConstruccion },
-      { path: 'coberturas', component: EnConstruccion },
+      {
+        path: 'especialidades',
+        loadComponent: () =>
+          import('../components/admin/especialidades/especialidades').then(
+            (modulo) => modulo.Especialidades,
+          ),
+      },
+      {
+        path: 'coberturas',
+        loadComponent: () =>
+          import('../components/admin/coberturas/coberturas').then(
+            (modulo) => modulo.Coberturas,
+          ),
+      },
       { path: 'auditoria', component: EnConstruccion },
       { path: 'reportes', component: EnConstruccion },
     ],

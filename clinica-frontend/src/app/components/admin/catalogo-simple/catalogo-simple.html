@@ -1,0 +1,118 @@
+<section class="catalogo-page">
+  <app-page-header
+    [titulo]="config().titulo"
+    [subtitulo]="config().subtitulo"
+    [icono]="config().icono"
+  >
+    <button acciones mat-flat-button color="primary" type="button" (click)="nuevo()">
+      <mat-icon>add</mat-icon>
+      Nueva {{ config().singular }}
+    </button>
+  </app-page-header>
+
+  <mat-card appearance="outlined" class="tabla-card">
+    <div class="barra-filtro">
+      <mat-form-field appearance="outline" subscriptSizing="dynamic" class="campo-filtro">
+        <mat-icon matPrefix>search</mat-icon>
+        <mat-label>Buscar {{ config().plural }}</mat-label>
+        <input
+          matInput
+          type="search"
+          [placeholder]="'Por ' + config().etiqueta.toLocaleLowerCase()"
+          [value]="filtro()"
+          (input)="filtro.set($any($event.target).value)"
+        />
+      </mat-form-field>
+
+      @if (filtro()) {
+        <button mat-button type="button" (click)="limpiarFiltro()">
+          <mat-icon>clear</mat-icon>
+          Limpiar
+        </button>
+      }
+    </div>
+
+    @if (errorAccion()) {
+      <div class="aviso-error" role="alert">
+        <mat-icon>error_outline</mat-icon>
+        <span>{{ errorAccion() }}</span>
+        <button mat-icon-button type="button" aria-label="Cerrar aviso" (click)="errorAccion.set('')">
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+    }
+
+    @if (cargando()) {
+      <app-loading-state [mensaje]="'Cargando ' + config().plural + '...'" />
+    } @else if (errorCarga()) {
+      <app-error-state
+        [titulo]="'No se pudieron cargar ' + config().plural"
+        [mensaje]="errorCarga()"
+        (reintentar)="cargar()"
+      />
+    } @else if (itemsFiltrados().length === 0) {
+      <app-empty-state
+        [icono]="config().iconoVacio"
+        [titulo]="
+          filtro() ? 'No se encontraron ' + config().plural : 'Todavía no hay ' + config().plural
+        "
+        [mensaje]="
+          filtro()
+            ? 'Probá con otro ' + config().etiqueta.toLocaleLowerCase() + '.'
+            : 'Creá la primera ' + config().singular + ' para comenzar.'
+        "
+      >
+        @if (filtro()) {
+          <button mat-stroked-button type="button" (click)="limpiarFiltro()">
+            Limpiar filtro
+          </button>
+        } @else {
+          <button mat-flat-button color="primary" type="button" (click)="nuevo()">
+            <mat-icon>add</mat-icon>
+            Nueva {{ config().singular }}
+          </button>
+        }
+      </app-empty-state>
+    } @else {
+      <div class="tabla-contenedor">
+        <table class="tabla" [attr.aria-label]="'Listado de ' + config().plural">
+          <thead>
+            <tr>
+              <th scope="col">{{ config().etiqueta }}</th>
+              <th scope="col" class="col-acciones">Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (item of itemsFiltrados(); track item.id) {
+              <tr>
+                <td [attr.data-label]="config().etiqueta">{{ item.texto }}</td>
+                <td data-label="Acciones" class="acciones">
+                  <button
+                    mat-icon-button
+                    type="button"
+                    matTooltip="Editar"
+                    [attr.aria-label]="'Editar ' + item.texto"
+                    (click)="editar(item)"
+                  >
+                    <mat-icon>edit</mat-icon>
+                  </button>
+                  <button
+                    mat-icon-button
+                    color="warn"
+                    type="button"
+                    matTooltip="Eliminar"
+                    [attr.aria-label]="'Eliminar ' + item.texto"
+                    [disabled]="eliminandoId() === item.id"
+                    (click)="eliminar(item)"
+                  >
+                    <mat-icon>delete_outline</mat-icon>
+                  </button>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+  </mat-card>
+</section>
