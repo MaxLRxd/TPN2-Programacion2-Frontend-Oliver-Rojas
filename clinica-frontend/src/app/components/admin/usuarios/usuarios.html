@@ -1,0 +1,204 @@
+<section class="usuarios-page">
+  <app-page-header
+    titulo="Usuarios"
+    subtitulo="Gestioná las cuentas de pacientes, médicos, operadores y administradores."
+    icono="group"
+  >
+    <button
+      acciones
+      mat-flat-button
+      color="primary"
+      type="button"
+      [disabled]="cargandoCatalogos() || !!errorCatalogos()"
+      (click)="nuevoUsuario()"
+    >
+      <mat-icon>person_add</mat-icon>
+      Nuevo usuario
+    </button>
+  </app-page-header>
+
+  @if (errorCatalogos()) {
+    <div class="aviso-error" role="alert">
+      <mat-icon>error_outline</mat-icon>
+      <span>{{ errorCatalogos() }}</span>
+      <button mat-stroked-button type="button" (click)="cargarCatalogos()">Reintentar</button>
+    </div>
+  }
+
+  <mat-card appearance="outlined" class="filtros-card">
+    <form [formGroup]="filtrosForm" class="filtros" (ngSubmit)="buscar()">
+      <mat-form-field appearance="outline" subscriptSizing="dynamic">
+        <mat-label>Nombre</mat-label>
+        <input matInput formControlName="nombre" autocomplete="off" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" subscriptSizing="dynamic">
+        <mat-label>Apellido</mat-label>
+        <input matInput formControlName="apellido" autocomplete="off" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" subscriptSizing="dynamic">
+        <mat-label>Tipo de usuario</mat-label>
+        <mat-select formControlName="rol">
+          <mat-option value="">Todos</mat-option>
+          @for (rol of roles; track rol) {
+            <mat-option [value]="rol">{{ etiquetaRol(rol) }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" subscriptSizing="dynamic">
+        <mat-label>Sede</mat-label>
+        <mat-select formControlName="id_sede" canSelectNullableOptions>
+          <mat-option [value]="null">Todas</mat-option>
+          @for (sede of sedes(); track sede.id) {
+            <mat-option [value]="sede.id">{{ sede.nombre }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+      <div class="filtros__acciones">
+        <button mat-flat-button color="primary" type="submit">
+          <mat-icon>search</mat-icon>
+          Buscar
+        </button>
+        <button mat-button type="button" (click)="limpiarFiltros()">Limpiar</button>
+      </div>
+    </form>
+  </mat-card>
+
+  <mat-card appearance="outlined" class="tabla-card">
+    @if (cargando()) {
+      <app-loading-state mensaje="Cargando usuarios..." />
+    } @else if (errorCarga()) {
+      <app-error-state
+        titulo="No se pudieron cargar los usuarios"
+        [mensaje]="errorCarga()"
+        (reintentar)="cargar(pagina())"
+      />
+    } @else if (usuarios().length === 0) {
+      <app-empty-state
+        icono="group_off"
+        [titulo]="hayFiltros() ? 'No se encontraron usuarios' : 'Todavía no hay usuarios'"
+        [mensaje]="
+          hayFiltros()
+            ? 'Probá con otros filtros o con otro tipo de usuario.'
+            : 'Creá el primer usuario para comenzar.'
+        "
+      >
+        @if (hayFiltros()) {
+          <button mat-stroked-button type="button" (click)="limpiarFiltros()">
+            Limpiar filtros
+          </button>
+        } @else {
+          <button
+            mat-flat-button
+            color="primary"
+            type="button"
+            [disabled]="cargandoCatalogos() || !!errorCatalogos()"
+            (click)="nuevoUsuario()"
+          >
+            <mat-icon>person_add</mat-icon>
+            Nuevo usuario
+          </button>
+        }
+      </app-empty-state>
+    } @else {
+      <div class="tabla-contenedor">
+        <table class="tabla" aria-label="Listado de usuarios">
+          <thead>
+            <tr>
+              <th scope="col">Usuario</th>
+              <th scope="col">DNI</th>
+              <th scope="col">Rol</th>
+              <th scope="col">Asignación</th>
+              <th scope="col">Especialidades</th>
+              <th scope="col">Teléfono</th>
+              <th scope="col" class="col-acciones">Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (usuario of usuarios(); track usuario.id) {
+              <tr>
+                <td>
+                  <div class="usuario">
+                    <span class="usuario__nombre"
+                      >{{ usuario.apellido }}, {{ usuario.nombre }}</span
+                    >
+                    <span class="usuario__email">{{ usuario.email }}</span>
+                  </div>
+                </td>
+                <td>{{ usuario.dni }}</td>
+                <td>
+                  <span [class]="'rol rol--' + usuario.rol">
+                    {{ etiquetaRol(usuario.rol) }}
+                  </span>
+                </td>
+                <td>{{ asignacion(usuario) }}</td>
+                <td>
+                  @if (usuario.rol === 'medico') {
+                    {{ especialidadesTexto(usuario) }}
+                  } @else {
+                    —
+                  }
+                </td>
+                <td>{{ usuario.telefono || '—' }}</td>
+                <td class="acciones">
+                  <button
+                    mat-icon-button
+                    type="button"
+                    matTooltip="Editar usuario"
+                    [attr.aria-label]="'Editar ' + usuario.apellido + ', ' + usuario.nombre"
+                    [disabled]="cargandoCatalogos() || !!errorCatalogos()"
+                    (click)="editarUsuario(usuario)"
+                  >
+                    <mat-icon>edit</mat-icon>
+                  </button>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+
+      <div class="paginacion">
+        <span class="paginacion__resumen">
+          Mostrando {{ desde() }}–{{ hasta() }} de {{ total() }}
+        </span>
+
+        <div class="paginacion__controles">
+          <mat-form-field appearance="outline" subscriptSizing="dynamic" class="limite">
+            <mat-label>Por página</mat-label>
+            <mat-select [value]="limite()" (selectionChange)="cambiarLimite($event.value)">
+              @for (opcion of limites; track opcion) {
+                <mat-option [value]="opcion">{{ opcion }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+
+          <button
+            mat-icon-button
+            type="button"
+            aria-label="Página anterior"
+            [disabled]="!hayPaginaAnterior() || cargando()"
+            (click)="paginaAnterior()"
+          >
+            <mat-icon>chevron_left</mat-icon>
+          </button>
+
+          <span>Página {{ pagina() }} de {{ totalPaginas() || 1 }}</span>
+
+          <button
+            mat-icon-button
+            type="button"
+            aria-label="Página siguiente"
+            [disabled]="!hayPaginaSiguiente() || cargando()"
+            (click)="paginaSiguiente()"
+          >
+            <mat-icon>chevron_right</mat-icon>
+          </button>
+        </div>
+      </div>
+    }
+  </mat-card>
+</section>

@@ -1,0 +1,44 @@
+.formulario {
+  padding-top: 0.5rem;
+  min-width: min(700px, 85vw);
+}
+
+.grilla {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0 1rem;
+}
+
+mat-form-field {
+  width: 100%;
+}
+
+.campo-completo {
+  grid-column: 1 / -1;
+}
+
+.aviso-error {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.5rem;
+  background: var(--mat-sys-error-container, #fdecea);
+  color: var(--mat-sys-on-error-container, #5f1712);
+}
+
+mat-spinner {
+  display: inline-block;
+  margin-right: 0.5rem;
+}
+
+@media (max-width: 640px) {
+  .formulario {
+    min-width: 0;
+  }
+
+  .grilla {
+    grid-template-columns: 1fr;
+  }
+}

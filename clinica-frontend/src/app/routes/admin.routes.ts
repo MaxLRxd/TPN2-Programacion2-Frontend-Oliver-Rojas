@@ -11,7 +11,11 @@ export const adminRoutes: Routes = [
     data: { roles: ['admin'] },
     children: [
       { path: '', redirectTo: 'usuarios', pathMatch: 'full' },
-      { path: 'usuarios', component: EnConstruccion },
+      {
+        path: 'usuarios',
+        loadComponent: () =>
+          import('../components/admin/usuarios/usuarios').then((modulo) => modulo.Usuarios),
+      },
       {
         path: 'sedes',
         loadComponent: () =>
@@ -27,9 +31,7 @@ export const adminRoutes: Routes = [
       {
         path: 'coberturas',
         loadComponent: () =>
-          import('../components/admin/coberturas/coberturas').then(
-            (modulo) => modulo.Coberturas,
-          ),
+          import('../components/admin/coberturas/coberturas').then((modulo) => modulo.Coberturas),
       },
       { path: 'auditoria', component: EnConstruccion },
       { path: 'reportes', component: EnConstruccion },

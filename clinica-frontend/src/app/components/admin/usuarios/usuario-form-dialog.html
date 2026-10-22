@@ -1,0 +1,157 @@
+<h2 mat-dialog-title>{{ esEdicion ? 'Editar usuario' : 'Nuevo usuario' }}</h2>
+
+<form [formGroup]="form" (ngSubmit)="guardar()">
+  <mat-dialog-content class="formulario">
+    @if (error()) {
+      <div class="aviso-error" role="alert">
+        <mat-icon>error_outline</mat-icon>
+        <span>{{ error() }}</span>
+      </div>
+    }
+
+    <div class="grilla">
+      <mat-form-field appearance="outline">
+        <mat-label>Nombre</mat-label>
+        <input matInput formControlName="nombre" maxlength="30" autocomplete="given-name" />
+        @if (form.controls.nombre.touched && form.controls.nombre.invalid) {
+          <mat-error>{{ mensaje('nombre') }}</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Apellido</mat-label>
+        <input matInput formControlName="apellido" maxlength="30" autocomplete="family-name" />
+        @if (form.controls.apellido.touched && form.controls.apellido.invalid) {
+          <mat-error>{{ mensaje('apellido') }}</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>DNI</mat-label>
+        <input
+          matInput
+          formControlName="dni"
+          maxlength="8"
+          inputmode="numeric"
+          autocomplete="off"
+        />
+        @if (form.controls.dni.touched && form.controls.dni.invalid) {
+          <mat-error>{{ mensaje('dni') }}</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Fecha de nacimiento</mat-label>
+        <input matInput type="date" formControlName="fecha_nacimiento" />
+        @if (form.controls.fecha_nacimiento.touched && form.controls.fecha_nacimiento.invalid) {
+          <mat-error>{{ mensaje('fecha_nacimiento') }}</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Email</mat-label>
+        <input matInput type="email" formControlName="email" maxlength="30" autocomplete="email" />
+        @if (form.controls.email.touched && form.controls.email.invalid) {
+          <mat-error>{{ mensaje('email') }}</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Teléfono (opcional)</mat-label>
+        <input
+          matInput
+          formControlName="telefono"
+          maxlength="10"
+          inputmode="tel"
+          autocomplete="tel"
+        />
+        @if (form.controls.telefono.touched && form.controls.telefono.invalid) {
+          <mat-error>{{ mensaje('telefono') }}</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Tipo de usuario</mat-label>
+        <mat-select formControlName="rol">
+          @for (rol of rolesDisponibles; track rol) {
+            <mat-option [value]="rol">{{ etiquetaRol(rol) }}</mat-option>
+          }
+        </mat-select>
+        @if (form.controls.rol.touched && form.controls.rol.invalid) {
+          <mat-error>{{ mensaje('rol') }}</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>{{ esEdicion ? 'Nueva contraseña (opcional)' : 'Contraseña' }}</mat-label>
+        <input
+          matInput
+          type="password"
+          formControlName="password"
+          autocomplete="new-password"
+          placeholder="{{
+            esEdicion ? 'Dejar vacío para conservar la actual' : 'Mínimo 6 caracteres'
+          }}"
+        />
+        @if (form.controls.password.touched && form.controls.password.invalid) {
+          <mat-error>{{ mensaje('password') }}</mat-error>
+        }
+      </mat-form-field>
+
+      @if (esStaff()) {
+        <mat-form-field appearance="outline">
+          <mat-label>Sede</mat-label>
+          <mat-select formControlName="id_sede">
+            @for (sede of datos.sedes; track sede.id) {
+              <mat-option [value]="sede.id">{{ sede.nombre }}</mat-option>
+            }
+          </mat-select>
+          @if (form.controls.id_sede.touched && form.controls.id_sede.invalid) {
+            <mat-error>{{ mensaje('id_sede') }}</mat-error>
+          }
+        </mat-form-field>
+      }
+
+      @if (rolSeleccionado() === 'paciente') {
+        <mat-form-field appearance="outline">
+          <mat-label>Cobertura</mat-label>
+          <mat-select formControlName="id_cobertura">
+            @for (cobertura of datos.coberturas; track cobertura.id) {
+              <mat-option [value]="cobertura.id">{{ cobertura.nombre }}</mat-option>
+            }
+          </mat-select>
+          @if (form.controls.id_cobertura.touched && form.controls.id_cobertura.invalid) {
+            <mat-error>{{ mensaje('id_cobertura') }}</mat-error>
+          }
+        </mat-form-field>
+      }
+
+      @if (rolSeleccionado() === 'medico') {
+        <mat-form-field appearance="outline" class="campo-completo">
+          <mat-label>Especialidades</mat-label>
+          <mat-select formControlName="especialidades" multiple>
+            @for (especialidad of datos.especialidades; track especialidad.id) {
+              <mat-option [value]="especialidad.id">{{ especialidad.descripcion }}</mat-option>
+            }
+          </mat-select>
+          <mat-hint>Seleccioná al menos una especialidad.</mat-hint>
+          @if (form.controls.especialidades.touched && form.controls.especialidades.invalid) {
+            <mat-error>{{ mensaje('especialidades') }}</mat-error>
+          }
+        </mat-form-field>
+      }
+    </div>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+    <button mat-button type="button" [disabled]="guardando()" (click)="cancelar()">Cancelar</button>
+    <button mat-flat-button color="primary" type="submit" [disabled]="guardando()">
+      @if (guardando()) {
+        <mat-spinner diameter="18"></mat-spinner>
+      } @else {
+        <mat-icon>save</mat-icon>
+      }
+      Guardar
+    </button>
+  </mat-dialog-actions>
+</form>
