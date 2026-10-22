@@ -33,7 +33,11 @@ export const adminRoutes: Routes = [
         loadComponent: () =>
           import('../components/admin/coberturas/coberturas').then((modulo) => modulo.Coberturas),
       },
-      { path: 'auditoria', component: EnConstruccion },
+      {
+        path: 'auditoria',
+        loadComponent: () =>
+          import('../components/admin/auditoria/auditoria').then((modulo) => modulo.Auditoria),
+      },
       { path: 'reportes', component: EnConstruccion },
     ],
   },

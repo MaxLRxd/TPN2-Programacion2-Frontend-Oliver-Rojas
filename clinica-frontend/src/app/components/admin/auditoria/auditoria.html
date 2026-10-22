@@ -1,0 +1,164 @@
+<section class="auditoria-page">
+  <app-page-header
+    titulo="Auditoría"
+    subtitulo="Consultá el registro de altas, bajas y modificaciones sensibles."
+    icono="history"
+  >
+    <button acciones mat-stroked-button type="button" [disabled]="cargando()" (click)="cargar()">
+      <mat-icon>refresh</mat-icon>
+      Actualizar
+    </button>
+  </app-page-header>
+
+  <mat-card appearance="outlined" class="filtros-card">
+    <form [formGroup]="filtrosForm" class="filtros" (ngSubmit)="aplicarFiltros()">
+      <mat-form-field appearance="outline" subscriptSizing="dynamic">
+        <mat-label>Usuario</mat-label>
+        <mat-select formControlName="id_usuario" canSelectNullableOptions>
+          <mat-option [value]="null">Todos</mat-option>
+          @for (usuario of usuariosFiltro(); track usuario.id) {
+            <mat-option [value]="usuario.id">{{ usuario.nombre }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" subscriptSizing="dynamic">
+        <mat-label>Entidad</mat-label>
+        <mat-select formControlName="entidad">
+          <mat-option value="">Todas</mat-option>
+          @for (entidad of entidadesFiltro(); track entidad) {
+            <mat-option [value]="entidad">{{ etiquetaEntidad(entidad) }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" subscriptSizing="dynamic">
+        <mat-label>Desde</mat-label>
+        <input matInput type="date" formControlName="fecha_desde" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" subscriptSizing="dynamic">
+        <mat-label>Hasta</mat-label>
+        <input matInput type="date" formControlName="fecha_hasta" />
+      </mat-form-field>
+
+      <div class="filtros__acciones">
+        <button mat-flat-button color="primary" type="submit">
+          <mat-icon>filter_alt</mat-icon>
+          Filtrar
+        </button>
+        <button mat-button type="button" (click)="limpiarFiltros()">Limpiar</button>
+      </div>
+    </form>
+
+    @if (errorFiltros()) {
+      <p class="filtros__error" role="alert">
+        <mat-icon>error_outline</mat-icon>
+        {{ errorFiltros() }}
+      </p>
+    }
+  </mat-card>
+
+  <mat-card appearance="outlined" class="tabla-card">
+    @if (cargando()) {
+      <app-loading-state mensaje="Cargando auditoría..." />
+    } @else if (errorCarga()) {
+      <app-error-state
+        titulo="No se pudo cargar la auditoría"
+        [mensaje]="errorCarga()"
+        (reintentar)="cargar()"
+      />
+    } @else if (registrosFiltrados().length === 0) {
+      <app-empty-state
+        icono="history_toggle_off"
+        [titulo]="hayFiltros() ? 'No se encontraron registros' : 'Todavía no hay registros'"
+        [mensaje]="
+          hayFiltros()
+            ? 'Probá con otro usuario, entidad o rango de fechas.'
+            : 'Las acciones sensibles aparecerán acá a medida que se realicen.'
+        "
+      >
+        @if (hayFiltros()) {
+          <button mat-stroked-button type="button" (click)="limpiarFiltros()">
+            Limpiar filtros
+          </button>
+        }
+      </app-empty-state>
+    } @else {
+      <div class="tabla-contenedor">
+        <table class="tabla" aria-label="Registro de auditoría">
+          <thead>
+            <tr>
+              <th scope="col">Usuario</th>
+              <th scope="col">Acción</th>
+              <th scope="col">Entidad</th>
+              <th scope="col">Detalle</th>
+              <th scope="col">Fecha</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (registro of registrosPagina(); track registro.id) {
+              <tr>
+                <td data-label="Usuario">
+                  <span class="usuario">{{ etiquetaUsuario(registro) }}</span>
+                </td>
+                <td data-label="Acción">
+                  <span [class]="'accion accion--' + claseAccion(registro.accion)">
+                    {{ etiquetaAccion(registro.accion) }}
+                  </span>
+                </td>
+                <td data-label="Entidad">
+                  <span class="entidad">{{ etiquetaEntidad(registro.entidad) }}</span>
+                  @if (registro.id_entidad !== null) {
+                    <span class="entidad__id">#{{ registro.id_entidad }}</span>
+                  }
+                </td>
+                <td data-label="Detalle" class="detalle">{{ detalle(registro) }}</td>
+                <td data-label="Fecha" class="fecha">{{ formatearFechaHora(registro.fecha) }}</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+
+      <div class="paginacion">
+        <span class="paginacion__resumen">
+          Mostrando {{ desde() }}–{{ hasta() }} de {{ total() }}
+        </span>
+
+        <div class="paginacion__controles">
+          <mat-form-field appearance="outline" subscriptSizing="dynamic" class="limite">
+            <mat-label>Por página</mat-label>
+            <mat-select [value]="limite()" (selectionChange)="cambiarLimite($event.value)">
+              @for (opcion of limites; track opcion) {
+                <mat-option [value]="opcion">{{ opcion }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+
+          <button
+            mat-icon-button
+            type="button"
+            aria-label="Página anterior"
+            [disabled]="!hayPaginaAnterior()"
+            (click)="paginaAnterior()"
+          >
+            <mat-icon>chevron_left</mat-icon>
+          </button>
+
+          <span>Página {{ pagina() }} de {{ totalPaginas() || 1 }}</span>
+
+          <button
+            mat-icon-button
+            type="button"
+            aria-label="Página siguiente"
+            [disabled]="!hayPaginaSiguiente()"
+            (click)="paginaSiguiente()"
+          >
+            <mat-icon>chevron_right</mat-icon>
+          </button>
+        </div>
+      </div>
+    }
+  </mat-card>
+</section>
