@@ -37,6 +37,23 @@ describe('ApiService', () => {
     await expect(p).resolves.toEqual([{ id: 1, nombre: 'Jerarquicos' }]);
   });
 
+  it('agrega query params y omite los vacios', async () => {
+    const p = firstValueFrom(
+      service.get<unknown[]>('/medicos', {
+        especialidad: 1,
+        sede: undefined,
+        nombre: '',
+      }),
+    );
+    const req = httpMock.expectOne(
+      (r) => r.url === `${base}/medicos` && r.params.get('especialidad') === '1',
+    );
+    expect(req.request.params.has('sede')).toBe(false);
+    expect(req.request.params.has('nombre')).toBe(false);
+    req.flush({ codigo: 200, estado: 'ok', datos: [] });
+    await expect(p).resolves.toEqual([]);
+  });
+
   it('envía el body en POST', async () => {
     const p = firstValueFrom(
       service.post<{ id: number }>('/auth/login', { dni: '1', password: 'x' }),

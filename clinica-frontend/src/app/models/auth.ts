@@ -33,3 +33,10 @@ export interface AuthResponse {
   token: string;
   usuario: Usuario;
 }
+
+export interface PerfilPacienteRequest {
+  email?: string;
+  password?: string;
+  telefono?: string;
+  id_cobertura?: number;
+}

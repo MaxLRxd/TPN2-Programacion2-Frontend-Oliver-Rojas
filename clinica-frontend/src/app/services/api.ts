@@ -1,9 +1,11 @@
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 import { ApiResponse } from '../models/api';
+
+export type QueryParams = Record<string, string | number | boolean | null | undefined>;
 
 /** Error normalizado que los componentes pueden mostrar directamente. */
 export class ApiError extends Error {
@@ -32,29 +34,37 @@ export class ApiService {
   private http = inject(HttpClient);
   private apiUrl = environment.apiUrl;
 
-  get<T>(path: string): Observable<T> {
-    return this.request<T>('GET', path);
+  get<T>(path: string, params?: QueryParams): Observable<T> {
+    return this.request<T>('GET', path, undefined, params);
   }
 
-  post<T>(path: string, body?: unknown): Observable<T> {
-    return this.request<T>('POST', path, body);
+  post<T>(path: string, body?: unknown, params?: QueryParams): Observable<T> {
+    return this.request<T>('POST', path, body, params);
   }
 
-  put<T>(path: string, body?: unknown): Observable<T> {
-    return this.request<T>('PUT', path, body);
+  put<T>(path: string, body?: unknown, params?: QueryParams): Observable<T> {
+    return this.request<T>('PUT', path, body, params);
   }
 
-  patch<T>(path: string, body?: unknown): Observable<T> {
-    return this.request<T>('PATCH', path, body);
+  patch<T>(path: string, body?: unknown, params?: QueryParams): Observable<T> {
+    return this.request<T>('PATCH', path, body, params);
   }
 
-  delete<T>(path: string): Observable<T> {
-    return this.request<T>('DELETE', path);
+  delete<T>(path: string, params?: QueryParams): Observable<T> {
+    return this.request<T>('DELETE', path, undefined, params);
   }
 
-  private request<T>(method: string, path: string, body?: unknown): Observable<T> {
+  private request<T>(
+    method: string,
+    path: string,
+    body?: unknown,
+    params?: QueryParams,
+  ): Observable<T> {
     const url = path.startsWith('http') ? path : `${this.apiUrl}${path}`;
-    return this.http.request<ApiResponse<T>>(method, url, { body }).pipe(
+    return this.http.request<ApiResponse<T>>(method, url, {
+      body,
+      params: this.crearParams(params),
+    }).pipe(
       map((resp) => {
         if (resp.codigo >= 400 || resp.estado !== 'ok') {
           throw new ApiError(resp.codigo, resp.estado);
@@ -63,6 +73,20 @@ export class ApiService {
       }),
       catchError((err: unknown) => throwError(() => this.aApiError(err))),
     );
+  }
+
+  private crearParams(params?: QueryParams): HttpParams | undefined {
+    if (!params) {
+      return undefined;
+    }
+
+    let httpParams = new HttpParams();
+    for (const [clave, valor] of Object.entries(params)) {
+      if (valor !== undefined && valor !== null && valor !== '') {
+        httpParams = httpParams.set(clave, String(valor));
+      }
+    }
+    return httpParams;
   }
 
   private aApiError(err: unknown): ApiError {

@@ -2,7 +2,13 @@ import { inject, Injectable } from '@angular/core';
 import { catchError, map, Observable, of, tap } from 'rxjs';
 import { ApiError, ApiService } from './api';
 import { SessionService } from './session.service';
-import { AuthResponse, LoginRequest, RegistroForm, RegistroRequest } from '../models/auth';
+import {
+  AuthResponse,
+  LoginRequest,
+  PerfilPacienteRequest,
+  RegistroForm,
+  RegistroRequest,
+} from '../models/auth';
 import { Usuario } from '../models/usuario';
 
 @Injectable({
@@ -28,6 +34,12 @@ export class AuthService {
   cargarPerfil(): Observable<Usuario> {
     return this.api
       .get<Usuario>('/auth/perfil')
+      .pipe(tap((usuario) => this.sesion.actualizarUsuario(usuario)));
+  }
+
+  actualizarPerfil(datos: PerfilPacienteRequest): Observable<Usuario> {
+    return this.api
+      .patch<Usuario>('/auth/perfil', datos)
       .pipe(tap((usuario) => this.sesion.actualizarUsuario(usuario)));
   }
 
