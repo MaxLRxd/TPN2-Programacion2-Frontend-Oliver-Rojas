@@ -1,0 +1,120 @@
+<section class="sedes-page">
+  <app-page-header
+    titulo="Sedes"
+    subtitulo="Administrá las sedes donde atiende la clínica."
+    icono="location_on"
+  >
+    <button acciones mat-flat-button color="primary" type="button" (click)="nuevaSede()">
+      <mat-icon>add</mat-icon>
+      Nueva sede
+    </button>
+  </app-page-header>
+
+  <mat-card appearance="outlined" class="tabla-card">
+    <div class="barra-filtro">
+      <mat-form-field appearance="outline" subscriptSizing="dynamic" class="campo-filtro">
+        <mat-icon matPrefix>search</mat-icon>
+        <mat-label>Buscar sedes</mat-label>
+        <input
+          matInput
+          type="search"
+          placeholder="Nombre, dirección o teléfono"
+          [value]="filtro()"
+          (input)="filtro.set($any($event.target).value)"
+        />
+      </mat-form-field>
+
+      @if (filtro()) {
+        <button mat-button type="button" (click)="limpiarFiltro()">
+          <mat-icon>clear</mat-icon>
+          Limpiar
+        </button>
+      }
+    </div>
+
+    @if (errorAccion()) {
+      <div class="aviso-error" role="alert">
+        <mat-icon>error_outline</mat-icon>
+        <span>{{ errorAccion() }}</span>
+        <button mat-icon-button type="button" aria-label="Cerrar aviso" (click)="errorAccion.set('')">
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+    }
+
+    @if (cargando()) {
+      <app-loading-state mensaje="Cargando sedes..." />
+    } @else if (errorCarga()) {
+      <app-error-state
+        titulo="No se pudieron cargar las sedes"
+        [mensaje]="errorCarga()"
+        (reintentar)="cargar()"
+      />
+    } @else if (sedesFiltradas().length === 0) {
+      <app-empty-state
+        icono="location_off"
+        [titulo]="filtro() ? 'No se encontraron sedes' : 'Todavía no hay sedes'"
+        [mensaje]="
+          filtro()
+            ? 'Probá con otro nombre, dirección o teléfono.'
+            : 'Creá la primera sede para comenzar.'
+        "
+      >
+        @if (filtro()) {
+          <button mat-stroked-button type="button" (click)="limpiarFiltro()">
+            Limpiar filtro
+          </button>
+        } @else {
+          <button mat-flat-button color="primary" type="button" (click)="nuevaSede()">
+            <mat-icon>add</mat-icon>
+            Nueva sede
+          </button>
+        }
+      </app-empty-state>
+    } @else {
+      <div class="tabla-contenedor">
+        <table class="tabla" aria-label="Listado de sedes">
+          <thead>
+            <tr>
+              <th scope="col">Nombre</th>
+              <th scope="col">Dirección</th>
+              <th scope="col">Teléfono</th>
+              <th scope="col" class="col-acciones">Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (sede of sedesFiltradas(); track sede.id) {
+              <tr>
+                <td data-label="Nombre">{{ sede.nombre }}</td>
+                <td data-label="Dirección">{{ sede.direccion }}</td>
+                <td data-label="Teléfono">{{ sede.telefono }}</td>
+                <td data-label="Acciones" class="acciones">
+                  <button
+                    mat-icon-button
+                    type="button"
+                    matTooltip="Editar sede"
+                    [attr.aria-label]="'Editar ' + sede.nombre"
+                    (click)="editarSede(sede)"
+                  >
+                    <mat-icon>edit</mat-icon>
+                  </button>
+                  <button
+                    mat-icon-button
+                    color="warn"
+                    type="button"
+                    matTooltip="Eliminar sede"
+                    [attr.aria-label]="'Eliminar ' + sede.nombre"
+                    [disabled]="eliminandoId() === sede.id"
+                    (click)="eliminarSede(sede)"
+                  >
+                    <mat-icon>delete_outline</mat-icon>
+                  </button>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+  </mat-card>
+</section>

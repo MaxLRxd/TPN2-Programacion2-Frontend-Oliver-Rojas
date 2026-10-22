@@ -12,7 +12,11 @@ export const adminRoutes: Routes = [
     children: [
       { path: '', redirectTo: 'usuarios', pathMatch: 'full' },
       { path: 'usuarios', component: EnConstruccion },
-      { path: 'sedes', component: EnConstruccion },
+      {
+        path: 'sedes',
+        loadComponent: () =>
+          import('../components/admin/sedes/sedes').then((modulo) => modulo.Sedes),
+      },
       { path: 'especialidades', component: EnConstruccion },
       { path: 'coberturas', component: EnConstruccion },
       { path: 'auditoria', component: EnConstruccion },

@@ -1,0 +1,50 @@
+<h2 mat-dialog-title>{{ esEdicion ? 'Editar sede' : 'Nueva sede' }}</h2>
+
+<form [formGroup]="form" (ngSubmit)="guardar()">
+  <mat-dialog-content class="formulario">
+    @if (error()) {
+      <div class="aviso-error" role="alert">
+        <mat-icon>error_outline</mat-icon>
+        <span>{{ error() }}</span>
+      </div>
+    }
+
+    <mat-form-field appearance="outline">
+      <mat-label>Nombre</mat-label>
+      <input matInput formControlName="nombre" maxlength="50" autocomplete="organization" />
+      @if (form.controls.nombre.touched && form.controls.nombre.invalid) {
+        <mat-error>{{ mensajeError('nombre') }}</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Dirección</mat-label>
+      <input matInput formControlName="direccion" maxlength="100" autocomplete="street-address" />
+      @if (form.controls.direccion.touched && form.controls.direccion.invalid) {
+        <mat-error>{{ mensajeError('direccion') }}</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Teléfono</mat-label>
+      <input matInput formControlName="telefono" maxlength="15" autocomplete="tel" />
+      @if (form.controls.telefono.touched && form.controls.telefono.invalid) {
+        <mat-error>{{ mensajeError('telefono') }}</mat-error>
+      }
+    </mat-form-field>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+    <button mat-button type="button" [disabled]="guardando()" (click)="cancelar()">
+      Cancelar
+    </button>
+    <button mat-flat-button color="primary" type="submit" [disabled]="guardando()">
+      @if (guardando()) {
+        <mat-spinner diameter="18"></mat-spinner>
+      } @else {
+        <mat-icon>save</mat-icon>
+      }
+      Guardar
+    </button>
+  </mat-dialog-actions>
+</form>

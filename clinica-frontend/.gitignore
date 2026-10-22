@@ -43,4 +43,7 @@ __screenshots__/
 .DS_Store
 Thumbs.db
 
+# Tests
+*.spec.ts
+
 .env
