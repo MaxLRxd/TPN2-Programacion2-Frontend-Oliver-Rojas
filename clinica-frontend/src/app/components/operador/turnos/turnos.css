@@ -1,0 +1,196 @@
+.operador-turnos-page {
+  padding: 1.5rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.tabla-card {
+  padding: 1rem;
+}
+
+.barra-filtros {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 0.75rem;
+}
+
+.campo {
+  width: 220px;
+}
+
+.resumen {
+  margin: 0;
+  color: var(--mat-sys-on-surface-variant, #666);
+}
+
+.aviso-error,
+.aviso-exito {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.5rem;
+}
+
+.aviso-error {
+  background: var(--mat-sys-error-container, #fdecea);
+  color: var(--mat-sys-on-error-container, #5f1712);
+}
+
+.aviso-exito {
+  background: #e8f5e9;
+  color: #1b5e20;
+}
+
+.aviso-error span,
+.aviso-exito span {
+  flex: 1;
+}
+
+.tabla-contenedor {
+  overflow-x: auto;
+}
+
+.tabla {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.tabla th,
+.tabla td {
+  padding: 0.7rem;
+  text-align: left;
+  vertical-align: middle;
+  border-bottom: 1px solid var(--mat-sys-outline-variant, #ddd);
+}
+
+.tabla th {
+  color: var(--mat-sys-on-surface-variant, #555);
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.fila-turno {
+  cursor: pointer;
+}
+
+.fila-turno:hover {
+  background: var(--mat-sys-surface-container-low, #f7f7f7);
+}
+
+.fila-turno:focus-visible {
+  outline: 2px solid var(--mat-sys-primary, #1a73e8);
+  outline-offset: -2px;
+}
+
+.icono-detalle {
+  vertical-align: middle;
+  color: var(--mat-sys-on-surface-variant, #666);
+}
+
+.estado {
+  display: inline-block;
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.estado--confirmado {
+  background: #e3f2fd;
+  color: #0d47a1;
+}
+
+.estado--cancelado {
+  background: #ffebee;
+  color: #b71c1c;
+}
+
+.estado--atendido {
+  background: #e8f5e9;
+  color: #1b5e20;
+}
+
+.col-acciones,
+.acciones {
+  width: 1%;
+  white-space: nowrap;
+  text-align: right;
+}
+
+.fila-detalle td {
+  background: var(--mat-sys-surface-container-low, #f7f7f7);
+}
+
+.detalle {
+  padding: 0.5rem 0.75rem;
+}
+
+.detalle strong {
+  font-size: 0.85rem;
+  text-transform: uppercase;
+}
+
+.detalle p {
+  margin: 0.35rem 0 0;
+  white-space: pre-wrap;
+}
+
+@media (max-width: 700px) {
+  .operador-turnos-page {
+    padding: 1rem;
+  }
+
+  .barra-filtros {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .campo {
+    width: 100%;
+  }
+
+  .tabla thead {
+    display: none;
+  }
+
+  .tabla tbody tr.fila-turno {
+    display: block;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid var(--mat-sys-outline-variant, #ddd);
+  }
+
+  .tabla tbody tr.fila-turno td {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.35rem 0;
+    border-bottom: none;
+    text-align: right;
+  }
+
+  .tabla tbody tr.fila-turno td::before {
+    content: attr(data-label);
+    color: var(--mat-sys-on-surface-variant, #555);
+    font-weight: 600;
+    text-align: left;
+  }
+
+  .tabla tbody tr.fila-turno td.acciones {
+    justify-content: flex-end;
+  }
+
+  .tabla tbody tr.fila-turno td.acciones::before {
+    margin-right: auto;
+  }
+
+  .fila-detalle,
+  .fila-detalle td {
+    display: block;
+  }
+}

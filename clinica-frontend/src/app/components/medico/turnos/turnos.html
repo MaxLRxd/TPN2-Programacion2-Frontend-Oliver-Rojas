@@ -1,0 +1,152 @@
+<section class="medico-turnos-page">
+  <app-page-header
+    titulo="Turnos del día"
+    subtitulo="Consultá los turnos programados y registrá la atención."
+    icono="assignment"
+  />
+
+  <mat-card appearance="outlined" class="tabla-card">
+    <div class="barra-filtros">
+      <mat-form-field appearance="outline" subscriptSizing="dynamic" class="campo">
+        <mat-label>Fecha</mat-label>
+        <input
+          matInput
+          type="date"
+          [value]="fecha()"
+          (change)="cambiarFecha($any($event.target).value)"
+        />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" subscriptSizing="dynamic" class="campo">
+        <mat-label>Sede</mat-label>
+        <mat-select [value]="filtroSede()" (selectionChange)="filtroSede.set($event.value)">
+          <mat-option [value]="null">Todas las sedes</mat-option>
+          @for (sede of sedes(); track sede.id) {
+            <mat-option [value]="sede.id">{{ sede.nombre }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+      <p class="resumen">{{ turnosFiltrados().length }} turno(s) encontrados</p>
+    </div>
+
+    @if (errorAccion()) {
+      <div class="aviso-error" role="alert">
+        <mat-icon>error_outline</mat-icon>
+        <span>{{ errorAccion() }}</span>
+        <button
+          mat-icon-button
+          type="button"
+          aria-label="Cerrar aviso"
+          (click)="errorAccion.set('')"
+        >
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+    }
+
+    @if (cargando()) {
+      <app-loading-state mensaje="Cargando turnos..." />
+    } @else if (errorCarga()) {
+      <app-error-state
+        titulo="No se pudieron cargar los turnos"
+        [mensaje]="errorCarga()"
+        (reintentar)="cargar()"
+      />
+    } @else if (turnosFiltrados().length === 0) {
+      <app-empty-state
+        icono="event_available"
+        titulo="Sin turnos"
+        mensaje="No hay turnos programados para la fecha y sede seleccionadas."
+      />
+    } @else {
+      <div class="tabla-contenedor">
+        <table class="tabla" aria-label="Turnos del médico">
+          <thead>
+            <tr>
+              <th scope="col">Hora</th>
+              <th scope="col">Paciente</th>
+              <th scope="col">Edad</th>
+              <th scope="col">Especialidad</th>
+              <th scope="col">Sede</th>
+              <th scope="col">Estado</th>
+              <th scope="col" class="col-acciones">Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (turno of turnosFiltrados(); track turno.id) {
+              <tr
+                class="fila-turno"
+                tabindex="0"
+                [attr.aria-expanded]="expandidoId() === turno.id"
+                (click)="toggleDetalle(turno)"
+                (keyup.enter)="toggleDetalle(turno)"
+              >
+                <td data-label="Hora">
+                  <mat-icon class="icono-detalle" aria-hidden="true">
+                    {{ expandidoId() === turno.id ? 'expand_less' : 'expand_more' }}
+                  </mat-icon>
+                  {{ turno.hora.slice(0, 5) }}
+                </td>
+                <td data-label="Paciente">
+                  {{ turno.paciente_apellido }}, {{ turno.paciente_nombre }}
+                </td>
+                <td data-label="Edad">{{ edad(turno) ?? '—' }}</td>
+                <td data-label="Especialidad">{{ turno.especialidad }}</td>
+                <td data-label="Sede">{{ turno.sede }}</td>
+                <td data-label="Estado">
+                  <span [class]="claseEstado(turno.estado)">{{
+                    etiquetaEstado(turno.estado)
+                  }}</span>
+                </td>
+                <td data-label="Acciones" class="acciones">
+                  @if (turno.estado === 'confirmado') {
+                    <button
+                      mat-stroked-button
+                      color="primary"
+                      type="button"
+                      [disabled]="atendiendoId() === turno.id"
+                      (click)="$event.stopPropagation(); atender(turno)"
+                    >
+                      <mat-icon>medical_services</mat-icon>
+                      Marcar como atendido
+                    </button>
+                    <button
+                      mat-icon-button
+                      color="warn"
+                      type="button"
+                      matTooltip="Cancelar turno"
+                      aria-label="Cancelar turno"
+                      [disabled]="cancelandoId() === turno.id"
+                      (click)="$event.stopPropagation(); cancelar(turno)"
+                    >
+                      <mat-icon>event_busy</mat-icon>
+                    </button>
+                  }
+                </td>
+              </tr>
+              @if (expandidoId() === turno.id) {
+                <tr class="fila-detalle">
+                  <td colspan="7">
+                    <div class="detalle">
+                      <div>
+                        <strong>Nota del paciente</strong>
+                        <p>{{ turno.nota || 'Sin notas.' }}</p>
+                      </div>
+                      @if (turno.estado === 'atendido') {
+                        <p class="detalle__aviso">
+                          <mat-icon>info</mat-icon>
+                          El resumen clínico está disponible en el historial del paciente.
+                        </p>
+                      }
+                    </div>
+                  </td>
+                </tr>
+              }
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+  </mat-card>
+</section>

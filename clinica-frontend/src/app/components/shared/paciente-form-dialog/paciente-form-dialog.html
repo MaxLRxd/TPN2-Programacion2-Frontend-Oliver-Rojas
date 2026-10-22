@@ -1,0 +1,95 @@
+<h2 mat-dialog-title>Nuevo paciente</h2>
+
+<form [formGroup]="form" (ngSubmit)="guardar()">
+  <mat-dialog-content class="formulario">
+    @if (error()) {
+      <div class="aviso-error" role="alert">
+        <mat-icon>error_outline</mat-icon>
+        <span>{{ error() }}</span>
+      </div>
+    }
+
+    <div class="grilla">
+      <mat-form-field appearance="outline">
+        <mat-label>Nombre</mat-label>
+        <input matInput formControlName="nombre" maxlength="30" autocomplete="given-name" />
+        @if (form.controls.nombre.touched && form.controls.nombre.invalid) {
+          <mat-error>Campo obligatorio (máximo 30 caracteres).</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Apellido</mat-label>
+        <input matInput formControlName="apellido" maxlength="30" autocomplete="family-name" />
+        @if (form.controls.apellido.touched && form.controls.apellido.invalid) {
+          <mat-error>Campo obligatorio (máximo 30 caracteres).</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>DNI</mat-label>
+        <input matInput formControlName="dni" maxlength="8" inputmode="numeric" />
+        @if (form.controls.dni.touched && form.controls.dni.invalid) {
+          <mat-error>Ingresá un DNI de 7 u 8 números.</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Fecha de nacimiento</mat-label>
+        <input matInput type="date" formControlName="fechaNacimiento" [max]="maxFecha" />
+        @if (form.controls.fechaNacimiento.touched && form.controls.fechaNacimiento.invalid) {
+          <mat-error>
+            @if (form.controls.fechaNacimiento.hasError('fechaFutura')) {
+              La fecha no puede ser futura.
+            } @else {
+              Ingresá una fecha válida.
+            }
+          </mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Email</mat-label>
+        <input matInput type="email" formControlName="email" maxlength="30" autocomplete="email" />
+        @if (form.controls.email.touched && form.controls.email.invalid) {
+          <mat-error>Ingresá un email válido.</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Contraseña</mat-label>
+        <input matInput type="password" formControlName="password" autocomplete="new-password" />
+        @if (form.controls.password.touched && form.controls.password.invalid) {
+          <mat-error>Mínimo 6 caracteres.</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="campo-completo">
+        <mat-label>Cobertura</mat-label>
+        <mat-select formControlName="coberturaId">
+          @for (cobertura of coberturas(); track cobertura.id) {
+            <mat-option [value]="cobertura.id">{{ cobertura.nombre }}</mat-option>
+          }
+        </mat-select>
+        @if (cargandoCoberturas()) {
+          <mat-hint>Cargando coberturas...</mat-hint>
+        }
+        @if (form.controls.coberturaId.touched && form.controls.coberturaId.invalid) {
+          <mat-error>Seleccioná una cobertura.</mat-error>
+        }
+      </mat-form-field>
+    </div>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+    <button mat-button type="button" [disabled]="guardando()" (click)="cancelar()">Cancelar</button>
+    <button mat-flat-button color="primary" type="submit" [disabled]="guardando()">
+      @if (guardando()) {
+        <mat-spinner diameter="18"></mat-spinner>
+      } @else {
+        <mat-icon>person_add</mat-icon>
+      }
+      Registrar paciente
+    </button>
+  </mat-dialog-actions>
+</form>

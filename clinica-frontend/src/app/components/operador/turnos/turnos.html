@@ -1,0 +1,135 @@
+<section class="operador-turnos-page">
+  <app-page-header
+    titulo="Turnos de la sede"
+    subtitulo="Consultá los turnos del día y cancelalos si es necesario."
+    icono="assignment"
+  >
+    <button acciones mat-flat-button color="primary" type="button" (click)="asignarTurno()">
+      <mat-icon>event_available</mat-icon>
+      Asignar turno
+    </button>
+  </app-page-header>
+
+  <mat-card appearance="outlined" class="tabla-card">
+    <div class="barra-filtros">
+      <mat-form-field appearance="outline" subscriptSizing="dynamic" class="campo">
+        <mat-label>Fecha</mat-label>
+        <input
+          matInput
+          type="date"
+          [value]="fecha()"
+          (change)="cambiarFecha($any($event.target).value)"
+        />
+      </mat-form-field>
+      <p class="resumen">{{ turnos().length }} turno(s) en la sede</p>
+    </div>
+
+    @if (exito()) {
+      <div class="aviso-exito" role="status">
+        <mat-icon>check_circle</mat-icon>
+        <span>{{ exito() }}</span>
+        <button mat-icon-button type="button" aria-label="Cerrar aviso" (click)="exito.set('')">
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+    }
+
+    @if (errorAccion()) {
+      <div class="aviso-error" role="alert">
+        <mat-icon>error_outline</mat-icon>
+        <span>{{ errorAccion() }}</span>
+        <button
+          mat-icon-button
+          type="button"
+          aria-label="Cerrar aviso"
+          (click)="errorAccion.set('')"
+        >
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+    }
+
+    @if (cargando()) {
+      <app-loading-state mensaje="Cargando turnos..." />
+    } @else if (errorCarga()) {
+      <app-error-state
+        titulo="No se pudieron cargar los turnos"
+        [mensaje]="errorCarga()"
+        (reintentar)="cargar()"
+      />
+    } @else if (turnos().length === 0) {
+      <app-empty-state
+        icono="event_available"
+        titulo="Sin turnos"
+        mensaje="No hay turnos programados para la fecha seleccionada."
+      />
+    } @else {
+      <div class="tabla-contenedor">
+        <table class="tabla" aria-label="Turnos de la sede">
+          <thead>
+            <tr>
+              <th scope="col">Hora</th>
+              <th scope="col">Paciente</th>
+              <th scope="col">Médico</th>
+              <th scope="col">Especialidad</th>
+              <th scope="col">Estado</th>
+              <th scope="col" class="col-acciones">Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (turno of turnos(); track turno.id) {
+              <tr
+                class="fila-turno"
+                tabindex="0"
+                [attr.aria-expanded]="expandidoId() === turno.id"
+                (click)="toggleDetalle(turno)"
+                (keyup.enter)="toggleDetalle(turno)"
+              >
+                <td data-label="Hora">
+                  <mat-icon class="icono-detalle" aria-hidden="true">
+                    {{ expandidoId() === turno.id ? 'expand_less' : 'expand_more' }}
+                  </mat-icon>
+                  {{ turno.hora.slice(0, 5) }}
+                </td>
+                <td data-label="Paciente">
+                  {{ turno.paciente_apellido }}, {{ turno.paciente_nombre }}
+                </td>
+                <td data-label="Médico">{{ turno.medico_apellido }}, {{ turno.medico_nombre }}</td>
+                <td data-label="Especialidad">{{ turno.especialidad }}</td>
+                <td data-label="Estado">
+                  <span [class]="'estado estado--' + turno.estado">{{
+                    etiquetaEstado(turno.estado)
+                  }}</span>
+                </td>
+                <td data-label="Acciones" class="acciones">
+                  @if (turno.estado === 'confirmado') {
+                    <button
+                      mat-stroked-button
+                      color="warn"
+                      type="button"
+                      [disabled]="cancelandoId() === turno.id"
+                      (click)="$event.stopPropagation(); cancelar(turno)"
+                    >
+                      <mat-icon>event_busy</mat-icon>
+                      Cancelar
+                    </button>
+                  }
+                </td>
+              </tr>
+              @if (expandidoId() === turno.id) {
+                <tr class="fila-detalle">
+                  <td colspan="6">
+                    <div class="detalle">
+                      <strong>Nota del paciente</strong>
+                      <p>{{ turno.nota || 'Sin notas.' }}</p>
+                    </div>
+                  </td>
+                </tr>
+              }
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+  </mat-card>
+</section>

@@ -1,0 +1,55 @@
+<section class="paciente-historial-page">
+  <app-page-header
+    titulo="Mi historial clínico"
+    subtitulo="Registros de las atenciones médicas que recibiste."
+    icono="history"
+  />
+
+  <mat-card appearance="outlined" class="contenido-card">
+    @if (cargando()) {
+      <app-loading-state mensaje="Cargando historial..." />
+    } @else if (error()) {
+      <app-error-state
+        titulo="No se pudo cargar tu historial"
+        [mensaje]="error()"
+        (reintentar)="cargar()"
+      />
+    } @else if (historial().length === 0) {
+      <app-empty-state
+        icono="history_toggle_off"
+        titulo="Sin registros clínicos"
+        mensaje="Todavía no tenés atenciones registradas en tu historial."
+      />
+    } @else {
+      <div class="registros">
+        @for (registro of historial(); track registro.id) {
+          <article class="registro">
+            <header class="registro__header">
+              <div class="registro__fecha">
+                <mat-icon>event_note</mat-icon>
+                <strong>{{ formatearFechaHora(registro.fecha_registro) }}</strong>
+              </div>
+              <span class="registro__medico">{{ nombreMedico(registro.id_medico) }}</span>
+              <span class="registro__turno">Registro #{{ registro.id }}</span>
+            </header>
+
+            <dl class="registro__datos">
+              <div>
+                <dt>Diagnóstico</dt>
+                <dd>{{ registro.diagnostico }}</dd>
+              </div>
+              <div>
+                <dt>Tratamiento</dt>
+                <dd>{{ registro.tratamiento || 'Sin tratamiento registrado' }}</dd>
+              </div>
+              <div>
+                <dt>Observaciones</dt>
+                <dd>{{ registro.observaciones || 'Sin observaciones' }}</dd>
+              </div>
+            </dl>
+          </article>
+        }
+      </div>
+    }
+  </mat-card>
+</section>

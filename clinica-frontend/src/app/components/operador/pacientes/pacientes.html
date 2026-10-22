@@ -1,0 +1,116 @@
+<section class="operador-pacientes-page">
+  <app-page-header
+    titulo="Pacientes"
+    subtitulo="Buscá un paciente para asignarle un turno o registrá uno nuevo."
+    icono="groups"
+  >
+    <button acciones mat-flat-button color="primary" type="button" (click)="nuevoPaciente()">
+      <mat-icon>person_add</mat-icon>
+      Nuevo paciente
+    </button>
+  </app-page-header>
+
+  <mat-card appearance="outlined" class="tabla-card">
+    <form class="barra-filtros" (submit)="$event.preventDefault(); buscar()">
+      <mat-form-field appearance="outline" subscriptSizing="dynamic" class="campo-busqueda">
+        <mat-label>Buscar por nombre, apellido o DNI</mat-label>
+        <input
+          matInput
+          type="search"
+          [value]="busqueda()"
+          (input)="busqueda.set($any($event.target).value)"
+        />
+        <mat-icon matPrefix>search</mat-icon>
+      </mat-form-field>
+      <button mat-flat-button color="primary" type="submit">
+        <mat-icon>search</mat-icon>
+        Buscar
+      </button>
+      <button mat-button type="button" (click)="limpiar()">Limpiar</button>
+      <p class="resumen">{{ pacientes().length }} paciente(s)</p>
+    </form>
+
+    @if (exito()) {
+      <div class="aviso-exito" role="status">
+        <mat-icon>check_circle</mat-icon>
+        <span>{{ exito() }}</span>
+        <button mat-icon-button type="button" aria-label="Cerrar aviso" (click)="exito.set('')">
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+    }
+
+    @if (errorAccion()) {
+      <div class="aviso-error" role="alert">
+        <mat-icon>error_outline</mat-icon>
+        <span>{{ errorAccion() }}</span>
+        <button
+          mat-icon-button
+          type="button"
+          aria-label="Cerrar aviso"
+          (click)="errorAccion.set('')"
+        >
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+    }
+
+    @if (buscando()) {
+      <app-loading-state mensaje="Buscando pacientes..." />
+    } @else if (error()) {
+      <app-error-state
+        titulo="No se pudieron buscar pacientes"
+        [mensaje]="error()"
+        (reintentar)="buscar()"
+      />
+    } @else if (pacientes().length === 0) {
+      <app-empty-state
+        icono="person_search"
+        titulo="Sin pacientes"
+        mensaje="No se encontraron pacientes con el criterio de búsqueda."
+      >
+        <button mat-stroked-button type="button" (click)="nuevoPaciente()">
+          <mat-icon>person_add</mat-icon>
+          Registrar paciente
+        </button>
+      </app-empty-state>
+    } @else {
+      <div class="tabla-contenedor">
+        <table class="tabla" aria-label="Pacientes">
+          <thead>
+            <tr>
+              <th scope="col">DNI</th>
+              <th scope="col">Paciente</th>
+              <th scope="col">Email</th>
+              <th scope="col">Teléfono</th>
+              <th scope="col">Cobertura</th>
+              <th scope="col" class="col-acciones">Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (paciente of pacientes(); track paciente.id) {
+              <tr>
+                <td data-label="DNI">{{ paciente.dni }}</td>
+                <td data-label="Paciente">{{ paciente.apellido }}, {{ paciente.nombre }}</td>
+                <td data-label="Email">{{ paciente.email }}</td>
+                <td data-label="Teléfono">{{ paciente.telefono || '—' }}</td>
+                <td data-label="Cobertura">{{ paciente.cobertura || 'Sin cobertura' }}</td>
+                <td data-label="Acciones" class="acciones">
+                  <button
+                    mat-stroked-button
+                    color="primary"
+                    type="button"
+                    (click)="asignarTurno(paciente)"
+                  >
+                    <mat-icon>event_available</mat-icon>
+                    Asignar turno
+                  </button>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+  </mat-card>
+</section>

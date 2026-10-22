@@ -1,0 +1,62 @@
+.paciente-sacar-turno-page {
+  padding: 1.5rem;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.exito-card {
+  padding: 2rem;
+  text-align: center;
+}
+
+.exito-icono mat-icon {
+  font-size: 3.5rem;
+  width: 3.5rem;
+  height: 3.5rem;
+  color: #2e7d32;
+}
+
+.exito-card h2 {
+  margin: 0.5rem 0 0;
+}
+
+.resumen-turno {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 2rem;
+  margin: 1.5rem 0;
+}
+
+.resumen-turno dt {
+  color: var(--mat-sys-on-surface-variant, #666);
+  font-size: 0.8rem;
+  text-transform: uppercase;
+}
+
+.resumen-turno dd {
+  margin: 0.25rem 0 0;
+  font-weight: 600;
+}
+
+.acciones {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.75rem;
+}
+
+@media (max-width: 700px) {
+  .paciente-sacar-turno-page {
+    padding: 1rem;
+  }
+
+  .exito-card {
+    padding: 1.25rem;
+  }
+
+  .resumen-turno {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+}

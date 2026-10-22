@@ -1,0 +1,47 @@
+<section class="paciente-sacar-turno-page">
+  <app-page-header
+    titulo="Sacar turno"
+    subtitulo="Elegí especialidad, sede, médico y horario para solicitar tu turno."
+    icono="add_circle"
+  />
+
+  @if (turnoCreado(); as turno) {
+    <mat-card appearance="outlined" class="exito-card">
+      <div class="exito-icono">
+        <mat-icon>check_circle</mat-icon>
+      </div>
+      <h2>Turno solicitado</h2>
+      <p>
+        Tu turno quedó reservado para el <strong>{{ turno.fecha }}</strong> a las
+        <strong>{{ turno.hora.slice(0, 5) }}</strong
+        >.
+      </p>
+      <dl class="resumen-turno">
+        <div>
+          <dt>Especialidad</dt>
+          <dd>{{ turno.especialidad || '—' }}</dd>
+        </div>
+        <div>
+          <dt>Médico</dt>
+          <dd>{{ turno.medico_apellido }}, {{ turno.medico_nombre }}</dd>
+        </div>
+        <div>
+          <dt>Sede</dt>
+          <dd>{{ turno.sede || '—' }}</dd>
+        </div>
+      </dl>
+      <div class="acciones">
+        <button mat-flat-button color="primary" type="button" (click)="verMisTurnos()">
+          <mat-icon>event_note</mat-icon>
+          Ver mis turnos
+        </button>
+        <button mat-stroked-button type="button" (click)="sacarOtro()">
+          <mat-icon>add</mat-icon>
+          Sacar otro turno
+        </button>
+      </div>
+    </mat-card>
+  } @else {
+    <app-turno-wizard modo="paciente" (creado)="onCreado($event)" />
+  }
+</section>

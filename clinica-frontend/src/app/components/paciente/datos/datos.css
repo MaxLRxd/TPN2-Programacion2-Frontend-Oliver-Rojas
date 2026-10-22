@@ -1,0 +1,81 @@
+.paciente-datos-page {
+  padding: 1.5rem;
+  max-width: 760px;
+  margin: 0 auto;
+}
+
+.datos-card {
+  padding: 1.25rem;
+}
+
+.identidad {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--mat-sys-outline-variant, #ddd);
+}
+
+.identidad mat-icon {
+  font-size: 2.5rem;
+  width: 2.5rem;
+  height: 2.5rem;
+  color: var(--mat-sys-primary, #1a73e8);
+}
+
+.identidad div {
+  display: flex;
+  flex-direction: column;
+}
+
+.identidad span {
+  color: var(--mat-sys-on-surface-variant, #666);
+}
+
+.ayuda {
+  color: var(--mat-sys-on-surface-variant, #666);
+  font-size: 0.9rem;
+}
+
+.aviso-exito,
+.aviso-error {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.5rem;
+}
+
+.aviso-exito {
+  background: #e8f5e9;
+  color: #1b5e20;
+}
+
+.aviso-error {
+  background: var(--mat-sys-error-container, #fdecea);
+  color: var(--mat-sys-on-error-container, #5f1712);
+}
+
+.formulario {
+  display: grid;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.acciones {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+@media (max-width: 650px) {
+  .paciente-datos-page {
+    padding: 1rem;
+  }
+
+  .datos-card {
+    padding: 1rem;
+  }
+}

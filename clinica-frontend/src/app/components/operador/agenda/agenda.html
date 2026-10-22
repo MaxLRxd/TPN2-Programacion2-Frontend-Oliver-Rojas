@@ -1,0 +1,174 @@
+<section class="operador-agenda-page">
+  <app-page-header
+    titulo="Agenda de la sede"
+    subtitulo="Consultá la agenda por fecha y sede. Solo podés modificar la agenda de tu sede."
+    icono="calendar_month"
+  >
+    <button
+      acciones
+      mat-flat-button
+      color="primary"
+      type="button"
+      [disabled]="!esSedePropia()"
+      (click)="nuevaAgenda()"
+    >
+      <mat-icon>add</mat-icon>
+      Nueva agenda
+    </button>
+    <button acciones mat-stroked-button type="button" (click)="nuevoPaciente()">
+      <mat-icon>person_add</mat-icon>
+      Nuevo paciente
+    </button>
+    <button
+      acciones
+      mat-stroked-button
+      type="button"
+      [disabled]="!esSedePropia()"
+      (click)="asignarTurno()"
+    >
+      <mat-icon>event_available</mat-icon>
+      Asignar turno
+    </button>
+  </app-page-header>
+
+  <mat-card appearance="outlined" class="tabla-card">
+    <div class="barra-filtros">
+      <mat-form-field appearance="outline" subscriptSizing="dynamic" class="campo">
+        <mat-label>Fecha</mat-label>
+        <input
+          matInput
+          type="date"
+          [value]="fecha()"
+          (change)="cambiarFecha($any($event.target).value)"
+        />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" subscriptSizing="dynamic" class="campo">
+        <mat-label>Sede</mat-label>
+        <mat-select [value]="sedeId()" (selectionChange)="cambiarSede($event.value)">
+          @for (sede of sedes(); track sede.id) {
+            <mat-option [value]="sede.id">{{ sede.nombre }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+      <p class="resumen">{{ agendas().length }} rango(s) de agenda</p>
+    </div>
+
+    @if (!esSedePropia()) {
+      <div class="aviso-info" role="status">
+        <mat-icon>visibility</mat-icon>
+        <span>Estás consultando otra sede en modo solo lectura.</span>
+      </div>
+    }
+
+    @if (exito()) {
+      <div class="aviso-exito" role="status">
+        <mat-icon>check_circle</mat-icon>
+        <span>{{ exito() }}</span>
+        <button mat-icon-button type="button" aria-label="Cerrar aviso" (click)="exito.set('')">
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+    }
+
+    @if (errorAccion()) {
+      <div class="aviso-error" role="alert">
+        <mat-icon>error_outline</mat-icon>
+        <span>{{ errorAccion() }}</span>
+        <button
+          mat-icon-button
+          type="button"
+          aria-label="Cerrar aviso"
+          (click)="errorAccion.set('')"
+        >
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+    }
+
+    @if (cargando()) {
+      <app-loading-state mensaje="Cargando agenda..." />
+    } @else if (errorCarga()) {
+      <app-error-state
+        titulo="No se pudo cargar la agenda"
+        [mensaje]="errorCarga()"
+        (reintentar)="cargar()"
+      />
+    } @else if (agendas().length === 0) {
+      <app-empty-state
+        icono="event_busy"
+        titulo="Sin agenda para esta fecha"
+        mensaje="No hay rangos horarios cargados para la fecha y sede seleccionadas."
+      >
+        @if (esSedePropia()) {
+          <button mat-flat-button color="primary" type="button" (click)="nuevaAgenda()">
+            <mat-icon>add</mat-icon>
+            Nueva agenda
+          </button>
+        }
+      </app-empty-state>
+    } @else {
+      <div class="tabla-contenedor">
+        <table class="tabla" aria-label="Agenda de médicos por sede">
+          <thead>
+            <tr>
+              <th scope="col">Médico</th>
+              <th scope="col">Especialidad</th>
+              <th scope="col">Horario</th>
+              <th scope="col">Sede</th>
+              <th scope="col" class="col-acciones">Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (agenda of agendas(); track agenda.id) {
+              <tr>
+                <td data-label="Médico">
+                  {{ agenda.medico_apellido }}, {{ agenda.medico_nombre }}
+                </td>
+                <td data-label="Especialidad">{{ agenda.especialidad }}</td>
+                <td data-label="Horario">{{ horario(agenda) }}</td>
+                <td data-label="Sede">{{ agenda.sede }}</td>
+                <td data-label="Acciones" class="acciones">
+                  @if (esSedePropia()) {
+                    <button
+                      mat-icon-button
+                      type="button"
+                      matTooltip="Editar agenda"
+                      aria-label="Editar agenda"
+                      (click)="editarAgenda(agenda)"
+                    >
+                      <mat-icon>edit</mat-icon>
+                    </button>
+                    <button
+                      mat-icon-button
+                      type="button"
+                      matTooltip="Ver turnos confirmados"
+                      aria-label="Ver turnos confirmados"
+                      (click)="verTurnos(agenda)"
+                    >
+                      <mat-icon>visibility</mat-icon>
+                    </button>
+                    <button
+                      mat-icon-button
+                      color="warn"
+                      type="button"
+                      matTooltip="Eliminar rango"
+                      aria-label="Eliminar rango"
+                      [disabled]="eliminandoId() === agenda.id"
+                      (click)="eliminarAgenda(agenda)"
+                    >
+                      <mat-icon>delete_outline</mat-icon>
+                    </button>
+                  } @else {
+                    <span class="solo-lectura">Solo lectura</span>
+                  }
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+  </mat-card>
+</section>

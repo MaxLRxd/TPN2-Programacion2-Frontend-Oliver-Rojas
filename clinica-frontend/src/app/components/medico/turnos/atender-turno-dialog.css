@@ -1,0 +1,16 @@
+.formulario {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding-top: 0.5rem;
+  min-width: min(520px, 85vw);
+}
+
+.paciente {
+  margin: 0 0 0.5rem;
+  font-weight: 600;
+}
+
+mat-form-field {
+  width: 100%;
+}

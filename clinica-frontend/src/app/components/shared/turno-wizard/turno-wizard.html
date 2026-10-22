@@ -1,0 +1,340 @@
+<section class="wizard">
+  <div class="pasos" aria-label="Pasos para solicitar un turno">
+    @for (item of pasos(); track item; let i = $index) {
+      <div class="paso" [class.paso--activo]="i === paso()" [class.paso--completo]="i < paso()">
+        <span class="paso__numero">{{ i + 1 }}</span>
+        <span class="paso__nombre">{{ etiquetaPaso(item) }}</span>
+      </div>
+    }
+  </div>
+
+  @if (cargandoCatalogos()) {
+    <app-loading-state mensaje="Cargando datos para el turno..." />
+  } @else if (errorCarga()) {
+    <app-error-state
+      titulo="No se pudieron cargar los datos"
+      [mensaje]="errorCarga()"
+      (reintentar)="cargarCatalogos()"
+    />
+  } @else {
+    @if (errorAccion()) {
+      <div class="aviso-error" role="alert">
+        <mat-icon>error_outline</mat-icon>
+        <span>{{ errorAccion() }}</span>
+        <button
+          mat-icon-button
+          type="button"
+          aria-label="Cerrar aviso"
+          (click)="errorAccion.set('')"
+        >
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+    }
+
+    <mat-card appearance="outlined" class="contenido">
+      <mat-card-content>
+        @switch (pasoActual()) {
+          @case ('paciente') {
+            <h2>Elegí el paciente</h2>
+            <p class="ayuda">
+              Buscá por DNI o apellido y seleccioná el paciente que recibirá el turno.
+            </p>
+
+            <div class="buscador">
+              <mat-form-field appearance="outline" subscriptSizing="dynamic" class="campo-busqueda">
+                <mat-icon matPrefix>search</mat-icon>
+                <mat-label>Buscar paciente</mat-label>
+                <input
+                  matInput
+                  type="search"
+                  placeholder="DNI o apellido"
+                  [value]="busquedaPaciente()"
+                  (input)="busquedaPaciente.set($any($event.target).value)"
+                  (keyup.enter)="buscarPacientes()"
+                />
+              </mat-form-field>
+              <button
+                mat-stroked-button
+                type="button"
+                [disabled]="buscandoPacientes()"
+                (click)="buscarPacientes()"
+              >
+                <mat-icon>search</mat-icon>
+                Buscar
+              </button>
+            </div>
+
+            @if (pacienteSeleccionado(); as paciente) {
+              <div class="seleccionado">
+                <mat-icon>person</mat-icon>
+                <div>
+                  <strong>{{ paciente.apellido }}, {{ paciente.nombre }}</strong>
+                  <span>DNI {{ paciente.dni }} · {{ paciente.cobertura || 'Sin cobertura' }}</span>
+                </div>
+                <button mat-button type="button" (click)="cambiarPaciente()">Cambiar</button>
+              </div>
+            }
+
+            @if (buscandoPacientes()) {
+              <app-loading-state mensaje="Buscando pacientes..." />
+            } @else if (errorPacientes()) {
+              <app-error-state
+                titulo="No se pudieron buscar pacientes"
+                [mensaje]="errorPacientes()"
+                (reintentar)="buscarPacientes()"
+              />
+            } @else if (resultadosPacientes().length === 0) {
+              <app-empty-state
+                icono="person_search"
+                titulo="Sin pacientes"
+                mensaje="No se encontraron pacientes con ese criterio."
+              />
+            } @else {
+              <div class="lista-opciones">
+                @for (paciente of resultadosPacientes(); track paciente.id) {
+                  <button
+                    mat-stroked-button
+                    type="button"
+                    class="opcion"
+                    [class.opcion--activa]="pacienteSeleccionado()?.id === paciente.id"
+                    (click)="seleccionarPaciente(paciente)"
+                  >
+                    <span class="opcion__titulo"
+                      >{{ paciente.apellido }}, {{ paciente.nombre }}</span
+                    >
+                    <span class="opcion__detalle"
+                      >DNI {{ paciente.dni }} · {{ paciente.cobertura || 'Sin cobertura' }}</span
+                    >
+                  </button>
+                }
+              </div>
+            }
+          }
+
+          @case ('especialidad') {
+            <h2>Elegí la especialidad</h2>
+            <p class="ayuda">Primero seleccioná qué tipo de atención necesitás.</p>
+            <mat-form-field appearance="outline" class="campo">
+              <mat-label>Especialidad</mat-label>
+              <mat-select
+                [value]="especialidadId()"
+                (selectionChange)="seleccionarEspecialidad($event.value)"
+              >
+                @for (especialidad of especialidades(); track especialidad.id) {
+                  <mat-option [value]="especialidad.id">{{ especialidad.descripcion }}</mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+          }
+
+          @case ('sede') {
+            <h2>Elegí la sede</h2>
+            <p class="ayuda">
+              @if (sedeFija()) {
+                El turno se asignará en la sede del operador.
+              } @else {
+                Seleccioná dónde querés atenderte.
+              }
+            </p>
+            <mat-form-field appearance="outline" class="campo">
+              <mat-label>Sede</mat-label>
+              <mat-select
+                [value]="sedeId()"
+                [disabled]="sedeFija() !== null"
+                (selectionChange)="seleccionarSede($event.value)"
+              >
+                @for (sede of sedes(); track sede.id) {
+                  <mat-option [value]="sede.id">{{ sede.nombre }}</mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+            @if (sedeFija()) {
+              <p class="nota">Sede fija: {{ resumen().sede }}</p>
+            }
+          }
+
+          @case ('medico') {
+            <h2>Elegí el médico</h2>
+            <p class="ayuda">Se muestran los médicos de la especialidad y sede elegidas.</p>
+
+            @if (cargandoMedicos()) {
+              <app-loading-state mensaje="Cargando médicos..." />
+            } @else if (medicos().length === 0) {
+              <app-empty-state
+                icono="medical_services"
+                titulo="Sin médicos disponibles"
+                mensaje="No hay médicos para la especialidad y sede seleccionadas."
+              />
+            } @else {
+              <div class="lista-opciones">
+                @for (medico of medicos(); track medico.id) {
+                  <button
+                    mat-stroked-button
+                    type="button"
+                    class="opcion"
+                    [class.opcion--activa]="medicoId() === medico.id"
+                    (click)="seleccionarMedico(medico.id)"
+                  >
+                    <span class="opcion__titulo">{{ medico.apellido }}, {{ medico.nombre }}</span>
+                    <span class="opcion__detalle">
+                      {{ medico.especialidades[0]?.descripcion || 'Médico' }}
+                    </span>
+                  </button>
+                }
+              </div>
+            }
+          }
+
+          @case ('fecha') {
+            <h2>Elegí la fecha</h2>
+            <p class="ayuda">Solo se muestran los días en que el médico tiene agenda.</p>
+
+            @if (cargandoFechas()) {
+              <app-loading-state mensaje="Cargando fechas..." />
+            } @else if (fechas().length === 0) {
+              <app-empty-state
+                icono="event_busy"
+                titulo="Sin fechas disponibles"
+                mensaje="El médico no tiene fechas con agenda para esta especialidad y sede."
+              />
+            } @else {
+              <div class="chips">
+                @for (dia of fechas(); track dia) {
+                  <button
+                    mat-stroked-button
+                    type="button"
+                    class="chip"
+                    [class.chip--activo]="dia === fecha()"
+                    (click)="seleccionarFecha(dia)"
+                  >
+                    {{ dia }}
+                  </button>
+                }
+              </div>
+            }
+          }
+
+          @case ('horario') {
+            <h2>Elegí el horario</h2>
+            <p class="ayuda">Los horarios ocupados no se muestran.</p>
+
+            @if (cargandoHorarios()) {
+              <app-loading-state mensaje="Cargando horarios..." />
+            } @else if (horarios().length === 0) {
+              <app-empty-state
+                icono="schedule"
+                titulo="Sin horarios disponibles"
+                mensaje="No quedan horarios libres para la fecha seleccionada. Probá con otra fecha."
+              />
+            } @else {
+              <div class="chips">
+                @for (horario of horarios(); track horario) {
+                  <button
+                    mat-stroked-button
+                    type="button"
+                    class="chip"
+                    [class.chip--activo]="horario === hora()"
+                    (click)="seleccionarHora(horario)"
+                  >
+                    {{ horario }}
+                  </button>
+                }
+              </div>
+            }
+          }
+
+          @case ('nota') {
+            <h2>Contanos el motivo</h2>
+            <p class="ayuda">La nota es obligatoria y ayuda al médico a preparar la consulta.</p>
+            <mat-form-field appearance="outline" class="campo">
+              <mat-label>Nota para el médico</mat-label>
+              <textarea matInput rows="4" maxlength="255" [formControl]="nota"></textarea>
+              <mat-hint align="end">{{ nota.value.length }}/255</mat-hint>
+              @if (nota.touched && nota.invalid) {
+                <mat-error>Ingresá una nota de hasta 255 caracteres.</mat-error>
+              }
+            </mat-form-field>
+          }
+
+          @case ('confirmar') {
+            <h2>Revisá y confirmá</h2>
+            <p class="ayuda">Verificá los datos antes de solicitar el turno.</p>
+            <dl class="resumen">
+              <div>
+                <dt>Paciente</dt>
+                <dd>{{ resumen().paciente }}</dd>
+              </div>
+              <div>
+                <dt>Especialidad</dt>
+                <dd>{{ resumen().especialidad }}</dd>
+              </div>
+              <div>
+                <dt>Médico</dt>
+                <dd>{{ resumen().medico }}</dd>
+              </div>
+              <div>
+                <dt>Sede</dt>
+                <dd>{{ resumen().sede }}</dd>
+              </div>
+              <div>
+                <dt>Fecha</dt>
+                <dd>{{ resumen().fecha }}</dd>
+              </div>
+              <div>
+                <dt>Hora</dt>
+                <dd>{{ resumen().hora }}</dd>
+              </div>
+              <div>
+                <dt>Cobertura</dt>
+                <dd>{{ resumen().cobertura }}</dd>
+              </div>
+              <div class="resumen__nota">
+                <dt>Nota</dt>
+                <dd>{{ nota.value }}</dd>
+              </div>
+            </dl>
+          }
+        }
+      </mat-card-content>
+
+      <mat-card-actions class="acciones">
+        <button
+          mat-button
+          type="button"
+          [disabled]="paso() === 0 || guardando()"
+          (click)="volver()"
+        >
+          Volver
+        </button>
+        @if (esUltimoPaso()) {
+          <button
+            mat-flat-button
+            color="primary"
+            type="button"
+            [disabled]="!pasoCompleto('nota') || guardando()"
+            (click)="confirmar()"
+          >
+            @if (guardando()) {
+              <mat-spinner diameter="18"></mat-spinner>
+            } @else {
+              <mat-icon>check_circle</mat-icon>
+            }
+            Confirmar turno
+          </button>
+        } @else {
+          <button
+            mat-flat-button
+            color="primary"
+            type="button"
+            [disabled]="!pasoCompleto(pasoActual())"
+            (click)="continuar()"
+          >
+            Siguiente
+            <mat-icon>arrow_forward</mat-icon>
+          </button>
+        }
+      </mat-card-actions>
+    </mat-card>
+  }
+</section>

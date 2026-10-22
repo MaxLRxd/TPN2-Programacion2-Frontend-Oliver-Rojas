@@ -1,0 +1,14 @@
+<h2 mat-dialog-title>Asignar turno</h2>
+
+<mat-dialog-content class="contenido">
+  <app-turno-wizard
+    modo="operador"
+    [pacienteInicial]="datos.paciente"
+    [sedeFija]="datos.sedeFija"
+    (creado)="cerrar($event)"
+  />
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button type="button" (click)="cancelar()">Cerrar</button>
+</mat-dialog-actions>

@@ -1,0 +1,95 @@
+<h2 mat-dialog-title>{{ esEdicion ? 'Editar rango horario' : 'Nuevo rango horario' }}</h2>
+
+<form [formGroup]="form" (ngSubmit)="guardar()">
+  <mat-dialog-content class="formulario">
+    @if (error()) {
+      <div class="aviso-error" role="alert">
+        <mat-icon>error_outline</mat-icon>
+        <span>{{ error() }}</span>
+      </div>
+    }
+
+    <div class="grilla">
+      <mat-form-field appearance="outline">
+        <mat-label>Fecha</mat-label>
+        <input matInput type="date" formControlName="fecha" />
+        @if (form.controls.fecha.touched && form.controls.fecha.invalid) {
+          <mat-error>Seleccioná una fecha.</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Médico</mat-label>
+        <mat-select formControlName="id_medico" [disabled]="!!datos.medicoIdFijo">
+          @for (medico of datos.medicos; track medico.id) {
+            <mat-option [value]="medico.id">{{ medico.apellido }}, {{ medico.nombre }}</mat-option>
+          }
+        </mat-select>
+        @if (form.controls.id_medico.touched && form.controls.id_medico.invalid) {
+          <mat-error>Seleccioná un médico.</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Hora de entrada</mat-label>
+        <input matInput type="time" formControlName="hora_entrada" />
+        @if (form.controls.hora_entrada.touched && form.controls.hora_entrada.invalid) {
+          <mat-error>Ingresá la hora de entrada.</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Hora de salida</mat-label>
+        <input matInput type="time" formControlName="hora_salida" />
+        @if (errorHorario()) {
+          <mat-error>{{ errorHorario() }}</mat-error>
+        } @else if (form.controls.hora_salida.touched && form.controls.hora_salida.invalid) {
+          <mat-error>Ingresá la hora de salida.</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Especialidad</mat-label>
+        <mat-select formControlName="id_especialidad">
+          @for (especialidad of especialidadesDisponibles(); track especialidad.id) {
+            <mat-option [value]="especialidad.id">{{ especialidad.descripcion }}</mat-option>
+          }
+        </mat-select>
+        @if (especialidadesDisponibles().length === 0) {
+          <mat-hint>Seleccioná primero un médico.</mat-hint>
+        }
+        @if (form.controls.id_especialidad.touched && form.controls.id_especialidad.invalid) {
+          <mat-error>Seleccioná una especialidad.</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Sede</mat-label>
+        <mat-select formControlName="id_sede">
+          @for (sede of sedesDisponibles(); track sede.id) {
+            <mat-option [value]="sede.id">{{ sede.nombre }}</mat-option>
+          }
+        </mat-select>
+        @if (form.controls.id_sede.touched && form.controls.id_sede.invalid) {
+          <mat-error>Seleccioná una sede.</mat-error>
+        }
+      </mat-form-field>
+    </div>
+
+    @if (!datos.medicoIdFijo && form.controls.id_medico.value) {
+      <p class="detalle">Médico seleccionado: {{ nombreMedico(form.controls.id_medico.value) }}</p>
+    }
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+    <button mat-button type="button" [disabled]="guardando()" (click)="cancelar()">Cancelar</button>
+    <button mat-flat-button color="primary" type="submit" [disabled]="guardando()">
+      @if (guardando()) {
+        <mat-spinner diameter="18"></mat-spinner>
+      } @else {
+        <mat-icon>save</mat-icon>
+      }
+      Guardar
+    </button>
+  </mat-dialog-actions>
+</form>

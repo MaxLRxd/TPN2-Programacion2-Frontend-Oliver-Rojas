@@ -1,6 +1,5 @@
 import { Routes } from '@angular/router';
 
-import { EnConstruccion } from '../components/en-construccion/en-construccion';
 import { authGuard } from '../guards/auth-guard';
 import { rolGuard } from '../guards/rol-guard';
 
@@ -10,9 +9,22 @@ export const operadorRoutes: Routes = [
     canActivate: [authGuard, rolGuard],
     data: { roles: ['operador'] },
     children: [
-      { path: '', redirectTo: 'turnos', pathMatch: 'full' },
-      { path: 'turnos', component: EnConstruccion },
-      { path: 'agenda', component: EnConstruccion },
+      { path: '', redirectTo: 'agenda', pathMatch: 'full' },
+      {
+        path: 'agenda',
+        loadComponent: () =>
+          import('../components/operador/agenda/agenda').then((m) => m.OperadorAgenda),
+      },
+      {
+        path: 'turnos',
+        loadComponent: () =>
+          import('../components/operador/turnos/turnos').then((m) => m.OperadorTurnos),
+      },
+      {
+        path: 'pacientes',
+        loadComponent: () =>
+          import('../components/operador/pacientes/pacientes').then((m) => m.OperadorPacientes),
+      },
     ],
   },
 ];

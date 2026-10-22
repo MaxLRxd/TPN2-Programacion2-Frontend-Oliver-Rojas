@@ -1,0 +1,151 @@
+.medico-historial-page {
+  padding: 1.5rem;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.busqueda-card {
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+
+.buscador {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.campo {
+  width: min(100%, 480px);
+}
+
+.aviso-error {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.5rem;
+  background: var(--mat-sys-error-container, #fdecea);
+  color: var(--mat-sys-on-error-container, #5f1712);
+}
+
+.paciente-card,
+.resultados-card {
+  padding: 1rem;
+}
+
+.paciente {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--mat-sys-outline-variant, #ddd);
+}
+
+.paciente div {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+}
+
+.paciente span {
+  color: var(--mat-sys-on-surface-variant, #666);
+  font-size: 0.85rem;
+}
+
+.historial {
+  padding-top: 1rem;
+}
+
+.registros {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.registro {
+  padding: 0.75rem;
+  border: 1px solid var(--mat-sys-outline-variant, #ddd);
+  border-radius: 0.5rem;
+}
+
+.registro__header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--mat-sys-on-surface-variant, #666);
+  font-size: 0.85rem;
+}
+
+.registro__turno {
+  margin-left: auto;
+}
+
+.registro__datos {
+  display: grid;
+  gap: 0.5rem;
+  margin: 0.75rem 0 0;
+}
+
+.registro__datos dt {
+  color: var(--mat-sys-on-surface-variant, #666);
+  font-size: 0.8rem;
+  text-transform: uppercase;
+}
+
+.registro__datos dd {
+  margin: 0.15rem 0 0;
+  white-space: pre-wrap;
+}
+
+.resultados__titulo {
+  margin: 0 0 0.75rem;
+  font-size: 1rem;
+}
+
+.resultados {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.resultado {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.75rem;
+  border: 1px solid var(--mat-sys-outline-variant, #ddd);
+  border-radius: 0.5rem;
+}
+
+.resultado div {
+  display: flex;
+  flex-direction: column;
+}
+
+.resultado span {
+  color: var(--mat-sys-on-surface-variant, #666);
+  font-size: 0.85rem;
+}
+
+@media (max-width: 640px) {
+  .medico-historial-page {
+    padding: 1rem;
+  }
+
+  .buscador {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .campo {
+    width: 100%;
+  }
+
+  .resultado {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}

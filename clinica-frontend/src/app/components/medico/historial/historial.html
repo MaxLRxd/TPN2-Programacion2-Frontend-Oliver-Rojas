@@ -1,0 +1,128 @@
+<section class="medico-historial-page">
+  <app-page-header
+    titulo="Historial clínico"
+    subtitulo="Buscá un paciente y consultá los registros de los turnos que atendiste."
+    icono="history"
+  />
+
+  <mat-card appearance="outlined" class="busqueda-card">
+    <form class="buscador" (submit)="$event.preventDefault(); buscar()">
+      <mat-form-field appearance="outline" subscriptSizing="dynamic" class="campo">
+        <mat-icon matPrefix>search</mat-icon>
+        <mat-label>Buscar paciente</mat-label>
+        <input
+          matInput
+          type="search"
+          placeholder="DNI o apellido"
+          [value]="busqueda()"
+          (input)="busqueda.set($any($event.target).value)"
+        />
+      </mat-form-field>
+      <button mat-flat-button color="primary" type="submit" [disabled]="buscando()">
+        <mat-icon>search</mat-icon>
+        Buscar
+      </button>
+      @if (buscado() || pacienteSeleccionado()) {
+        <button mat-button type="button" (click)="limpiar()">Limpiar</button>
+      }
+    </form>
+  </mat-card>
+
+  @if (errorPacientes()) {
+    <div class="aviso-error" role="alert">
+      <mat-icon>error_outline</mat-icon>
+      <span>{{ errorPacientes() }}</span>
+    </div>
+  }
+
+  @if (pacienteSeleccionado(); as paciente) {
+    <mat-card appearance="outlined" class="paciente-card">
+      <div class="paciente">
+        <mat-icon>person</mat-icon>
+        <div>
+          <strong>{{ paciente.apellido }}, {{ paciente.nombre }}</strong>
+          <span>DNI {{ paciente.dni }} · {{ paciente.cobertura || 'Sin cobertura' }}</span>
+        </div>
+        <button mat-button type="button" (click)="limpiar()">Cambiar paciente</button>
+      </div>
+
+      <div class="historial">
+        @if (cargandoHistorial()) {
+          <app-loading-state mensaje="Cargando historial..." />
+        } @else if (errorHistorial()) {
+          <app-error-state
+            titulo="No se pudo cargar el historial"
+            [mensaje]="errorHistorial()"
+            (reintentar)="cargarHistorial(paciente)"
+          />
+        } @else if (historial().length === 0) {
+          <app-empty-state
+            icono="history_toggle_off"
+            titulo="Sin registros"
+            mensaje="El paciente no tiene registros clínicos cargados por vos."
+          />
+        } @else {
+          <div class="registros">
+            @for (registro of historial(); track registro.id) {
+              <article class="registro">
+                <header class="registro__header">
+                  <mat-icon>event_note</mat-icon>
+                  <span>{{ formatearFechaHora(registro.fecha_registro) }}</span>
+                  <span class="registro__turno">Turno #{{ registro.id_turno }}</span>
+                </header>
+                <dl class="registro__datos">
+                  <div>
+                    <dt>Diagnóstico</dt>
+                    <dd>{{ registro.diagnostico }}</dd>
+                  </div>
+                  <div>
+                    <dt>Tratamiento</dt>
+                    <dd>{{ registro.tratamiento || 'Sin tratamiento registrado' }}</dd>
+                  </div>
+                  <div>
+                    <dt>Observaciones</dt>
+                    <dd>{{ registro.observaciones || 'Sin observaciones' }}</dd>
+                  </div>
+                </dl>
+              </article>
+            }
+          </div>
+        }
+      </div>
+    </mat-card>
+  } @else {
+    <mat-card appearance="outlined" class="resultados-card">
+      @if (buscando()) {
+        <app-loading-state mensaje="Buscando pacientes..." />
+      } @else if (!buscado()) {
+        <app-empty-state
+          icono="manage_search"
+          titulo="Buscá un paciente"
+          mensaje="Ingresá un DNI o apellido para consultar su historial."
+        />
+      } @else if (pacientes().length === 0) {
+        <app-empty-state
+          icono="person_search"
+          titulo="Sin resultados"
+          mensaje="No se encontraron pacientes con ese criterio."
+        />
+      } @else {
+        <h2 class="resultados__titulo">Pacientes encontrados</h2>
+        <div class="resultados">
+          @for (paciente of pacientes(); track paciente.id) {
+            <div class="resultado">
+              <div>
+                <strong>{{ paciente.apellido }}, {{ paciente.nombre }}</strong>
+                <span>DNI {{ paciente.dni }} · {{ paciente.cobertura || 'Sin cobertura' }}</span>
+              </div>
+              <button mat-stroked-button type="button" (click)="seleccionarPaciente(paciente)">
+                <mat-icon>history</mat-icon>
+                Ver historial
+              </button>
+            </div>
+          }
+        </div>
+      }
+    </mat-card>
+  }
+</section>

@@ -1,0 +1,10 @@
+.contenido {
+  padding-top: 0.5rem;
+  min-width: min(900px, 88vw);
+}
+
+@media (max-width: 640px) {
+  .contenido {
+    min-width: 0;
+  }
+}

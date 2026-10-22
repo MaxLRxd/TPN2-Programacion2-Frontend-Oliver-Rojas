@@ -21,13 +21,15 @@ export const MENU_POR_ROL: Record<Rol, MenuItem[]> = {
     { titulo: 'Historial clínico', ruta: '/medico/historial' },
   ],
   operador: [
-    { titulo: 'Turnos de la sede', ruta: '/operador/turnos' },
     { titulo: 'Agenda', ruta: '/operador/agenda' },
+    { titulo: 'Turnos de la sede', ruta: '/operador/turnos' },
+    { titulo: 'Pacientes', ruta: '/operador/pacientes' },
   ],
   paciente: [
     { titulo: 'Sacar turno', ruta: '/paciente/sacar-turno' },
     { titulo: 'Mis turnos', ruta: '/paciente/turnos' },
     { titulo: 'Mi historial', ruta: '/paciente/historial' },
+    { titulo: 'Mis datos', ruta: '/paciente/datos' },
   ],
 };
 

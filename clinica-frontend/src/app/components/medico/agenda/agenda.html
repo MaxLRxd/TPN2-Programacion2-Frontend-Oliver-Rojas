@@ -1,0 +1,109 @@
+<section class="medico-agenda-page">
+  <app-page-header
+    titulo="Mi agenda"
+    subtitulo="Administrá tus rangos horarios de atención."
+    icono="calendar_month"
+  >
+    <button acciones mat-flat-button color="primary" type="button" (click)="nuevaAgenda()">
+      <mat-icon>add</mat-icon>
+      Nueva agenda
+    </button>
+  </app-page-header>
+
+  <mat-card appearance="outlined" class="tabla-card">
+    <div class="barra-filtro">
+      <mat-form-field appearance="outline" subscriptSizing="dynamic" class="campo-fecha">
+        <mat-label>Fecha</mat-label>
+        <input
+          matInput
+          type="date"
+          [value]="fecha()"
+          (change)="cambiarFecha($any($event.target).value)"
+        />
+      </mat-form-field>
+      <p class="resumen-fecha">{{ agendas().length }} rango(s) para la fecha seleccionada</p>
+    </div>
+
+    @if (errorAccion()) {
+      <div class="aviso-error" role="alert">
+        <mat-icon>error_outline</mat-icon>
+        <span>{{ errorAccion() }}</span>
+        <button
+          mat-icon-button
+          type="button"
+          aria-label="Cerrar aviso"
+          (click)="errorAccion.set('')"
+        >
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+    }
+
+    @if (cargando()) {
+      <app-loading-state mensaje="Cargando agenda..." />
+    } @else if (errorCarga()) {
+      <app-error-state
+        titulo="No se pudo cargar la agenda"
+        [mensaje]="errorCarga()"
+        (reintentar)="cargar()"
+      />
+    } @else if (agendas().length === 0) {
+      <app-empty-state
+        icono="event_busy"
+        titulo="Sin rangos para esta fecha"
+        mensaje="Cargá un rango horario para comenzar a recibir turnos."
+      >
+        <button mat-flat-button color="primary" type="button" (click)="nuevaAgenda()">
+          <mat-icon>add</mat-icon>
+          Nueva agenda
+        </button>
+      </app-empty-state>
+    } @else {
+      <div class="tabla-contenedor">
+        <table class="tabla" aria-label="Agenda del médico">
+          <thead>
+            <tr>
+              <th scope="col">Fecha</th>
+              <th scope="col">Horario</th>
+              <th scope="col">Especialidad</th>
+              <th scope="col">Sede</th>
+              <th scope="col" class="col-acciones">Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (agenda of agendas(); track agenda.id) {
+              <tr>
+                <td data-label="Fecha">{{ agenda.fecha }}</td>
+                <td data-label="Horario">{{ horario(agenda) }}</td>
+                <td data-label="Especialidad">{{ agenda.especialidad }}</td>
+                <td data-label="Sede">{{ agenda.sede }}</td>
+                <td data-label="Acciones" class="acciones">
+                  <button
+                    mat-icon-button
+                    type="button"
+                    matTooltip="Editar rango"
+                    aria-label="Editar rango"
+                    (click)="editarAgenda(agenda)"
+                  >
+                    <mat-icon>edit</mat-icon>
+                  </button>
+                  <button
+                    mat-icon-button
+                    color="warn"
+                    type="button"
+                    matTooltip="Eliminar rango"
+                    aria-label="Eliminar rango"
+                    [disabled]="eliminandoId() === agenda.id"
+                    (click)="eliminarAgenda(agenda)"
+                  >
+                    <mat-icon>delete_outline</mat-icon>
+                  </button>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+  </mat-card>
+</section>

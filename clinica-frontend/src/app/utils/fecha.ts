@@ -1,3 +1,14 @@
+export function fechaISO(fecha: Date): string {
+  const anio = fecha.getFullYear();
+  const mes = String(fecha.getMonth() + 1).padStart(2, '0');
+  const dia = String(fecha.getDate()).padStart(2, '0');
+  return `${anio}-${mes}-${dia}`;
+}
+
+export function hoyISO(referencia: Date = new Date()): string {
+  return fechaISO(referencia);
+}
+
 export function parseFecha(valor: string | Date | null | undefined): Date | null {
   if (valor === null || valor === undefined || valor === '') {
     return null;

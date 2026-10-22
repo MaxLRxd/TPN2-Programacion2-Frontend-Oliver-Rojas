@@ -1,6 +1,5 @@
 import { Routes } from '@angular/router';
 
-import { EnConstruccion } from '../components/en-construccion/en-construccion';
 import { authGuard } from '../guards/auth-guard';
 import { rolGuard } from '../guards/rol-guard';
 
@@ -11,9 +10,23 @@ export const medicoRoutes: Routes = [
     data: { roles: ['medico'] },
     children: [
       { path: '', redirectTo: 'agenda', pathMatch: 'full' },
-      { path: 'agenda', component: EnConstruccion },
-      { path: 'turnos', component: EnConstruccion },
-      { path: 'historial', component: EnConstruccion },
+      {
+        path: 'agenda',
+        loadComponent: () =>
+          import('../components/medico/agenda/agenda').then((modulo) => modulo.MedicoAgenda),
+      },
+      {
+        path: 'turnos',
+        loadComponent: () =>
+          import('../components/medico/turnos/turnos').then((modulo) => modulo.MedicoTurnos),
+      },
+      {
+        path: 'historial',
+        loadComponent: () =>
+          import('../components/medico/historial/historial').then(
+            (modulo) => modulo.MedicoHistorial,
+          ),
+      },
     ],
   },
 ];
