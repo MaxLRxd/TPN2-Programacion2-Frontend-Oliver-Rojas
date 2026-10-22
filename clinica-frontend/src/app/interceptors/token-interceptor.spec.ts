@@ -68,12 +68,14 @@ describe('tokenInterceptor', () => {
     expect(router.navigate).not.toHaveBeenCalled();
   });
 
-  it('en 403 redirige a /acceso-denegado', () => {
-    http.get('/api/privado').subscribe({ error: () => {} });
+  it('en 403 no redirige y re-emite el error para que la pantalla lo muestre', () => {
+    let capturado: unknown;
+    http.get('/api/privado').subscribe({ error: (error) => (capturado = error) });
     httpMock
       .expectOne('/api/privado')
       .flush({ estado: 'prohibido' }, { status: 403, statusText: 'Forbidden' });
-    expect(router.navigate).toHaveBeenCalledWith(['/acceso-denegado']);
+    expect(router.navigate).not.toHaveBeenCalled();
+    expect(capturado).toBeTruthy();
   });
 
   it('si ya está en /login no vuelve a redirigir', () => {

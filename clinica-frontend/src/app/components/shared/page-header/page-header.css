@@ -1,0 +1,38 @@
+.page-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.page-header__texto {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.page-header__icono {
+  color: var(--mat-sys-primary, #1b5e20);
+  font-size: 2rem;
+  width: 2rem;
+  height: 2rem;
+}
+
+h1 {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 500;
+}
+
+p {
+  margin: 0.25rem 0 0;
+  color: var(--mat-sys-on-surface-variant, #666);
+}
+
+.page-header__acciones {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}

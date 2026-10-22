@@ -1,0 +1,10 @@
+<div class="empty-state">
+  <mat-icon class="empty-state__icono" aria-hidden="true">{{ icono() }}</mat-icon>
+  <h2>{{ titulo() }}</h2>
+  @if (mensaje()) {
+    <p>{{ mensaje() }}</p>
+  }
+  <div class="empty-state__acciones">
+    <ng-content></ng-content>
+  </div>
+</div>

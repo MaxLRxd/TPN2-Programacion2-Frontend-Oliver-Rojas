@@ -1,0 +1,17 @@
+<header class="page-header">
+  <div class="page-header__texto">
+    @if (icono()) {
+      <mat-icon class="page-header__icono" aria-hidden="true">{{ icono() }}</mat-icon>
+    }
+    <div>
+      <h1>{{ titulo() }}</h1>
+      @if (subtitulo()) {
+        <p>{{ subtitulo() }}</p>
+      }
+    </div>
+  </div>
+
+  <div class="page-header__acciones">
+    <ng-content select="[acciones]"></ng-content>
+  </div>
+</header>

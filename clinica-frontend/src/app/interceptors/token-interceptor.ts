@@ -7,12 +7,10 @@ import { AuthService } from '../services/auth';
 
 /**
  * Agrega el `Authorization: Bearer` cuando hay token y centraliza el manejo
- * de errores de autenticación:
- *  - 401 (token inválido/vencido): limpia la sesión y redirige a `/login`.
- *  - 403 (sin permiso): redirige a `/acceso-denegado`.
+ * de la sesión vencida: un 401 limpia la sesión y redirige a `/login`.
  *
- * El error siempre se re-emite para que `ApiService` lo transforme en `ApiError`
- * y el componente pueda mostrar el mensaje del backend.
+ * Los 403 de negocio se re-emiten para que `ApiService` los transforme en
+ * `ApiError` y cada pantalla muestre el mensaje del backend.
  */
 export const tokenInterceptor: HttpInterceptorFn = (req, next) => {
   const auth = inject(AuthService);
@@ -33,8 +31,6 @@ export const tokenInterceptor: HttpInterceptorFn = (req, next) => {
         if (router.url !== '/login') {
           router.navigate(['/login']);
         }
-      } else if (error.status === 403 && router.url !== '/acceso-denegado') {
-        router.navigate(['/acceso-denegado']);
       }
 
       return throwError(() => error);

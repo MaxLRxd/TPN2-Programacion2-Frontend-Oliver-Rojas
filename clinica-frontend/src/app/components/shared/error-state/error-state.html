@@ -1,0 +1,11 @@
+<div class="error-state" role="alert">
+  <mat-icon class="error-state__icono" aria-hidden="true">error_outline</mat-icon>
+  <h2>{{ titulo() }}</h2>
+  <p>{{ mensaje() }}</p>
+  @if (mostrarReintentar()) {
+    <button mat-stroked-button color="primary" type="button" (click)="reintentar.emit()">
+      <mat-icon>refresh</mat-icon>
+      {{ textoReintentar() }}
+    </button>
+  }
+</div>
