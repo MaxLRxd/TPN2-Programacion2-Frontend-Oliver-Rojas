@@ -31,7 +31,9 @@ export class Header {
   auth = inject(AuthService);
   readonly notificaciones = inject(NotificacionService);
   private router = inject(Router);
-  private usuario = toSignal(this.auth.usuario$, { initialValue: this.auth.getUsuario() });
+  // Se usa la señal (y no `auth.isLoggedIn()`) para que el template reaccione al login/logout
+  // dentro del mismo ciclo de detección de cambios.
+  readonly usuario = toSignal(this.auth.usuario$, { initialValue: this.auth.getUsuario() });
 
   readonly errorMarcar = signal('');
   readonly formatearFecha = formatearFecha;
@@ -46,17 +48,13 @@ export class Header {
     });
   }
 
-  get usuarioActual() {
-    return this.auth.getUsuario();
-  }
-
   get nombre() {
-    const u = this.usuarioActual;
+    const u = this.usuario();
     return u ? `${u.nombre} ${u.apellido}` : '';
   }
 
   get tipo() {
-    return this.usuarioActual?.rol || '';
+    return this.usuario()?.rol || '';
   }
 
   irAPerfil(): void {

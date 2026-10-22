@@ -15,6 +15,8 @@ registro de pacientes, inicio y cierre de sesión, y "Mi perfil".
 | Angular            | 21.2.25    |
 | Angular Material   | 21.2.14    |
 | TypeScript         | 5.9.2      |
+| Chart.js           | 4.6.1      |
+| ng2-charts         | 10.0.0     |
 
 > Angular 21 requiere Node `^20.19.0`, `^22.12.0` o `^24.0.0`.
 
@@ -98,3 +100,27 @@ src/
 - Cierre de sesión y pantalla "Mi perfil" contra `GET /auth/perfil`.
 - Rutas protegidas por sesión y por rol, con páginas "Acceso denegado" y
   "No encontrada".
+
+## Librería de gráficos
+
+La pantalla de **Reportes** (`/admin/reportes`) usa
+[Chart.js](https://www.chartjs.org/) 4 a través de
+[ng2-charts](https://valor-software.com/ng2-charts/) 10, que es la versión
+compatible con Angular 21 (`peerDependencies: @angular/core >= 21`). Ambas se
+instalan con `npm install`; no requieren configuración adicional.
+
+- La directiva `baseChart` se importa solo en el componente de reportes, que se
+  carga en forma diferida (lazy loading), por lo que Chart.js no aumenta el
+  bundle inicial.
+- Se registran únicamente los elementos usados (barras, torta, escalas,
+  leyenda y tooltip) con `provideCharts(...)` en el propio componente.
+
+## Funcionalidades incluidas (Semana 4)
+
+- Auditoría de solo lectura con filtros por usuario, entidad y rango de fechas,
+  paginada y ordenada de más reciente a más antigua.
+- Reportes y estadísticas: turnos totales, atendidos y cancelados, tasa de
+  cancelación, turnos por especialidad (gráfico de barras), turnos por sede
+  (gráfico de torta) y ranking de médicos por turnos atendidos (gráfico de
+  barras horizontales). Un único filtro de rango de fechas actualiza todos los
+  indicadores a la vez.

@@ -1,6 +1,5 @@
 import { Routes } from '@angular/router';
 
-import { EnConstruccion } from '../components/en-construccion/en-construccion';
 import { authGuard } from '../guards/auth-guard';
 import { rolGuard } from '../guards/rol-guard';
 
@@ -38,7 +37,11 @@ export const adminRoutes: Routes = [
         loadComponent: () =>
           import('../components/admin/auditoria/auditoria').then((modulo) => modulo.Auditoria),
       },
-      { path: 'reportes', component: EnConstruccion },
+      {
+        path: 'reportes',
+        loadComponent: () =>
+          import('../components/admin/reportes/reportes').then((modulo) => modulo.Reportes),
+      },
     ],
   },
 ];

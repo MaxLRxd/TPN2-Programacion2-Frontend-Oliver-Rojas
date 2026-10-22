@@ -1,7 +1,7 @@
 <mat-toolbar color="primary">
   <span>Clínica Virtual</span>
   <span style="flex: 1 1 auto"></span>
-  @if (!auth.isLoggedIn()) {
+  @if (!usuario()) {
     <span>Bienvenido a la clínica virtual</span>
   } @else {
     <span>{{ nombre }}</span>
