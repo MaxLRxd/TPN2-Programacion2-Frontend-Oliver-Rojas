@@ -104,10 +104,10 @@
         <app-empty-state
           icono="person_search"
           titulo="Sin resultados"
-          mensaje="No se encontraron pacientes con ese criterio."
+          mensaje="No se encontraron pacientes con registros clínicos cargados por vos."
         />
       } @else {
-        <h2 class="resultados__titulo">Pacientes encontrados</h2>
+        <h2 class="resultados__titulo">Pacientes con registros</h2>
         <div class="resultados">
           @for (paciente of pacientes(); track paciente.id) {
             <div class="resultado">

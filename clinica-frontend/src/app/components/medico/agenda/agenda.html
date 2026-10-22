@@ -21,7 +21,14 @@
           (change)="cambiarFecha($any($event.target).value)"
         />
       </mat-form-field>
-      <p class="resumen-fecha">{{ agendas().length }} rango(s) para la fecha seleccionada</p>
+      <button mat-stroked-button type="button" [disabled]="!fecha()" (click)="verTodasLasFechas()">
+        <mat-icon>calendar_view_month</mat-icon>
+        Ver todas
+      </button>
+      <p class="resumen-fecha">
+        {{ agendas().length }} rango(s)
+        {{ fecha() ? 'para la fecha seleccionada' : 'en total' }}
+      </p>
     </div>
 
     @if (errorAccion()) {
@@ -50,8 +57,12 @@
     } @else if (agendas().length === 0) {
       <app-empty-state
         icono="event_busy"
-        titulo="Sin rangos para esta fecha"
-        mensaje="Cargá un rango horario para comenzar a recibir turnos."
+        [titulo]="fecha() ? 'Sin rangos para esta fecha' : 'Sin rangos cargados'"
+        [mensaje]="
+          fecha()
+            ? 'Cargá un rango horario para comenzar a recibir turnos.'
+            : 'Cargá tu primer rango horario para comenzar a recibir turnos.'
+        "
       >
         <button mat-flat-button color="primary" type="button" (click)="nuevaAgenda()">
           <mat-icon>add</mat-icon>

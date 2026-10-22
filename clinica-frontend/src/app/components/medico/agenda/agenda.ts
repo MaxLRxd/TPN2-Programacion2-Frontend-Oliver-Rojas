@@ -69,7 +69,9 @@ export class MedicoAgenda implements OnInit {
     this.cargando.set(true);
     this.errorCarga.set('');
 
-    this.agendaService.listar({ fecha: this.fecha() }).subscribe({
+    const filtros = this.fecha() ? { fecha: this.fecha() } : {};
+
+    this.agendaService.listar(filtros).subscribe({
       next: (agendas) => {
         this.agendas.set([...agendas].sort((a, b) => a.hora_entrada.localeCompare(b.hora_entrada)));
         this.cargando.set(false);
@@ -86,6 +88,11 @@ export class MedicoAgenda implements OnInit {
       return;
     }
     this.fecha.set(valor);
+    this.cargar();
+  }
+
+  verTodasLasFechas(): void {
+    this.fecha.set('');
     this.cargar();
   }
 
@@ -144,6 +151,7 @@ export class MedicoAgenda implements OnInit {
 
   private abrirFormulario(agenda: Agenda | null): void {
     const usuario = this.auth.getUsuario();
+    const medicoPropio = this.medicos().filter((medico) => medico.id === usuario?.id);
     this.errorAccion.set('');
 
     this.dialog
@@ -152,9 +160,10 @@ export class MedicoAgenda implements OnInit {
         maxWidth: '95vw',
         data: {
           agenda,
-          medicos: this.medicos(),
+          medicos: medicoPropio,
           sedes: this.sedes(),
           medicoIdFijo: usuario?.id ?? null,
+          sedeInicial: usuario?.id_sede ?? null,
           fechaInicial: this.fecha(),
         },
         autoFocus: 'first-tabbable',
@@ -162,9 +171,13 @@ export class MedicoAgenda implements OnInit {
       })
       .afterClosed()
       .subscribe((guardada) => {
-        if (guardada) {
-          this.cargar();
+        if (!guardada) {
+          return;
         }
+        if (this.fecha() && guardada.fecha !== this.fecha()) {
+          this.fecha.set(guardada.fecha);
+        }
+        this.cargar();
       });
   }
 }

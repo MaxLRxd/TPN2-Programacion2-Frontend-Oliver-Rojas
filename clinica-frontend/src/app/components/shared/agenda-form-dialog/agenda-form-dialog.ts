@@ -23,6 +23,7 @@ export interface AgendaFormDialogData {
   sedes: Sede[];
   medicoIdFijo?: number | null;
   sedeIdFija?: number | null;
+  sedeInicial?: number | null;
   fechaInicial?: string;
 }
 
@@ -74,7 +75,7 @@ export class AgendaFormDialog {
       Validators.required,
     ]),
     id_sede: this.fb.control<number | null>(
-      this.datos.agenda?.id_sede ?? this.datos.sedeIdFija ?? null,
+      this.datos.agenda?.id_sede ?? this.datos.sedeIdFija ?? this.datos.sedeInicial ?? null,
       [Validators.required],
     ),
   });
@@ -87,6 +88,10 @@ export class AgendaFormDialog {
   });
 
   constructor() {
+    if (this.datos.medicoIdFijo != null) {
+      this.form.controls.id_medico.disable({ emitEvent: false });
+    }
+
     this.form.controls.id_medico.valueChanges.pipe(takeUntilDestroyed()).subscribe((idMedico) => {
       this.medicoSeleccionadoId.set(idMedico);
       const especialidad = this.form.controls.id_especialidad.value;

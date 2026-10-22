@@ -18,17 +18,26 @@
         }
       </mat-form-field>
 
-      <mat-form-field appearance="outline">
-        <mat-label>Médico</mat-label>
-        <mat-select formControlName="id_medico" [disabled]="!!datos.medicoIdFijo">
-          @for (medico of datos.medicos; track medico.id) {
-            <mat-option [value]="medico.id">{{ medico.apellido }}, {{ medico.nombre }}</mat-option>
+      @if (datos.medicoIdFijo) {
+        <mat-form-field appearance="outline">
+          <mat-label>Médico</mat-label>
+          <input matInput [value]="nombreMedico(form.controls.id_medico.value)" readonly />
+        </mat-form-field>
+      } @else {
+        <mat-form-field appearance="outline">
+          <mat-label>Médico</mat-label>
+          <mat-select formControlName="id_medico">
+            @for (medico of datos.medicos; track medico.id) {
+              <mat-option [value]="medico.id"
+                >{{ medico.apellido }}, {{ medico.nombre }}</mat-option
+              >
+            }
+          </mat-select>
+          @if (form.controls.id_medico.touched && form.controls.id_medico.invalid) {
+            <mat-error>Seleccioná un médico.</mat-error>
           }
-        </mat-select>
-        @if (form.controls.id_medico.touched && form.controls.id_medico.invalid) {
-          <mat-error>Seleccioná un médico.</mat-error>
-        }
-      </mat-form-field>
+        </mat-form-field>
+      }
 
       <mat-form-field appearance="outline">
         <mat-label>Hora de entrada</mat-label>

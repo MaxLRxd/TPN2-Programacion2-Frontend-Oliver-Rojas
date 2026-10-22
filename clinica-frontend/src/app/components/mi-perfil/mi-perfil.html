@@ -42,10 +42,12 @@
             <span class="etiqueta">Teléfono</span>
             <span class="valor">{{ mostrar(u.telefono) }}</span>
           </div>
-          <div class="fila">
-            <span class="etiqueta">Rol</span>
-            <span class="valor">{{ mostrar(u.rol) }}</span>
-          </div>
+          @if (u.rol === 'admin') {
+            <div class="fila">
+              <span class="etiqueta">Rol</span>
+              <span class="valor">{{ mostrar(u.rol) }}</span>
+            </div>
+          }
           <div class="fila">
             <span class="etiqueta">Fecha de nacimiento</span>
             <span class="valor">{{ mostrar(u.fecha_nacimiento) }}</span>
