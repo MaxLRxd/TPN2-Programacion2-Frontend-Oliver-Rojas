@@ -28,8 +28,8 @@
 }
 
 .mensaje.error {
-  background: #fdecea;
-  color: #b3261e;
+  background: var(--cv-peligro-bg);
+  color: var(--cv-peligro);
 }
 
 .datos {

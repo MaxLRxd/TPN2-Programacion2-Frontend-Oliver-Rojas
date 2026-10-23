@@ -1,5 +1,13 @@
-<mat-nav-list>
-  @for (item of items(); track item.ruta) {
-    <a mat-list-item [routerLink]="item.ruta">{{ item.titulo }}</a>
-  }
-</mat-nav-list>
+@if (items().length > 0) {
+  <nav class="menu" aria-label="Secciones">
+    @for (item of items(); track item.ruta) {
+      <a
+        mat-button
+        class="menu__item"
+        [routerLink]="item.ruta"
+        routerLinkActive="menu__item--activo"
+        >{{ item.titulo }}</a
+      >
+    }
+  </nav>
+}

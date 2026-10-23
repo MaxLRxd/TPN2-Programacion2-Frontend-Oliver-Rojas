@@ -1,12 +1,29 @@
 .login-page {
   display: flex;
   justify-content: center;
-  padding: 2rem 1rem;
+  margin: -1.5rem -1rem 0;
+  padding: 3rem 1rem;
+  background: linear-gradient(180deg, var(--cv-bordo) 0, var(--cv-bordo-oscuro) 180px, transparent 180px);
 }
 
 .login-card {
   width: 100%;
   max-width: 420px;
+  padding: 1rem 0.75rem 0.5rem;
+  border-top: 4px solid var(--cv-dorado);
+  box-shadow: var(--cv-sombra-alta);
+}
+
+.mat-mdc-card-title {
+  font-size: 1.75rem;
+  line-height: 1.3;
+}
+
+.mat-mdc-card-subtitle {
+  color: var(--cv-dorado-oscuro);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.75rem;
 }
 
 form {
@@ -32,8 +49,8 @@ button[type='submit'] {
   margin-bottom: 0.75rem;
   padding: 0.5rem 0.75rem;
   border-radius: 0.5rem;
-  background: var(--mat-sys-error-container, #fde7e9);
-  color: var(--mat-sys-on-error-container, #b3261e);
+  background: var(--mat-sys-error-container, var(--cv-peligro-bg));
+  color: var(--mat-sys-on-error-container, var(--cv-peligro));
   font-size: 0.875rem;
 }
 
@@ -43,5 +60,5 @@ button[type='submit'] {
 
 .login-hint {
   margin-right: 0.5rem;
-  color: #666;
-}
+  color: var(--cv-texto-suave);
+}

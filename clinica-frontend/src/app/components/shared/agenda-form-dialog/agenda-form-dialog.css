@@ -15,7 +15,7 @@ mat-form-field {
 
 .detalle {
   margin: 0;
-  color: var(--mat-sys-on-surface-variant, #666);
+  color: var(--mat-sys-on-surface-variant, var(--cv-texto-suave));
   font-size: 0.9rem;
 }
 
@@ -26,8 +26,8 @@ mat-form-field {
   margin-bottom: 0.75rem;
   padding: 0.5rem 0.75rem;
   border-radius: 0.5rem;
-  background: var(--mat-sys-error-container, #fdecea);
-  color: var(--mat-sys-on-error-container, #5f1712);
+  background: var(--mat-sys-error-container, var(--cv-peligro-bg));
+  color: var(--mat-sys-on-error-container, var(--cv-peligro));
 }
 
 mat-spinner {

@@ -35,7 +35,8 @@ import { ErrorState } from '../../shared/error-state/error-state';
 import { LoadingState } from '../../shared/loading-state/loading-state';
 import { PageHeader } from '../../shared/page-header/page-header';
 
-const COLORES = ['#1565c0', '#2e7d32', '#ef6c00', '#6a1b9a', '#00838f', '#c62828', '#5d4037'];
+// Paleta de la aplicación: bordó, dorado, pizarra y tonos derivados.
+const COLORES = ['#a42822', '#be9f65', '#212934', '#6a7280', '#d0483e', '#8a6d38', '#4a8fc7'];
 
 const TASA_VACIA: TasaCancelacion = { total_turnos: 0, total_cancelados: 0, tasa_cancelacion: 0 };
 

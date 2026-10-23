@@ -8,7 +8,7 @@
 }
 
 .error-state__icono {
-  color: var(--mat-sys-error, #b3261e);
+  color: var(--mat-sys-error, var(--cv-peligro));
   font-size: 3rem;
   width: 3rem;
   height: 3rem;
@@ -22,5 +22,5 @@ h2 {
 
 p {
   margin: 0 0 0.5rem;
-  color: var(--mat-sys-on-surface-variant, #666);
+  color: var(--mat-sys-on-surface-variant, var(--cv-texto-suave));
 }

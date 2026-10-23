@@ -1,6 +1,6 @@
 import { Component, computed, inject } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { MatListModule } from '@angular/material/list';
+import { MatButtonModule } from '@angular/material/button';
 import { RouterModule } from '@angular/router';
 
 import { AuthService } from '../../services/auth';
@@ -9,7 +9,7 @@ import { MENU_POR_ROL } from '../../config/menu.config';
 
 @Component({
   selector: 'app-menu',
-  imports: [MatListModule, RouterModule],
+  imports: [MatButtonModule, RouterModule],
   templateUrl: './menu.html',
   styleUrl: './menu.css',
 })

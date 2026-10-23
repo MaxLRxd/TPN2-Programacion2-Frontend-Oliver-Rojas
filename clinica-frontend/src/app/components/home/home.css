@@ -1,0 +1,114 @@
+:host {
+  display: block;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+/* Portada: banda bordó con título serif y curva inferior. */
+.mat-mdc-card {
+  position: relative;
+  overflow: hidden;
+  padding: 3rem 3rem 4.5rem;
+  border-radius: 18px;
+  background:
+    radial-gradient(circle at 85% 15%, rgba(190, 159, 101, 0.35), transparent 45%),
+    linear-gradient(135deg, var(--cv-bordo-oscuro), var(--cv-bordo));
+  color: #fff;
+  box-shadow: var(--cv-sombra-alta);
+}
+
+.mat-mdc-card::after {
+  content: '';
+  position: absolute;
+  top: auto;
+  right: -10%;
+  bottom: -60px;
+  left: -10%;
+  width: auto;
+  height: 100px;
+  border-top: 6px solid var(--cv-dorado);
+  border-radius: 50% 50% 0 0;
+  background: var(--cv-fondo);
+}
+
+.mat-mdc-card-header {
+  padding: 0;
+}
+
+.mat-mdc-card-title {
+  color: #fff;
+  font-size: 2.75rem;
+  line-height: 1.15;
+}
+
+.mat-mdc-card-subtitle {
+  margin-top: 0.5rem;
+  color: #f1dfc0;
+  font-size: 1.05rem;
+}
+
+.mat-mdc-card-content {
+  position: relative;
+  z-index: 1;
+  padding: 1.5rem 0 0;
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+/* Lista de beneficios como columnas con íconos circulares dorados. */
+ul {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  margin: 1.5rem 0;
+  padding: 0;
+  list-style: none;
+}
+
+li {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+li::before {
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--cv-dorado);
+  color: #fff;
+  font-family: 'Material Icons';
+  font-size: 22px;
+  content: 'event';
+}
+
+li:nth-child(2)::before {
+  content: 'history';
+}
+
+li:nth-child(3)::before {
+  content: 'notifications';
+}
+
+button {
+  margin: 0.5rem 0.75rem 0 0;
+  height: 46px;
+  padding: 0 1.75rem;
+}
+
+.mat-mdc-unelevated-button {
+  --mat-button-filled-container-color: #fff;
+  --mat-button-filled-label-text-color: var(--cv-bordo);
+}
+
+.mat-mdc-outlined-button {
+  --mat-button-outlined-outline-color: rgba(255, 255, 255, 0.7);
+  --mat-button-outlined-label-text-color: #fff;
+}

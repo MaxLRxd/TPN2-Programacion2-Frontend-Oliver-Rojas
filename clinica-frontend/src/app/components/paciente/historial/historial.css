@@ -14,7 +14,7 @@
 }
 
 .registro {
-  border: 1px solid var(--mat-sys-outline-variant, #ddd);
+  border: 1px solid var(--mat-sys-outline-variant, var(--cv-borde));
   border-radius: 0.75rem;
   overflow: hidden;
 }
@@ -25,8 +25,8 @@
   align-items: center;
   gap: 0.75rem;
   padding: 0.75rem 1rem;
-  background: var(--mat-sys-surface-container-low, #f7f7f7);
-  border-bottom: 1px solid var(--mat-sys-outline-variant, #ddd);
+  background: var(--mat-sys-surface-container-low, var(--cv-fondo-suave));
+  border-bottom: 1px solid var(--mat-sys-outline-variant, var(--cv-borde));
 }
 
 .registro__fecha {
@@ -36,12 +36,12 @@
 }
 
 .registro__medico {
-  color: var(--mat-sys-on-surface-variant, #555);
+  color: var(--mat-sys-on-surface-variant, var(--cv-texto-suave));
 }
 
 .registro__turno {
   margin-left: auto;
-  color: var(--mat-sys-on-surface-variant, #555);
+  color: var(--mat-sys-on-surface-variant, var(--cv-texto-suave));
   font-size: 0.85rem;
 }
 
@@ -53,7 +53,7 @@
 }
 
 .registro__datos dt {
-  color: var(--mat-sys-on-surface-variant, #555);
+  color: var(--mat-sys-on-surface-variant, var(--cv-texto-suave));
   font-size: 0.8rem;
   font-weight: 600;
   text-transform: uppercase;

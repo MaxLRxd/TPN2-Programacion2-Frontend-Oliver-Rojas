@@ -4,7 +4,7 @@
   align-items: center;
   gap: 0.5rem;
   padding: 2rem 1rem;
-  color: var(--mat-sys-on-surface-variant, #666);
+  color: var(--mat-sys-on-surface-variant, var(--cv-texto-suave));
   text-align: center;
 }
 
@@ -17,7 +17,7 @@
 
 h2 {
   margin: 0;
-  color: var(--mat-sys-on-surface, #222);
+  color: var(--mat-sys-on-surface, var(--cv-titulo));
   font-size: 1.125rem;
   font-weight: 500;
 }

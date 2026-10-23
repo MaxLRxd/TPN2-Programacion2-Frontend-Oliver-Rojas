@@ -1,12 +1,29 @@
 .registro-page {
   display: flex;
   justify-content: center;
-  padding: 2rem 1rem;
+  margin: -1.5rem -1rem 0;
+  padding: 3rem 1rem;
+  background: linear-gradient(180deg, var(--cv-bordo) 0, var(--cv-bordo-oscuro) 180px, transparent 180px);
 }
 
 .registro-card {
   width: 100%;
   max-width: 460px;
+  padding: 1rem 0.75rem 0.5rem;
+  border-top: 4px solid var(--cv-dorado);
+  box-shadow: var(--cv-sombra-alta);
+}
+
+.mat-mdc-card-title {
+  font-size: 1.75rem;
+  line-height: 1.3;
+}
+
+.mat-mdc-card-subtitle {
+  color: var(--cv-dorado-oscuro);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.75rem;
 }
 
 form {
@@ -34,13 +51,13 @@ mat-form-field {
 }
 
 .mensaje.error {
-  background: var(--mat-sys-error-container, #fde7e9);
-  color: var(--mat-sys-on-error-container, #b3261e);
+  background: var(--mat-sys-error-container, var(--cv-peligro-bg));
+  color: var(--mat-sys-on-error-container, var(--cv-peligro));
 }
 
 .mensaje.exito {
-  background: var(--mat-sys-primary-container, #e3f2e5);
-  color: var(--mat-sys-on-primary-container, #1b5e20);
+  background: var(--mat-sys-primary-container, var(--cv-exito-bg));
+  color: var(--mat-sys-on-primary-container, var(--cv-exito));
 }
 
 .btn-submit {
@@ -51,5 +68,5 @@ mat-form-field {
 
 .registro-hint {
   margin-right: 0.5rem;
-  color: #666;
-}
+  color: var(--cv-texto-suave);
+}

@@ -1,10 +1,19 @@
-<mat-toolbar color="primary">
-  <span>Clínica Virtual</span>
-  <span style="flex: 1 1 auto"></span>
+<mat-toolbar class="header">
+  <span class="marca">
+    <span class="marca__icono" aria-hidden="true"><mat-icon>local_hospital</mat-icon></span>
+    <span class="marca__texto">
+      <span class="marca__nombre">Clínica Virtual</span>
+      <span class="marca__lema">Turnos y atención médica online</span>
+    </span>
+  </span>
+  <span class="espaciador"></span>
   @if (!usuario()) {
-    <span>Bienvenido a la clínica virtual</span>
+    <span class="bienvenida">Bienvenido a la clínica virtual</span>
   } @else {
-    <span>{{ nombre }}</span>
+    <span class="usuario">
+      <span class="usuario__nombre">{{ nombre }}</span>
+      <span class="usuario__rol">{{ tipo }}</span>
+    </span>
     <button mat-icon-button [matMenuTriggerFor]="infoMenu" aria-label="Información de usuario">
       <mat-icon>info</mat-icon>
     </button>
@@ -26,7 +35,7 @@
       [matBadge]="notificaciones.noLeidas()"
       [matBadgeHidden]="notificaciones.noLeidas() === 0"
       matBadgeColor="warn"
-      matBadgeSize="small"
+      matBadgeSize="medium"
     >
       <mat-icon>notifications</mat-icon>
     </button>

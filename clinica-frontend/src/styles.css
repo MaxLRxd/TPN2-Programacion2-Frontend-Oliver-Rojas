@@ -1,1 +1,270 @@
-/* Estilos globales de la aplicación. */
+/*
+ * Estilos globales de la aplicación.
+ * Paleta: bordó y dorado institucionales + grises pizarra de interfaz.
+ * Los componentes usan estas variables (--cv-*) en lugar de colores fijos.
+ */
+:root {
+  --cv-bordo: #a42822;
+  --cv-bordo-oscuro: #7c1a16;
+  --cv-bordo-claro: #fbeeec;
+  --cv-dorado: #be9f65;
+  --cv-dorado-oscuro: #8a6d38;
+  --cv-dorado-claro: #f6efe2;
+  --cv-pizarra: #212934;
+
+  --cv-fondo: #f5f3f0;
+  --cv-fondo-suave: #faf7f3;
+  --cv-superficie: #ffffff;
+  --cv-borde: #e7e1da;
+  --cv-texto: #4a4e57;
+  --cv-titulo: #212934;
+  --cv-texto-suave: #6a7280;
+
+  --cv-exito: #2e6b45;
+  --cv-exito-bg: #e6f3eb;
+  --cv-info: #0e5fae;
+  --cv-info-bg: #e5f0fb;
+  --cv-peligro: #a42822;
+  --cv-peligro-bg: #fbeceb;
+  --cv-alerta: #9a5200;
+  --cv-alerta-bg: #fdf0de;
+  --cv-acento: var(--cv-dorado-oscuro);
+  --cv-acento-bg: var(--cv-dorado-claro);
+
+  --cv-sombra: 0 2px 10px rgba(33, 41, 52, 0.08);
+  --cv-sombra-alta: 0 8px 28px rgba(33, 41, 52, 0.12);
+  --cv-fuente-ui: 'Poppins', 'Roboto', sans-serif;
+  --cv-fuente-titulos: 'Libre Caslon Text', Georgia, serif;
+
+  /* Superficies de Material en blanco y grises cálidos (sin tinte rosado). */
+  --mat-sys-surface: #ffffff;
+  --mat-sys-surface-container-lowest: #ffffff;
+  --mat-sys-surface-container-low: #faf7f3;
+  --mat-sys-surface-container: #f5f1ec;
+  --mat-sys-surface-container-high: #efeae4;
+  --mat-sys-surface-container-highest: #e9e3dc;
+  --mat-sys-primary-container: #f9e3e0;
+  --mat-sys-on-surface-variant: var(--cv-texto-suave);
+  --mat-sys-outline-variant: var(--cv-borde);
+}
+
+/* Layout general: el footer queda abajo aunque la página tenga poco contenido. */
+app-root {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+app-root > main {
+  flex: 1;
+}
+
+h1,
+h2,
+h3 {
+  color: var(--cv-titulo);
+}
+
+a {
+  color: var(--cv-bordo);
+}
+
+/* Tablas de listados: encabezado cálido, filas con separadores suaves. */
+table thead th {
+  background: var(--cv-fondo-suave);
+  font-family: var(--cv-fuente-ui);
+  letter-spacing: 0.04em;
+}
+
+table thead th:first-child {
+  border-top-left-radius: 8px;
+}
+
+table thead th:last-child {
+  border-top-right-radius: 8px;
+}
+
+table tbody tr {
+  transition: background-color 120ms ease;
+}
+
+table tbody tr:hover {
+  background: var(--cv-fondo-suave);
+}
+
+/* Tarjetas de Material: sombra suave como en los paneles de gestión. */
+.mat-mdc-card {
+  box-shadow: var(--cv-sombra);
+}
+
+.mat-mdc-card-title {
+  color: var(--cv-bordo);
+}
+
+/* Diálogos con título serif bordó y línea dorada. */
+.mat-mdc-dialog-title {
+  border-bottom: 2px solid var(--cv-dorado-claro);
+}
+
+/* Paneles flotantes (menús, selects) con sombra marcada. */
+.mat-mdc-menu-panel,
+.mat-mdc-select-panel {
+  box-shadow: var(--cv-sombra-alta) !important;
+}
+
+/* Barra de desplazamiento discreta. */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  border: 2px solid var(--cv-fondo);
+  border-radius: 999px;
+  background: #cfc6bd;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* ---------- Header ---------- */
+app-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+app-header .header {
+  height: 72px;
+  padding: 0 2rem;
+  gap: 0.75rem;
+  border-top: 4px solid var(--cv-bordo);
+  background: var(--cv-superficie);
+  color: var(--cv-titulo);
+  box-shadow: 0 1px 0 var(--cv-borde);
+}
+
+app-header .marca {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+app-header .marca__icono {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--cv-dorado);
+  color: #fff;
+  box-shadow: inset 0 0 0 3px rgba(255, 255, 255, 0.35);
+}
+
+app-header .marca__texto {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.15;
+}
+
+app-header .marca__nombre {
+  color: var(--cv-bordo);
+  font-family: var(--cv-fuente-titulos);
+  font-size: 1.45rem;
+}
+
+app-header .marca__lema {
+  color: var(--cv-texto-suave);
+  font-family: var(--cv-fuente-ui);
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+}
+
+app-header .espaciador {
+  flex: 1 1 auto;
+}
+
+app-header .bienvenida,
+app-header .usuario {
+  font-family: var(--cv-fuente-ui);
+  font-size: 0.9rem;
+}
+
+app-header .bienvenida {
+  color: var(--cv-texto-suave);
+}
+
+app-header .usuario {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  line-height: 1.2;
+  margin-right: 0.25rem;
+}
+
+app-header .usuario__nombre {
+  color: var(--cv-titulo);
+  font-weight: 500;
+}
+
+app-header .usuario__rol {
+  color: var(--cv-dorado-oscuro);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+app-header .header .mat-mdc-icon-button {
+  color: var(--cv-bordo);
+}
+
+/* ---------- Menú por rol ---------- */
+app-menu .menu {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+  padding: 0.4rem 2rem;
+  background: var(--cv-superficie);
+  border-bottom: 1px solid var(--cv-borde);
+  box-shadow: var(--cv-sombra);
+}
+
+app-menu .menu__item.mat-mdc-button {
+  height: 40px;
+  padding: 0 1rem;
+  color: var(--cv-texto);
+  font-family: var(--cv-fuente-ui);
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+app-menu .menu__item.mat-mdc-button:hover {
+  color: var(--cv-bordo);
+}
+
+app-menu .menu__item--activo.mat-mdc-button {
+  background: var(--cv-bordo-claro);
+  color: var(--cv-bordo);
+  box-shadow: inset 0 -2px 0 var(--cv-dorado);
+}
+
+/* ---------- Footer ---------- */
+app-footer .footer {
+  min-height: 64px;
+  height: auto;
+  padding: 1rem 2rem;
+  border-top: 3px solid var(--cv-dorado);
+  background: var(--cv-pizarra);
+  color: #c9ced6;
+  font-family: var(--cv-fuente-ui);
+  font-size: 0.8rem;
+  white-space: normal;
+}
+
+app-footer .footer__marca {
+  margin-right: 1.5rem;
+  color: #fff;
+  font-family: var(--cv-fuente-titulos);
+  font-size: 1.05rem;
+}

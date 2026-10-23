@@ -30,7 +30,7 @@
   align-items: center;
   gap: 0.5rem;
   margin: 0.75rem 0 0;
-  color: var(--mat-sys-error, #b3261e);
+  color: var(--mat-sys-error, var(--cv-peligro));
 }
 
 .tabla-card {
@@ -51,11 +51,11 @@
   padding: 0.75rem;
   text-align: left;
   vertical-align: top;
-  border-bottom: 1px solid var(--mat-sys-outline-variant, #ddd);
+  border-bottom: 1px solid var(--mat-sys-outline-variant, var(--cv-borde));
 }
 
 .tabla th {
-  color: var(--mat-sys-on-surface-variant, #555);
+  color: var(--mat-sys-on-surface-variant, var(--cv-texto-suave));
   font-size: 0.8rem;
   font-weight: 600;
   letter-spacing: 0.03em;
@@ -67,7 +67,7 @@
 }
 
 .tabla tbody tr:hover {
-  background: var(--mat-sys-surface-container-low, #f7f7f7);
+  background: var(--mat-sys-surface-container-low, var(--cv-fondo-suave));
 }
 
 .usuario {
@@ -85,23 +85,23 @@
 }
 
 .accion--alta {
-  background: #e8f5e9;
-  color: #1b5e20;
+  background: var(--cv-exito-bg);
+  color: var(--cv-exito);
 }
 
 .accion--baja {
-  background: #ffebee;
-  color: #b71c1c;
+  background: var(--cv-peligro-bg);
+  color: var(--cv-peligro);
 }
 
 .accion--modificacion {
-  background: #e3f2fd;
-  color: #0d47a1;
+  background: var(--cv-info-bg);
+  color: var(--cv-info);
 }
 
 .accion--otra {
-  background: var(--mat-sys-surface-container-high, #eee);
-  color: var(--mat-sys-on-surface, #333);
+  background: var(--mat-sys-surface-container-high, var(--cv-fondo-suave));
+  color: var(--mat-sys-on-surface, var(--cv-texto));
 }
 
 .entidad {
@@ -110,7 +110,7 @@
 
 .entidad__id {
   display: block;
-  color: var(--mat-sys-on-surface-variant, #666);
+  color: var(--mat-sys-on-surface-variant, var(--cv-texto-suave));
   font-size: 0.8rem;
 }
 
@@ -132,7 +132,7 @@
 }
 
 .paginacion__resumen {
-  color: var(--mat-sys-on-surface-variant, #666);
+  color: var(--mat-sys-on-surface-variant, var(--cv-texto-suave));
 }
 
 .paginacion__controles {
@@ -172,7 +172,7 @@
   .tabla tbody tr {
     display: block;
     padding: 0.5rem 0;
-    border-bottom: 1px solid var(--mat-sys-outline-variant, #ddd);
+    border-bottom: 1px solid var(--mat-sys-outline-variant, var(--cv-borde));
   }
 
   .tabla td {
@@ -186,7 +186,7 @@
 
   .tabla td::before {
     content: attr(data-label);
-    color: var(--mat-sys-on-surface-variant, #555);
+    color: var(--mat-sys-on-surface-variant, var(--cv-texto-suave));
     font-weight: 600;
     text-align: left;
   }

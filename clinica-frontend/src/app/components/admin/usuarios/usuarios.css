@@ -11,8 +11,8 @@
   margin-bottom: 1rem;
   padding: 0.6rem 0.75rem;
   border-radius: 0.5rem;
-  background: var(--mat-sys-error-container, #fdecea);
-  color: var(--mat-sys-on-error-container, #5f1712);
+  background: var(--mat-sys-error-container, var(--cv-peligro-bg));
+  color: var(--mat-sys-on-error-container, var(--cv-peligro));
 }
 
 .aviso-error span {
@@ -58,11 +58,11 @@
   padding: 0.75rem;
   text-align: left;
   vertical-align: middle;
-  border-bottom: 1px solid var(--mat-sys-outline-variant, #ddd);
+  border-bottom: 1px solid var(--mat-sys-outline-variant, var(--cv-borde));
 }
 
 .tabla th {
-  color: var(--mat-sys-on-surface-variant, #555);
+  color: var(--mat-sys-on-surface-variant, var(--cv-texto-suave));
   font-size: 0.8rem;
   font-weight: 600;
   letter-spacing: 0.03em;
@@ -74,7 +74,7 @@
 }
 
 .tabla tbody tr:hover {
-  background: var(--mat-sys-surface-container-low, #f7f7f7);
+  background: var(--mat-sys-surface-container-low, var(--cv-fondo-suave));
 }
 
 .usuario {
@@ -88,7 +88,7 @@
 }
 
 .usuario__email {
-  color: var(--mat-sys-on-surface-variant, #666);
+  color: var(--mat-sys-on-surface-variant, var(--cv-texto-suave));
   font-size: 0.85rem;
 }
 
@@ -98,28 +98,28 @@
   border-radius: 999px;
   font-size: 0.8rem;
   font-weight: 500;
-  background: var(--mat-sys-surface-container-high, #eee);
+  background: var(--mat-sys-surface-container-high, var(--cv-fondo-suave));
   white-space: nowrap;
 }
 
 .rol--admin {
-  background: #ede7f6;
-  color: #4527a0;
+  background: var(--cv-acento-bg);
+  color: var(--cv-acento);
 }
 
 .rol--medico {
-  background: #e3f2fd;
-  color: #0d47a1;
+  background: var(--cv-info-bg);
+  color: var(--cv-info);
 }
 
 .rol--operador {
-  background: #fff3e0;
-  color: #e65100;
+  background: var(--cv-alerta-bg);
+  color: var(--cv-alerta);
 }
 
 .rol--paciente {
-  background: #e8f5e9;
-  color: #1b5e20;
+  background: var(--cv-exito-bg);
+  color: var(--cv-exito);
 }
 
 .col-acciones,
@@ -138,7 +138,7 @@
 }
 
 .paginacion__resumen {
-  color: var(--mat-sys-on-surface-variant, #666);
+  color: var(--mat-sys-on-surface-variant, var(--cv-texto-suave));
 }
 
 .paginacion__controles {

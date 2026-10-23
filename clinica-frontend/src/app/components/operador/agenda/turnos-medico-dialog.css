@@ -1,7 +1,7 @@
 .subtitulo {
   margin: -1rem 0 0;
   padding: 0 1.5rem 1rem;
-  color: var(--mat-sys-on-surface-variant, #666);
+  color: var(--mat-sys-on-surface-variant, var(--cv-texto-suave));
 }
 
 .contenido {
@@ -16,8 +16,8 @@
   margin-bottom: 0.75rem;
   padding: 0.5rem 0.75rem;
   border-radius: 0.5rem;
-  background: var(--mat-sys-error-container, #fdecea);
-  color: var(--mat-sys-on-error-container, #5f1712);
+  background: var(--mat-sys-error-container, var(--cv-peligro-bg));
+  color: var(--mat-sys-on-error-container, var(--cv-peligro));
 }
 
 .tabla-contenedor {
@@ -33,11 +33,11 @@
 .tabla td {
   padding: 0.6rem;
   text-align: left;
-  border-bottom: 1px solid var(--mat-sys-outline-variant, #ddd);
+  border-bottom: 1px solid var(--mat-sys-outline-variant, var(--cv-borde));
 }
 
 .tabla th {
-  color: var(--mat-sys-on-surface-variant, #555);
+  color: var(--mat-sys-on-surface-variant, var(--cv-texto-suave));
   font-size: 0.8rem;
   text-transform: uppercase;
 }
@@ -55,18 +55,18 @@
 }
 
 .estado--confirmado {
-  background: #e3f2fd;
-  color: #0d47a1;
+  background: var(--cv-info-bg);
+  color: var(--cv-info);
 }
 
 .estado--cancelado {
-  background: #ffebee;
-  color: #b71c1c;
+  background: var(--cv-peligro-bg);
+  color: var(--cv-peligro);
 }
 
 .estado--atendido {
-  background: #e8f5e9;
-  color: #1b5e20;
+  background: var(--cv-exito-bg);
+  color: var(--cv-exito);
 }
 
 @media (max-width: 640px) {

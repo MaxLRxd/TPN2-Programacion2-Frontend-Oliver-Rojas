@@ -22,7 +22,7 @@
 
 .resumen {
   margin: 0 0 0 auto;
-  color: var(--mat-sys-on-surface-variant, #666);
+  color: var(--mat-sys-on-surface-variant, var(--cv-texto-suave));
   white-space: nowrap;
 }
 
@@ -37,13 +37,13 @@
 }
 
 .aviso-error {
-  background: var(--mat-sys-error-container, #fdecea);
-  color: var(--mat-sys-on-error-container, #5f1712);
+  background: var(--mat-sys-error-container, var(--cv-peligro-bg));
+  color: var(--mat-sys-on-error-container, var(--cv-peligro));
 }
 
 .aviso-exito {
-  background: #e8f5e9;
-  color: #1b5e20;
+  background: var(--cv-exito-bg);
+  color: var(--cv-exito);
 }
 
 .aviso-error span,
@@ -64,11 +64,11 @@
 .tabla td {
   padding: 0.7rem;
   text-align: left;
-  border-bottom: 1px solid var(--mat-sys-outline-variant, #ddd);
+  border-bottom: 1px solid var(--mat-sys-outline-variant, var(--cv-borde));
 }
 
 .tabla th {
-  color: var(--mat-sys-on-surface-variant, #555);
+  color: var(--mat-sys-on-surface-variant, var(--cv-texto-suave));
   font-size: 0.8rem;
   font-weight: 600;
   letter-spacing: 0.03em;
@@ -76,7 +76,7 @@
 }
 
 .tabla tbody tr:hover {
-  background: var(--mat-sys-surface-container-low, #f7f7f7);
+  background: var(--mat-sys-surface-container-low, var(--cv-fondo-suave));
 }
 
 .col-acciones,
@@ -111,7 +111,7 @@
   .tabla tbody tr {
     display: block;
     padding: 0.5rem 0;
-    border-bottom: 1px solid var(--mat-sys-outline-variant, #ddd);
+    border-bottom: 1px solid var(--mat-sys-outline-variant, var(--cv-borde));
   }
 
   .tabla td {
@@ -125,7 +125,7 @@
 
   .tabla td::before {
     content: attr(data-label);
-    color: var(--mat-sys-on-surface-variant, #555);
+    color: var(--mat-sys-on-surface-variant, var(--cv-texto-suave));
     font-weight: 600;
     text-align: left;
   }
