@@ -208,7 +208,7 @@
                     [class.chip--activo]="dia === fecha()"
                     (click)="seleccionarFecha(dia)"
                   >
-                    {{ dia }}
+                    {{ formatearFecha(dia) }}
                   </button>
                 }
               </div>
@@ -279,7 +279,7 @@
               </div>
               <div>
                 <dt>Fecha</dt>
-                <dd>{{ resumen().fecha }}</dd>
+                <dd>{{ formatearFecha(resumen().fecha) }}</dd>
               </div>
               <div>
                 <dt>Hora</dt>

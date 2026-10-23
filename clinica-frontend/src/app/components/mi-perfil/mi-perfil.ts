@@ -7,6 +7,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ApiError } from '../../services/api';
 import { AuthService } from '../../services/auth';
 import { Usuario } from '../../models/usuario';
+import { formatearFecha } from '../../utils/fecha';
 
 @Component({
   selector: 'app-mi-perfil',
@@ -15,6 +16,7 @@ import { Usuario } from '../../models/usuario';
   styleUrl: './mi-perfil.css',
 })
 export class MiPerfil implements OnInit {
+  readonly formatearFecha = formatearFecha;
   private auth = inject(AuthService);
 
   readonly usuario = signal<Usuario | null>(null);

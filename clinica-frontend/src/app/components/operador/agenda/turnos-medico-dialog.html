@@ -1,5 +1,5 @@
 <h2 mat-dialog-title>Turnos de {{ datos.medicoNombre }}</h2>
-<p class="subtitulo">Fecha {{ datos.fecha }}</p>
+<p class="subtitulo">Fecha {{ formatearFecha(datos.fecha) }}</p>
 
 <mat-dialog-content class="contenido">
   @if (errorAccion()) {

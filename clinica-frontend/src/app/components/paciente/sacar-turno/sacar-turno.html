@@ -12,7 +12,7 @@
       </div>
       <h2>Turno solicitado</h2>
       <p>
-        Tu turno quedó reservado para el <strong>{{ turno.fecha }}</strong> a las
+        Tu turno quedó reservado para el <strong>{{ formatearFecha(turno.fecha) }}</strong> a las
         <strong>{{ turno.hora.slice(0, 5) }}</strong
         >.
       </p>

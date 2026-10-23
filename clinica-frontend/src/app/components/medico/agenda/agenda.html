@@ -84,7 +84,7 @@
           <tbody>
             @for (agenda of agendas(); track agenda.id) {
               <tr>
-                <td data-label="Fecha">{{ agenda.fecha }}</td>
+                <td data-label="Fecha">{{ formatearFecha(agenda.fecha) }}</td>
                 <td data-label="Horario">{{ horario(agenda) }}</td>
                 <td data-label="Especialidad">{{ agenda.especialidad }}</td>
                 <td data-label="Sede">{{ agenda.sede }}</td>

@@ -33,6 +33,7 @@ import { TurnoService } from '../../../services/turno';
 import { EmptyState } from '../empty-state/empty-state';
 import { ErrorState } from '../error-state/error-state';
 import { LoadingState } from '../loading-state/loading-state';
+import { formatearFecha } from '../../../utils/fecha';
 
 export type TurnoWizardModo = 'paciente' | 'operador';
 export type TurnoWizardPaso =
@@ -73,6 +74,7 @@ function sinSoloEspacios(control: AbstractControl): ValidationErrors | null {
   styleUrl: './turno-wizard.css',
 })
 export class TurnoWizard implements OnInit {
+  readonly formatearFecha = formatearFecha;
   readonly modo = input<TurnoWizardModo>('paciente');
   readonly pacienteInicial = input<UsuarioAdmin | null>(null);
   readonly sedeFija = input<number | null>(null);

@@ -10,6 +10,7 @@ import { TurnoService } from '../../../services/turno';
 import { EmptyState } from '../../shared/empty-state/empty-state';
 import { ErrorState } from '../../shared/error-state/error-state';
 import { LoadingState } from '../../shared/loading-state/loading-state';
+import { formatearFecha } from '../../../utils/fecha';
 
 export interface TurnosMedicoDialogData {
   idMedico: number;
@@ -24,6 +25,7 @@ export interface TurnosMedicoDialogData {
   styleUrl: './turnos-medico-dialog.css',
 })
 export class TurnosMedicoDialog implements OnInit {
+  readonly formatearFecha = formatearFecha;
   readonly datos = inject<TurnosMedicoDialogData>(MAT_DIALOG_DATA);
   private ref = inject(MatDialogRef<TurnosMedicoDialog, boolean>);
   private turnoService = inject(TurnoService);

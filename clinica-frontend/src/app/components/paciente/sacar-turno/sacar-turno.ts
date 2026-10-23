@@ -7,6 +7,7 @@ import { Router } from '@angular/router';
 import { Turno } from '../../../models/turno';
 import { PageHeader } from '../../shared/page-header/page-header';
 import { TurnoWizard } from '../../shared/turno-wizard/turno-wizard';
+import { formatearFecha } from '../../../utils/fecha';
 
 @Component({
   selector: 'app-paciente-sacar-turno',
@@ -15,6 +16,7 @@ import { TurnoWizard } from '../../shared/turno-wizard/turno-wizard';
   styleUrl: './sacar-turno.css',
 })
 export class PacienteSacarTurno {
+  readonly formatearFecha = formatearFecha;
   private router = inject(Router);
 
   readonly turnoCreado = signal<Turno | null>(null);

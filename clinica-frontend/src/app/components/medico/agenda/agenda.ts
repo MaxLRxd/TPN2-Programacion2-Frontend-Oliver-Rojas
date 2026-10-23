@@ -16,7 +16,7 @@ import { AuthService } from '../../../services/auth';
 import { ConfirmDialogService } from '../../../services/confirm-dialog';
 import { MedicoService } from '../../../services/medico';
 import { SedeService } from '../../../services/sede';
-import { hoyISO } from '../../../utils/fecha';
+import { hoyISO, formatearFecha } from '../../../utils/fecha';
 import {
   AgendaFormDialog,
   AgendaFormDialogData,
@@ -44,6 +44,7 @@ import { PageHeader } from '../../shared/page-header/page-header';
   styleUrl: './agenda.css',
 })
 export class MedicoAgenda implements OnInit {
+  readonly formatearFecha = formatearFecha;
   private agendaService = inject(AgendaService);
   private sedeService = inject(SedeService);
   private medicoService = inject(MedicoService);
