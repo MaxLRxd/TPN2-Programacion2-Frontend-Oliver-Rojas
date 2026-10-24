@@ -2,11 +2,36 @@
   display: flex;
   justify-content: center;
   padding: 24px 16px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .perfil-card {
   width: 100%;
   max-width: 560px;
+  box-sizing: border-box;
+}
+
+@media (max-width: 640px) {
+  .perfil-page {
+    padding: 1rem 0.75rem;
+  }
+
+  .fila {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .valor {
+    text-align: left;
+  }
+}
+
+@media (max-width: 480px) {
+  .perfil-page {
+    padding: 0.875rem 0.625rem;
+  }
 }
 
 .estado {

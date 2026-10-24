@@ -2,11 +2,30 @@
   display: flex;
   justify-content: center;
   padding: 24px 16px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .estado-card {
   width: 100%;
   max-width: 480px;
+  box-sizing: border-box;
+}
+
+@media (max-width: 640px) {
+  .estado-page {
+    padding: 1rem 0.75rem;
+  }
+
+  .contenido {
+    padding: 1.25rem 0.75rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .estado-page {
+    padding: 0.875rem 0.625rem;
+  }
 }
 
 .contenido {

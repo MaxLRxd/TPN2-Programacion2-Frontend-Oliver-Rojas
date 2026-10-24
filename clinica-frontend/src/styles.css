@@ -401,9 +401,17 @@ h3 {
 }
 
 /* ---------- Responsive: Header ---------- */
+app-header .header {
+  display: flex;
+  align-items: center;
+  flex-wrap: nowrap;
+  min-height: 72px;
+  height: auto;
+}
+
 @media (max-width: 768px) {
   app-header .header {
-    height: 64px;
+    min-height: 64px;
     padding: 0 1rem;
     gap: 0.5rem;
   }
@@ -423,6 +431,15 @@ h3 {
 
   app-header .usuario {
     align-items: flex-start;
+    min-width: 0;
+  }
+
+  app-header .usuario__nombre,
+  app-header .usuario__rol {
+    max-width: 120px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
   app-header .usuario__nombre {
@@ -442,22 +459,53 @@ h3 {
   app-header .marca__nombre {
     font-size: 1.15rem;
   }
+
+  app-header .usuario__nombre,
+  app-header .usuario__rol {
+    max-width: 90px;
+  }
+}
+
+@media (max-width: 480px) {
+  app-header .marca__texto {
+    display: none;
+  }
+
+  app-header .usuario {
+    display: none;
+  }
 }
 
 /* ---------- Responsive: Menú ---------- */
+app-menu .menu {
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  gap: 0.25rem;
+  padding: 0.4rem 2rem;
+  scrollbar-width: thin;
+  scrollbar-color: #cfc6bd transparent;
+}
+
+app-menu .menu::-webkit-scrollbar {
+  height: 6px;
+}
+
+app-menu .menu::-webkit-scrollbar-thumb {
+  background: #cfc6bd;
+  border-radius: 999px;
+}
+
+app-menu .menu__item.mat-mdc-button {
+  flex: 0 0 auto;
+  white-space: nowrap;
+}
+
 @media (max-width: 1024px) {
   app-menu .menu {
-    flex-wrap: nowrap;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
     padding: 0.4rem 1rem;
-    gap: 0.25rem;
-    scrollbar-width: thin;
-  }
-
-  app-menu .menu__item.mat-mdc-button {
-    flex: 0 0 auto;
-    white-space: nowrap;
   }
 }
 
