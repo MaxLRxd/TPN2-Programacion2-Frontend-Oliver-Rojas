@@ -13,19 +13,25 @@ html {
 }
 
 :root {
-  /* Breakpoints (referenciales) */
+  /* Breakpoints centralizados */
+  --cv-bp-xs: 480px;
   --cv-bp-sm: 640px;
   --cv-bp-md: 768px;
   --cv-bp-lg: 1024px;
   --cv-bp-xl: 1280px;
-
-  /* Espaciados */
-  --cv-space-1: 0.5rem;
-  --cv-space-2: 0.75rem;
-  --cv-space-3: 1rem;
-  --cv-space-4: 1.5rem;
-  --cv-space-5: 2rem;
-  --cv-space-6: 3rem;
+  --cv-bp-2xl: 1400px;
+  /* Espaciados escalables */
+  --cv-space-0: 0;
+  --cv-space-1: 0.25rem;
+  --cv-space-2: 0.5rem;
+  --cv-space-3: 0.75rem;
+  --cv-space-4: 1rem;
+  --cv-space-5: 1.25rem;
+  --cv-space-6: 1.5rem;
+  --cv-space-7: 2rem;
+  --cv-space-8: 2.5rem;
+  --cv-space-9: 3rem;
+  --cv-space-10: 4rem;
   --cv-bordo: #a42822;
   --cv-bordo-oscuro: #7c1a16;
   --cv-bordo-claro: #fbeeec;
@@ -492,6 +498,26 @@ h3 {
   }
 }
 
+/* ---------- Utilidades de grid/flex escalables ---------- */
+.cv-grid-auto {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: var(--cv-space-4);
+}
+
+.cv-grid-auto-sm {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--cv-space-3);
+}
+
+@media (max-width: 640px) {
+  .cv-grid-auto,
+  .cv-grid-auto-sm {
+    grid-template-columns: 1fr;
+  }
+}
+
 /* ---------- Responsive: Reportes ---------- */
 @media (max-width: 1024px) {
   .reportes-page .graficos {
@@ -590,6 +616,39 @@ canvas {
 
 body {
   overflow-x: hidden;
+}
+
+/* Focus states visibles para accesibilidad */
+:focus-visible {
+  outline: 2px solid var(--cv-bordo);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+button:focus-visible,
+a:focus-visible,
+.mat-mdc-button:focus-visible,
+.mat-mdc-icon-button:focus-visible,
+.mat-mdc-raised-button:focus-visible,
+.mat-mdc-flat-button:focus-visible,
+.mat-mdc-stroked-button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid var(--cv-bordo);
+  outline-offset: 2px;
+}
+
+/* Reducir movimiento para usuarios que lo prefieren */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
 
 /* ---------- Tablas responsive (patrón card) ---------- */
