@@ -105,7 +105,7 @@
       </app-empty-state>
     } @else {
       <div class="tabla-contenedor">
-        <table class="tabla" aria-label="Listado de usuarios">
+        <table class="tabla cv-table--responsive" aria-label="Listado de usuarios">
           <thead>
             <tr>
               <th scope="col">Usuario</th>
@@ -120,7 +120,7 @@
           <tbody>
             @for (usuario of usuarios(); track usuario.id) {
               <tr>
-                <td>
+                <td data-label="Usuario">
                   <div class="usuario">
                     <span class="usuario__nombre"
                       >{{ usuario.apellido }}, {{ usuario.nombre }}</span
@@ -128,22 +128,22 @@
                     <span class="usuario__email">{{ usuario.email }}</span>
                   </div>
                 </td>
-                <td>{{ usuario.dni }}</td>
-                <td>
+                <td data-label="DNI">{{ usuario.dni }}</td>
+                <td data-label="Rol">
                   <span [class]="'rol rol--' + usuario.rol">
                     {{ etiquetaRol(usuario.rol) }}
                   </span>
                 </td>
-                <td>{{ asignacion(usuario) }}</td>
-                <td>
+                <td data-label="Asignación">{{ asignacion(usuario) }}</td>
+                <td data-label="Especialidades">
                   @if (usuario.rol === 'medico') {
                     {{ especialidadesTexto(usuario) }}
                   } @else {
                     —
                   }
                 </td>
-                <td>{{ usuario.telefono || '—' }}</td>
-                <td class="acciones">
+                <td data-label="Teléfono">{{ usuario.telefono || '—' }}</td>
+                <td data-label="Acciones" class="acciones">
                   <button
                     mat-icon-button
                     type="button"
