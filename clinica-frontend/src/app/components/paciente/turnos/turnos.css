@@ -151,46 +151,28 @@
 }
 
 @media (max-width: 750px) {
+  .filtros {
+    flex-wrap: wrap;
+  }
+}
+
+@media (max-width: 640px) {
   .paciente-turnos-page {
-    padding: 1rem;
+    padding: 0.875rem 0.75rem;
   }
 
-  .tabla thead {
-    display: none;
+  .tabla-card {
+    padding: 0.75rem 0.625rem;
   }
 
-  .tabla tbody tr.fila-turno {
-    display: block;
-    padding: 0.5rem 0;
-    border-bottom: 1px solid var(--mat-sys-outline-variant, var(--cv-borde));
+  .acciones {
+    width: 100%;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    gap: 0.5rem;
   }
 
-  .tabla tbody tr.fila-turno td {
-    display: flex;
-    justify-content: space-between;
-    gap: 1rem;
-    padding: 0.35rem 0;
-    border-bottom: none;
-    text-align: right;
-  }
-
-  .tabla tbody tr.fila-turno td::before {
-    content: attr(data-label);
-    color: var(--mat-sys-on-surface-variant, var(--cv-texto-suave));
-    font-weight: 600;
-    text-align: left;
-  }
-
-  .tabla tbody tr.fila-turno td.acciones {
-    justify-content: flex-end;
-  }
-
-  .tabla tbody tr.fila-turno td.acciones::before {
-    margin-right: auto;
-  }
-
-  .fila-detalle,
-  .fila-detalle td {
-    display: block;
+  .acciones button {
+    flex: 1 1 100%;
   }
 }

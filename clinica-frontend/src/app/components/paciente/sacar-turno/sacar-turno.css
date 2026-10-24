@@ -60,3 +60,23 @@
     gap: 0.75rem;
   }
 }
+
+@media (max-width: 640px) {
+  .paciente-sacar-turno-page {
+    padding: 0.875rem 0.75rem;
+  }
+
+  .exito-card {
+    padding: 1rem;
+  }
+
+  .acciones {
+    flex-direction: column-reverse;
+    width: 100%;
+  }
+
+  .acciones button,
+  .acciones a {
+    width: 100%;
+  }
+}
