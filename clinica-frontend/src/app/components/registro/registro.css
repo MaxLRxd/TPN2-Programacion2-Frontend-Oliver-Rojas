@@ -4,6 +4,30 @@
   margin: -1.5rem -1rem 0;
   padding: 3rem 1rem;
   background: linear-gradient(180deg, var(--cv-bordo) 0, var(--cv-bordo-oscuro) 180px, transparent 180px);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+@media (max-width: 640px) {
+  .registro-page {
+    margin: -1rem -0.75rem 0;
+    padding: 2rem 0.75rem;
+  }
+
+  .registro-card {
+    padding: 0.875rem 0.625rem 0.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .registro-page {
+    margin: -0.875rem -0.625rem 0;
+    padding: 1.75rem 0.625rem;
+  }
+
+  .registro-card {
+    max-width: 100%;
+  }
 }
 
 .registro-card {
