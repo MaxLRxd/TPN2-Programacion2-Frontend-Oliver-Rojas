@@ -324,14 +324,74 @@ app-footer .footer__marca {
   }
 }
 
+.cv-hide-md {
+  display: inline;
+}
+
+@media (max-width: 768px) {
+  .cv-hide-md {
+    display: none !important;
+  }
+}
+
+.cv-hide-lg {
+  display: inline;
+}
+
+@media (max-width: 1024px) {
+  .cv-hide-lg {
+    display: none !important;
+  }
+}
+
 .cv-stack {
   display: flex;
   flex-direction: column;
   gap: var(--cv-space-2);
 }
 
+.cv-stack-row {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: var(--cv-space-2);
+}
+
 .cv-full-width {
   width: 100%;
+}
+
+.cv-container {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  box-sizing: border-box;
+  padding: 0 1rem;
+}
+
+@media (max-width: 768px) {
+  .cv-container {
+    padding: 0 0.75rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .cv-container {
+    padding: 0 0.625rem;
+  }
+}
+
+/* Tipografía fluida */
+h1 {
+  font-size: clamp(1.6rem, 2.2vw + 1rem, 2.4rem);
+}
+
+h2 {
+  font-size: clamp(1.3rem, 1.6vw + 0.9rem, 1.8rem);
+}
+
+h3 {
+  font-size: clamp(1.15rem, 1.2vw + 0.8rem, 1.4rem);
 }
 
 /* ---------- Responsive: Header ---------- */
@@ -509,13 +569,27 @@ app-footer .footer__marca {
     display: flex;
     flex-wrap: wrap;
     gap: 0.5rem;
+    width: 100%;
   }
 
   [acciones] button,
   [acciones] a {
     flex: 1 1 100%;
     justify-content: center;
+    width: 100%;
   }
+}
+
+/* Mejoras accesibilidad/overflow */
+img,
+video,
+canvas {
+  max-width: 100%;
+  height: auto;
+}
+
+body {
+  overflow-x: hidden;
 }
 
 /* ---------- Tablas responsive (patrón card) ---------- */
