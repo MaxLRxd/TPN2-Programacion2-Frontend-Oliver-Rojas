@@ -25,7 +25,7 @@
     />
   } @else {
     <div class="tabla-contenedor">
-      <table class="tabla" aria-label="Turnos del médico">
+      <table class="tabla cv-table--responsive" aria-label="Turnos del médico">
         <thead>
           <tr>
             <th scope="col">Hora</th>
@@ -37,14 +37,14 @@
         <tbody>
           @for (turno of turnos(); track turno.id) {
             <tr>
-              <td>{{ turno.hora.slice(0, 5) }}</td>
-              <td>{{ turno.paciente_apellido }}, {{ turno.paciente_nombre }}</td>
-              <td>
+              <td data-label="Hora">{{ turno.hora.slice(0, 5) }}</td>
+              <td data-label="Paciente">{{ turno.paciente_apellido }}, {{ turno.paciente_nombre }}</td>
+              <td data-label="Estado">
                 <span class="estado" [class]="'estado estado--' + turno.estado">{{
                   turno.estado
                 }}</span>
               </td>
-              <td class="acciones">
+              <td data-label="Acciones" class="acciones">
                 @if (turno.estado === 'confirmado') {
                   <button
                     mat-stroked-button

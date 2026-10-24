@@ -133,10 +133,20 @@ table tbody tr:hover {
     max-width: 95vw !important;
     width: 100% !important;
     margin: 0.75rem;
+    max-height: 90vh;
   }
 
   .mat-mdc-dialog-content {
     max-height: 70vh;
+  }
+
+  .mat-mdc-dialog-actions {
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .mat-mdc-dialog-actions button {
+    flex: 1 1 auto;
   }
 }
 
@@ -419,6 +429,92 @@ app-footer .footer__marca {
 
   app-footer .footer__copy {
     text-align: center;
+  }
+}
+
+/* ---------- Responsive: Reportes ---------- */
+@media (max-width: 1024px) {
+  .reportes-page .graficos {
+    grid-template-columns: 1fr;
+  }
+
+  .reportes-page .ranking {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .reportes-page .indicadores {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .reportes-page .filtros {
+    grid-template-columns: 1fr;
+  }
+
+  .reportes-page .filtros__acciones {
+    flex-wrap: wrap;
+  }
+}
+
+@media (max-width: 640px) {
+  .reportes-page .indicadores {
+    grid-template-columns: 1fr;
+  }
+
+  .reportes-page .panel {
+    padding: 1rem;
+  }
+
+  .reportes-page .grafico {
+    height: clamp(220px, 60vw, 320px);
+  }
+}
+
+/* ---------- Responsive: Formularios / grids genéricos ---------- */
+@media (max-width: 768px) {
+  .form-grid,
+  .grid-form {
+    grid-template-columns: 1fr !important;
+  }
+
+  .form-grid .full-width,
+  .grid-form .full-width {
+    grid-column: 1 / -1 !important;
+  }
+}
+
+/* ---------- Responsive: Paginación genérica ---------- */
+@media (max-width: 768px) {
+  .paginacion {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+
+  .paginacion__controles {
+    width: 100%;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+
+  .paginacion__controles .limite {
+    width: 100%;
+  }
+}
+
+/* ---------- Responsive: Acciones/botones apilados ---------- */
+@media (max-width: 640px) {
+  [acciones] {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  [acciones] button,
+  [acciones] a {
+    flex: 1 1 100%;
+    justify-content: center;
   }
 }
 

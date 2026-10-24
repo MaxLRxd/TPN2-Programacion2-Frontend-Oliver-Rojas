@@ -111,7 +111,7 @@
             [options]="opcionesBarras"
           ></canvas>
         </div>
-        <table class="tabla" aria-label="Turnos por especialidad">
+        <table class="tabla cv-table--responsive" aria-label="Turnos por especialidad">
           <thead>
             <tr>
               <th scope="col">Especialidad</th>
@@ -121,8 +121,8 @@
           <tbody>
             @for (fila of porEspecialidad(); track fila.id) {
               <tr>
-                <td>{{ fila.descripcion }}</td>
-                <td class="numero">{{ fila.cantidad }}</td>
+                <td data-label="Especialidad">{{ fila.descripcion }}</td>
+                <td data-label="Turnos" class="numero">{{ fila.cantidad }}</td>
               </tr>
             }
           </tbody>
@@ -140,7 +140,7 @@
             [options]="opcionesTorta"
           ></canvas>
         </div>
-        <table class="tabla" aria-label="Turnos por sede">
+        <table class="tabla cv-table--responsive" aria-label="Turnos por sede">
           <thead>
             <tr>
               <th scope="col">Sede</th>
@@ -150,8 +150,8 @@
           <tbody>
             @for (fila of porSede(); track fila.id) {
               <tr>
-                <td>{{ fila.nombre }}</td>
-                <td class="numero">{{ fila.cantidad }}</td>
+                <td data-label="Sede">{{ fila.nombre }}</td>
+                <td data-label="Turnos" class="numero">{{ fila.cantidad }}</td>
               </tr>
             }
           </tbody>
@@ -178,7 +178,7 @@
               [options]="opcionesRanking"
             ></canvas>
           </div>
-          <table class="tabla" aria-label="Ranking de médicos">
+          <table class="tabla cv-table--responsive" aria-label="Ranking de médicos">
             <thead>
               <tr>
                 <th scope="col">#</th>
@@ -189,9 +189,9 @@
             <tbody>
               @for (medico of ranking(); track medico.id; let i = $index) {
                 <tr>
-                  <td>{{ i + 1 }}</td>
-                  <td>{{ nombreMedico(medico) }}</td>
-                  <td class="numero">{{ medico.cantidad_atendidos }}</td>
+                  <td data-label="#"> {{ i + 1 }}</td>
+                  <td data-label="Médico">{{ nombreMedico(medico) }}</td>
+                  <td data-label="Atendidos" class="numero">{{ medico.cantidad_atendidos }}</td>
                 </tr>
               }
             </tbody>
