@@ -178,7 +178,7 @@
                   >
                     <span class="opcion__titulo">{{ medico.apellido }}, {{ medico.nombre }}</span>
                     <span class="opcion__detalle">
-                      {{ medico.especialidades[0]?.descripcion || 'Médico' }}
+                      {{ especialidadDe(medico) }}
                     </span>
                   </button>
                 }
@@ -327,7 +327,7 @@
             mat-flat-button
             color="primary"
             type="button"
-            [disabled]="!pasoCompleto(pasoActual())"
+            [disabled]="pasoActual() !== 'nota' && !pasoCompleto(pasoActual())"
             (click)="continuar()"
           >
             Siguiente

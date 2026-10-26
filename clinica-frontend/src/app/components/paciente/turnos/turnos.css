@@ -116,6 +116,11 @@
   color: var(--cv-peligro);
 }
 
+.estado--vencido {
+  background: var(--cv-alerta-bg);
+  color: var(--cv-alerta);
+}
+
 .estado--atendido {
   background: var(--cv-exito-bg);
   color: var(--cv-exito);

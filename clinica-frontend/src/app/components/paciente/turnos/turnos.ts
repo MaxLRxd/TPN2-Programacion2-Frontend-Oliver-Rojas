@@ -8,7 +8,7 @@ import { EstadoTurno, Turno } from '../../../models/turno';
 import { ApiError } from '../../../services/api';
 import { ConfirmDialogService } from '../../../services/confirm-dialog';
 import { TurnoService } from '../../../services/turno';
-import { formatearFecha } from '../../../utils/fecha';
+import { fechaISO, formatearFecha } from '../../../utils/fecha';
 import { EmptyState } from '../../shared/empty-state/empty-state';
 import { ErrorState } from '../../shared/error-state/error-state';
 import { LoadingState } from '../../shared/loading-state/loading-state';
@@ -45,13 +45,13 @@ export class PacienteTurnos implements OnInit {
 
   readonly proximos = computed(() =>
     this.turnos()
-      .filter((turno) => turno.estado === 'confirmado')
+      .filter((turno) => turno.estado === 'confirmado' && !this.esVencido(turno))
       .sort((a, b) => this.clave(a).localeCompare(this.clave(b))),
   );
 
   readonly historial = computed(() =>
     this.turnos()
-      .filter((turno) => turno.estado !== 'confirmado')
+      .filter((turno) => turno.estado !== 'confirmado' || this.esVencido(turno))
       .sort((a, b) => this.clave(b).localeCompare(this.clave(a))),
   );
 
@@ -124,13 +124,28 @@ export class PacienteTurnos implements OnInit {
       });
   }
 
-  etiquetaEstado(estado: EstadoTurno): string {
-    const etiquetas: Record<EstadoTurno, string> = {
+  /** Turno confirmado cuya fecha y hora ya pasaron: no es "próximo" ni se puede cancelar. */
+  esVencido(turno: Turno): boolean {
+    return turno.estado === 'confirmado' && this.clave(turno) < this.ahora();
+  }
+
+  estadoVisible(turno: Turno): EstadoTurno | 'vencido' {
+    return this.esVencido(turno) ? 'vencido' : turno.estado;
+  }
+
+  etiquetaEstado(estado: EstadoTurno | 'vencido'): string {
+    const etiquetas: Record<EstadoTurno | 'vencido', string> = {
       confirmado: 'Confirmado',
       cancelado: 'Cancelado',
       atendido: 'Atendido',
+      vencido: 'Vencido',
     };
     return etiquetas[estado];
+  }
+
+  private ahora(): string {
+    const ahora = new Date();
+    return `${fechaISO(ahora)}T${String(ahora.getHours()).padStart(2, '0')}:${String(ahora.getMinutes()).padStart(2, '0')}`;
   }
 
   private clave(turno: Turno): string {

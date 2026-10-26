@@ -76,7 +76,7 @@
         <app-empty-state
           icono="history_toggle_off"
           titulo="Sin historial de turnos"
-          mensaje="Todavía no tenés turnos atendidos o cancelados."
+          mensaje="Todavía no tenés turnos atendidos, cancelados o vencidos."
         />
       }
     } @else {
@@ -111,12 +111,12 @@
                 <td data-label="Especialidad">{{ turno.especialidad }}</td>
                 <td data-label="Sede">{{ turno.sede }}</td>
                 <td data-label="Estado">
-                  <span [class]="'estado estado--' + turno.estado">{{
-                    etiquetaEstado(turno.estado)
+                  <span [class]="'estado estado--' + estadoVisible(turno)">{{
+                    etiquetaEstado(estadoVisible(turno))
                   }}</span>
                 </td>
                 <td data-label="Acciones" class="acciones">
-                  @if (turno.estado === 'confirmado') {
+                  @if (turno.estado === 'confirmado' && !esVencido(turno)) {
                     <button
                       mat-stroked-button
                       color="warn"

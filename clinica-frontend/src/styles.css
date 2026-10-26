@@ -473,8 +473,9 @@ app-header .header {
     display: none;
   }
 
-  app-header .usuario {
-    display: none;
+  app-header .usuario__nombre,
+  app-header .usuario__rol {
+    max-width: 110px;
   }
 }
 

@@ -268,6 +268,7 @@ export class TurnoWizard implements OnInit {
     if (!this.pasoCompleto(actual)) {
       if (actual === 'nota') {
         this.nota.markAsTouched();
+        this.nota.updateValueAndValidity();
       }
       return;
     }
@@ -326,6 +327,12 @@ export class TurnoWizard implements OnInit {
       confirmar: 'Confirmar',
     };
     return etiquetas[nombre];
+  }
+
+  /** Muestra la especialidad elegida si el médico la tiene; si no, la primera que atiende. */
+  especialidadDe(medico: Medico): string {
+    const elegida = medico.especialidades.find((item) => item.id === this.especialidadId());
+    return (elegida ?? medico.especialidades[0])?.descripcion || 'Médico';
   }
 
   nombreMedico(id: number | null): string {
