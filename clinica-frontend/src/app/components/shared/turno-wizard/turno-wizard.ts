@@ -379,7 +379,14 @@ export class TurnoWizard implements OnInit {
     this.turnoService.crear(payload).subscribe({
       next: (turno) => {
         this.guardando.set(false);
-        this.creado.emit(turno);
+        const medico = this.medicos().find((item) => item.id === this.medicoId());
+        this.creado.emit({
+          ...turno,
+          especialidad: turno.especialidad ?? this.resumen().especialidad,
+          sede: turno.sede ?? this.resumen().sede,
+          medico_nombre: turno.medico_nombre ?? medico?.nombre,
+          medico_apellido: turno.medico_apellido ?? medico?.apellido,
+        });
       },
       error: (e: ApiError) => {
         this.guardando.set(false);

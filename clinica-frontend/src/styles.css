@@ -135,10 +135,12 @@ table tbody tr:hover {
 }
 
 @media (max-width: 640px) {
-  .mat-mdc-dialog-container .mat-mdc-dialog-surface {
+  .cdk-overlay-pane.mat-mdc-dialog-panel {
     max-width: 95vw !important;
-    width: 100% !important;
-    margin: 0.75rem;
+    width: 95vw !important;
+  }
+
+  .mat-mdc-dialog-container .mat-mdc-dialog-surface {
     max-height: 90vh;
   }
 
@@ -563,45 +565,6 @@ app-menu .menu__item.mat-mdc-button {
   .cv-grid-auto,
   .cv-grid-auto-sm {
     grid-template-columns: 1fr;
-  }
-}
-
-/* ---------- Responsive: Reportes ---------- */
-@media (max-width: 1024px) {
-  .reportes-page .graficos {
-    grid-template-columns: 1fr;
-  }
-
-  .reportes-page .ranking {
-    grid-template-columns: 1fr;
-  }
-}
-
-@media (max-width: 768px) {
-  .reportes-page .indicadores {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .reportes-page .filtros {
-    grid-template-columns: 1fr;
-  }
-
-  .reportes-page .filtros__acciones {
-    flex-wrap: wrap;
-  }
-}
-
-@media (max-width: 640px) {
-  .reportes-page .indicadores {
-    grid-template-columns: 1fr;
-  }
-
-  .reportes-page .panel {
-    padding: 1rem;
-  }
-
-  .reportes-page .grafico {
-    height: clamp(220px, 60vw, 320px);
   }
 }
 
