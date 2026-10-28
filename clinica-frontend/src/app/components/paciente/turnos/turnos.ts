@@ -3,10 +3,14 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { RouterLink } from '@angular/router';
+import { catchError, of, switchMap } from 'rxjs';
 
+import { Historial } from '../../../models/historial';
 import { EstadoTurno, Turno } from '../../../models/turno';
 import { ApiError } from '../../../services/api';
+import { AuthService } from '../../../services/auth';
 import { ConfirmDialogService } from '../../../services/confirm-dialog';
+import { HistorialService } from '../../../services/historial';
 import { TurnoService } from '../../../services/turno';
 import { fechaISO, formatearFecha } from '../../../utils/fecha';
 import { EmptyState } from '../../shared/empty-state/empty-state';
@@ -33,9 +37,13 @@ type FiltroTurnos = 'proximos' | 'historial';
 })
 export class PacienteTurnos implements OnInit {
   private turnoService = inject(TurnoService);
+  private historialService = inject(HistorialService);
+  private auth = inject(AuthService);
   private confirmDialog = inject(ConfirmDialogService);
 
   readonly turnos = signal<Turno[]>([]);
+  /** Registros clínicos del paciente indexados por turno (se muestran en el detalle de los atendidos). */
+  readonly historialPorTurno = signal<Record<number, Historial>>({});
   readonly cargando = signal(true);
   readonly errorCarga = signal('');
   readonly errorAccion = signal('');
@@ -73,12 +81,32 @@ export class PacienteTurnos implements OnInit {
       next: (turnos) => {
         this.turnos.set(turnos);
         this.cargando.set(false);
+        this.cargarHistorial();
       },
       error: (e: ApiError) => {
         this.errorCarga.set(e?.mensaje || 'No se pudieron cargar tus turnos.');
         this.cargando.set(false);
       },
     });
+  }
+
+  /** El historial es complementario: si falla, el detalle solo omite el resumen clínico. */
+  private cargarHistorial(): void {
+    const idActual = this.auth.getUsuario()?.id;
+    const idPaciente$ = idActual
+      ? of(idActual)
+      : this.auth.cargarPerfil().pipe(switchMap((usuario) => of(usuario.id)));
+
+    idPaciente$
+      .pipe(
+        switchMap((id) => (id ? this.historialService.consultarPorPaciente(id) : of([]))),
+        catchError(() => of([] as Historial[])),
+      )
+      .subscribe((registros) => {
+        this.historialPorTurno.set(
+          Object.fromEntries(registros.map((registro) => [registro.id_turno, registro])),
+        );
+      });
   }
 
   cambiarFiltro(filtro: FiltroTurnos): void {

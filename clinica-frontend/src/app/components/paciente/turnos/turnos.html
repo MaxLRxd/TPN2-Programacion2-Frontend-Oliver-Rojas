@@ -139,9 +139,26 @@
                         <p>{{ turno.nota || 'Sin notas.' }}</p>
                       </div>
                       @if (turno.estado === 'atendido') {
+                        @if (historialPorTurno()[turno.id]; as registro) {
+                          <div>
+                            <strong>Diagnóstico</strong>
+                            <p>{{ registro.diagnostico }}</p>
+                          </div>
+                          <div>
+                            <strong>Tratamiento</strong>
+                            <p>{{ registro.tratamiento || 'Sin tratamiento registrado.' }}</p>
+                          </div>
+                          <div>
+                            <strong>Observaciones</strong>
+                            <p>{{ registro.observaciones || 'Sin observaciones.' }}</p>
+                          </div>
+                        } @else {
+                          <p class="detalle__historial">
+                            Todavía no hay un registro clínico cargado para esta atención.
+                          </p>
+                        }
                         <p class="detalle__historial">
-                          Esta atención puede tener un registro clínico asociado.
-                          <a routerLink="/paciente/historial">Consultar mi historial</a>.
+                          <a routerLink="/paciente/historial">Ver todo mi historial clínico</a>
                         </p>
                       }
                     </div>

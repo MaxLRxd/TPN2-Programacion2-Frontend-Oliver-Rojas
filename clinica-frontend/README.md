@@ -2,8 +2,8 @@
 
 Aplicación de frontend para la Clínica Virtual (TP N°2, Programación 2). Está
 construida con **Angular 21** y **Angular Material 21**, sin Server-Side
-Rendering (SSR). Consume la API del backend para el circuito de autenticación:
-registro de pacientes, inicio y cierre de sesión, y "Mi perfil".
+Rendering (SSR). Consume la API del backend (Node + Express + MySQL/MariaDB) y
+cubre los cuatro roles: administrador, médico, operador y paciente.
 
 ## Versiones utilizadas
 
@@ -20,19 +20,67 @@ registro de pacientes, inicio y cierre de sesión, y "Mi perfil".
 
 > Angular 21 requiere Node `^20.19.0`, `^22.12.0` o `^24.0.0`.
 
-## Requisitos previos
+## Puesta en marcha desde cero
 
-- Node.js 20.19.0 o superior (se recomienda Node 22 o 24 LTS).
-- Angular CLI 21 instalado de forma global (o usar `npx ng`):
+Se necesitan dos repositorios/carpetas: el **backend** (`Backend/` y `BD/`) y
+este **frontend** (`clinica-frontend/`).
+
+### 1. Requisitos previos
+
+- Node.js 20.19.0 o superior para el frontend (se recomienda Node 22 o 24 LTS;
+  el backend se probó con Node 24).
+- MySQL o MariaDB en ejecución (probado con MariaDB 10.4 de XAMPP).
+- Angular CLI 21 (opcional; se puede usar `npx ng`):
 
   ```bash
   npm install -g @angular/cli@21
   ```
 
-- El backend corriendo en `http://localhost:8080` con **CORS habilitado** para
-  `http://localhost:4200`.
+### 2. Base de datos
 
-## Instalación y ejecución
+Importar el script con datos de prueba (`BD/clinica.sql`). El script **elimina y
+vuelve a crear** la base `clinica`, por lo que no hace falta crearla antes (y se
+pierden los datos que tuviera):
+
+```bash
+mysql -u root -p < BD/clinica.sql
+```
+
+También se puede pegar completo en la pestaña SQL de phpMyAdmin, a nivel
+servidor y sin seleccionar ninguna base.
+
+El script carga usuarios de los cuatro roles, tres médicos con distintas
+especialidades (uno con agenda en dos sedes), turnos en estado `confirmado`,
+`cancelado` y `atendido`, historial clínico y notificaciones. Las fechas de la
+agenda se calculan respecto del día de la importación; si pasaron varios días,
+conviene cargar rangos nuevos desde la pantalla de agenda para poder sacar
+turnos.
+
+### 3. Backend
+
+Copiar `Backend/.env.example` a `Backend/.env` y completar:
+
+| Variable         | Descripción                            | Ejemplo               |
+| ---------------- | -------------------------------------- | --------------------- |
+| `DB_HOST`        | Host de la base de datos               | `localhost`           |
+| `DB_PORT`        | Puerto de la base de datos             | `3306`                |
+| `DB_USER`        | Usuario de la base                     | `root`                |
+| `DB_PASSWORD`    | Contraseña de la base (puede ir vacía) |                       |
+| `DB_NAME`        | Nombre de la base                      | `clinica`             |
+| `JWT_SECRET`     | Clave para firmar los tokens           | `una_clave_secreta`   |
+| `JWT_EXPIRES_IN` | Vigencia del token                     | `8h`                  |
+| `PORT`           | Puerto del servidor                    | `8080`                |
+
+```bash
+cd Backend
+npm install
+npm run dev
+```
+
+El backend queda en `http://localhost:8080`. La colección de Postman está en
+`Backend/Prog2.postman_collection.json`.
+
+### 4. Frontend
 
 Dentro de la carpeta `clinica-frontend`:
 
@@ -41,7 +89,23 @@ npm install
 ng serve
 ```
 
-Luego abrir el navegador en `http://localhost:4200`.
+Luego abrir el navegador en `http://localhost:4200`. La URL de la API se define
+en un único lugar (`src/environments/`).
+
+## Usuarios de prueba
+
+Todos los usuarios tienen la contraseña `1234`.
+
+| Rol      | Nombre                          | DNI      |
+| -------- | ------------------------------- | -------- |
+| admin    | Marcos Gomez                    | 18222333 |
+| operador | Juan Perez (sede 1)             | 15200548 |
+| medico   | Ana Lopez (sedes 1 y 2)         | 20111222 |
+| medico   | Pablo Rodriguez (sede 1)        | 22333444 |
+| medico   | Lucia Martinez (sede 2)         | 23444555 |
+| paciente | Franco Friggeri                 | 36000960 |
+| paciente | Maria Sosa                      | 41000111 |
+| paciente | Carlos Diaz                     | 12000222 |
 
 ## Backend y CORS
 
@@ -91,15 +155,54 @@ src/
 | `npm start`     | Alias de `ng serve`                          |
 | `npm run build` | Alias de `ng build`                          |
 
-## Funcionalidades incluidas (Semana 1)
+## Funcionalidades por rol
 
-- Layout general: header, menú de navegación por rol y footer.
-- Pantalla principal con y sin sesión.
-- Registro de paciente con coberturas cargadas desde el backend.
-- Login con DNI y contraseña, sesión persistente al recargar.
-- Cierre de sesión y pantalla "Mi perfil" contra `GET /auth/perfil`.
-- Rutas protegidas por sesión y por rol, con páginas "Acceso denegado" y
-  "No encontrada".
+**Todos los roles**
+- Layout con header, menú por rol y footer; pantalla principal con y sin sesión.
+- Registro de paciente, login con DNI y contraseña, sesión persistente y "Mi perfil".
+- Notificaciones: campana con contador de no leídas, listado de la más reciente
+  a la más antigua, marcado como leída y actualización del contador tras
+  confirmar, cancelar o atender un turno.
+- Rutas protegidas por sesión y por rol (menú y URL escrita a mano), con páginas
+  "Acceso denegado" y "No encontrada". Un token vencido (401) lleva al login.
+- Indicadores de carga, mensajes de listado vacío y de error (incluido backend
+  caído), fechas en formato día/mes/año.
+
+**Administrador**
+- CRUD de sedes, especialidades y coberturas con filtro de texto, validaciones y
+  baja con confirmación (se muestra el mensaje del backend si hay dependencias).
+- Usuarios: listado paginado con filtros por nombre, apellido, tipo y sede; alta
+  de operador, médico y administrador (sede y especialidades según el rol);
+  edición de cualquier usuario, incluidos los pacientes.
+- Auditoría de solo lectura con filtros por usuario, entidad y rango de fechas,
+  paginada y de más reciente a más antigua.
+- Reportes: turnos totales, atendidos y cancelados, tasa de cancelación, turnos
+  por especialidad (barras), por sede (torta) y ranking de médicos (barras
+  horizontales), con un único filtro de rango de fechas.
+
+**Médico**
+- Agenda propia con selector de fecha; alta, modificación y baja de rangos
+  horarios (varios por día, en más de una sede). No permite eliminar ni acortar
+  un rango dejando turnos confirmados fuera.
+- Turnos del día en todas sus sedes con filtro de sede, edad del paciente y notas
+  desplegables; "Marcar como atendido" con diagnóstico, tratamiento y
+  observaciones; cancelación con confirmación.
+- Historial clínico: búsqueda de pacientes por DNI o apellido, mostrando solo los
+  registros de los turnos que atendió.
+
+**Operador**
+- Agenda por fecha y sede (por defecto la suya): alta, edición y baja de rangos y
+  vista de turnos con cancelación, solo en su sede (las demás son de lectura).
+- Alta de pacientes y asignación de turnos con la sede fija, reutilizando el
+  formulario de registro y el wizard de turnos.
+
+**Paciente**
+- Sacar turno paso a paso (especialidad, sede, médico, fecha, horario, nota y
+  resumen), ofreciendo solo médicos, fechas y horarios disponibles.
+- Mis turnos: ordenados por proximidad, con estado diferenciado, cancelación con
+  confirmación y, en los atendidos, diagnóstico, tratamiento y observaciones.
+- Mi historial clínico y Mis datos (solo email, teléfono, cobertura y contraseña;
+  la nueva contraseña se repite y debe coincidir).
 
 ## Librería de gráficos
 
@@ -115,12 +218,12 @@ instalan con `npm install`; no requieren configuración adicional.
 - Se registran únicamente los elementos usados (barras, torta, escalas,
   leyenda y tooltip) con `provideCharts(...)` en el propio componente.
 
-## Funcionalidades incluidas (Semana 4)
+## Cambios en el backend
 
-- Auditoría de solo lectura con filtros por usuario, entidad y rango de fechas,
-  paginada y ordenada de más reciente a más antigua.
-- Reportes y estadísticas: turnos totales, atendidos y cancelados, tasa de
-  cancelación, turnos por especialidad (gráfico de barras), turnos por sede
-  (gráfico de torta) y ranking de médicos por turnos atendidos (gráfico de
-  barras horizontales). Un único filtro de rango de fechas actualiza todos los
-  indicadores a la vez.
+Para las pantallas del frontend se agregaron o ampliaron estos endpoints (todos
+documentados en la carpeta `06 - Soporte frontend` de la colección de Postman y
+en `Backend/README.md`): `GET /medicos`, `GET /turnos/disponibilidad/fechas` y
+`/horarios`, `GET /pacientes`, `PATCH /auth/perfil`, `GET/POST/PUT /usuarios`
+(con auditoría), agenda enriquecida con nombres, y validaciones de agenda,
+sedes y usuarios (rangos solapados, nombres duplicados, formato de email, DNI y
+contraseña).

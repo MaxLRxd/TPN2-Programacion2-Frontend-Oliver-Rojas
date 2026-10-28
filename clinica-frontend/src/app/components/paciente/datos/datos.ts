@@ -1,5 +1,11 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  AbstractControl,
+  FormBuilder,
+  ReactiveFormsModule,
+  ValidationErrors,
+  Validators,
+} from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -17,6 +23,12 @@ import { CoberturaService } from '../../../services/cobertura';
 import { ErrorState } from '../../shared/error-state/error-state';
 import { LoadingState } from '../../shared/loading-state/loading-state';
 import { PageHeader } from '../../shared/page-header/page-header';
+
+/** La repetición debe coincidir con la contraseña nueva (ambas vacías también coinciden). */
+function coincideConPassword(repetir: AbstractControl): ValidationErrors | null {
+  const password = repetir.parent?.get('password')?.value ?? '';
+  return password !== (repetir.value ?? '') ? { noCoinciden: true } : null;
+}
 
 @Component({
   selector: 'app-paciente-datos',
@@ -52,9 +64,13 @@ export class PacienteDatos implements OnInit {
     telefono: ['', [Validators.maxLength(30)]],
     coberturaId: this.fb.control<number | null>(null, [Validators.required]),
     password: ['', [Validators.minLength(6)]],
+    repetirPassword: ['', [coincideConPassword]],
   });
 
   ngOnInit(): void {
+    this.form.controls.password.valueChanges.subscribe(() =>
+      this.form.controls.repetirPassword.updateValueAndValidity(),
+    );
     this.cargar();
   }
 
@@ -75,6 +91,7 @@ export class PacienteDatos implements OnInit {
           telefono: usuario.telefono ?? '',
           coberturaId: usuario.id_cobertura ?? null,
           password: '',
+          repetirPassword: '',
         });
         this.cargando.set(false);
       },
@@ -110,7 +127,7 @@ export class PacienteDatos implements OnInit {
     this.auth.actualizarPerfil(datos).subscribe({
       next: (usuario) => {
         this.usuario.set(usuario);
-        this.form.patchValue({ password: '' });
+        this.form.patchValue({ password: '', repetirPassword: '' });
         this.form.markAsPristine();
         this.guardando.set(false);
         this.exito.set('Tus datos se actualizaron correctamente.');

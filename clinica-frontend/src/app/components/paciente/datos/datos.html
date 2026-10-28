@@ -86,6 +86,20 @@
           }
         </mat-form-field>
 
+        <mat-form-field appearance="outline">
+          <mat-label>Repetir nueva contraseña</mat-label>
+          <input
+            matInput
+            type="password"
+            formControlName="repetirPassword"
+            autocomplete="new-password"
+          />
+          @if (form.controls.repetirPassword.touched &&
+            form.controls.repetirPassword.hasError('noCoinciden')) {
+            <mat-error>Las contraseñas no coinciden.</mat-error>
+          }
+        </mat-form-field>
+
         <div class="acciones">
           <button mat-flat-button color="primary" type="submit" [disabled]="guardando()">
             <mat-icon>save</mat-icon>
